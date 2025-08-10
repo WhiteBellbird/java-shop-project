@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User updateManager(String userId) throws ShopException {
-		User findUser = repository.findUserByUserId(userId);
+		User findUser = repository.findUserByUserId(userId); // exception issue
 		// 유저를 찾을 수 없다면 예외처리
 		if(findUser == null) {
 			throw new UserNotfoundException(String.format("%s 아이디의 유저를 찾을 수 없습니다.",userId));
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
 	private void isRegisteredUserEmail(String email) throws UserDuplicatedException {;
 		// TODO Auto-generated method stub
-		User user = repository.findUserByEmail(email);
+		User user = repository.findUserByEmail(email); // exception issue
 		if(user != null) {
 			throw new UserDuplicatedException(String.format("%s은 이미 등록된 사용자"
 					+ "입니다.",email));

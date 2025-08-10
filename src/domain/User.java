@@ -4,7 +4,9 @@ import java.io.Serializable;
 import exception.InvalidatedInputException;
 import exception.UserInvalidCoupon;
 
-public class User{
+public class User implements Serializable{
+	private static final long serialVersionUID = 1L;
+	private String sessionId;
 	private String userId;
 	private String username;
 	private String email;
@@ -18,7 +20,7 @@ public class User{
 	
 	
 	public User(String userId, String username, String password, String email, String address, String phone) {
-		super();
+		//super();
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
@@ -29,6 +31,7 @@ public class User{
 		this.point = 0;
 		this.coupon = null; // 쿠폰은 한개만 소지가능
 		this.phone = phone;
+		this.sessionId = null;
 	}
 	public void updatePassword (String password) {
 		if(password != null && !password.isEmpty()) {
@@ -85,6 +88,17 @@ public class User{
 		// 관리자로 승격
 		this.isAdmin = true;
 	}
+	//set the sessionId later with a set method
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	// remove sessionId if a user logs out or be inactive
+	public void removeSessionId() {
+		this.sessionId = null;
+	}
+	public String getSessionId() {
+		return sessionId;
+	}
 	public String getRank() {
 		return rank;
 	}
@@ -114,5 +128,14 @@ public class User{
 	}
 	public boolean isAdmin() {
 		return isAdmin;
+	}
+	@Override
+	public String toString() {
+		return "계정이름: "+username+" | 등급: "+rank+" | 이메일: "+ email+" | 주소: "+address+" | 전화번호: "+phone + " | 관리자 여부: " + isAdmin();	
+	}
+	public boolean equals(User obj) {
+		return (this.getUserId().equals(obj.getUserId()) && this.getUsername().equals(obj.getUsername()) 
+				&& this.getEmail().equals(obj.getEmail()) && this.getRank().equals(obj.getRank())
+				&& this.getUserId().equals(obj.getUserId()));
 	}
 }
