@@ -56,7 +56,7 @@ public class UserRepositoryImpl implements UserRepository{
 		return null;
 	}
 	@Override
-	public User changeUser(User previousUser, User changedUser) {
+	public User replaceUser(User previousUser, User changedUser) {
 		users = FileManager.readObject(DATA_FILE);
 		for (int i = 0; i < users.size(); i++) {
 		    if (users.get(i).equals(previousUser)) {

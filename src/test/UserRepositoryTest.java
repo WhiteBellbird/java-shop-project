@@ -14,31 +14,31 @@ import repository.UserRepositoryImpl;
 import java.io.*;
 
 public class UserRepositoryTest {
+	
+	static UserRepositoryImpl repo = new UserRepositoryImpl();
 	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
-		
-		
-		UserRepositoryImpl repo = new UserRepositoryImpl();
-		
 		repo.resetData();
-		
-		User saved1 = repo.saveUser(new User("001", "KwonLee", "1234", "kwon@gmail.com", null, null));
-		User saved2 = repo.saveUser(new User("002", "SusanLee", "1234", "su@gmail.com", null, null));
-		User saved3 = repo.saveUser(new User("003", "BruceLee", "1234", "Bruce@gmail.com", null, null));
-		User saved4 = repo.saveUser(new User("004", "RobertLee", "1234", "Robert@gmail.com", null, null));
-		
-		System.out.println();
-		System.out.println("확인 메세지 출력: ");
-		System.out.println(repo.findUserByEmail("su@gmail.com"));
-		
-		System.out.println(repo.findUserByUserId("001")); 
+		createUsers();
+		updateUser();
+		replaceUser();		
+		displayData();
+	}
 	
-		System.out.println(repo.changeUser(saved2 , saved3));
-	
-		System.out.println(repo.updateUser(saved1));
-		
-		System.out.println();
+	public static void createUsers() {
+		repo.saveUser(new User("001", "KwonLee", "1234", "kwon@gmail.com", null, null));
+		repo.saveUser(new User("002", "SusanLee", "1234", "su@gmail.com", null, null));
+		repo.saveUser(new User("003", "BruceLee", "1234", "Bruce@gmail.com", null, null));
+		repo.saveUser(new User("004", "RobertLee", "1234", "Robert@gmail.com", null, null));
+	}
+	public static void displayData() {
 		System.out.println("업데이트한 데이타 출력");
 		repo.display();
+	}
+	public static void replaceUser() {
+		repo.replaceUser(repo.findUserByEmail("su@gmail.com"), repo.findUserByUserId("001"));
+	}
+	public static void updateUser() {
+		repo.updateUser(repo.findUserByUserId("001"));
 	}
 }
 

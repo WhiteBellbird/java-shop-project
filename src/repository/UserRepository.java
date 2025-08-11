@@ -14,7 +14,9 @@ public interface UserRepository {
 	
 	User updateUser(User user);
 	
-	User changeUser(User previousUser, User changedUser);
+	User replaceUser(User previousUser, User changedUser);
 
-	public void display() throws ClassNotFoundException;
+	public void resetData();
+	
+	public void display();
 }

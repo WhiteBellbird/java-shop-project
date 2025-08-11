@@ -1,2 +1,4 @@
-/repository/
+/domain/
 /service/
+/test/
+/repository/

@@ -6,7 +6,6 @@ import exception.UserInvalidCoupon;
 
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private String sessionId;
 	private String userId;
 	private String username;
 	private String email;
@@ -31,7 +30,6 @@ public class User implements Serializable{
 		this.point = 0;
 		this.coupon = null; // 쿠폰은 한개만 소지가능
 		this.phone = phone;
-		this.sessionId = null;
 	}
 	public void updatePassword (String password) {
 		if(password != null && !password.isEmpty()) {
@@ -88,17 +86,6 @@ public class User implements Serializable{
 		// 관리자로 승격
 		this.isAdmin = true;
 	}
-	//set the sessionId later with a set method
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
-	}
-	// remove sessionId if a user logs out or be inactive
-	public void removeSessionId() {
-		this.sessionId = null;
-	}
-	public String getSessionId() {
-		return sessionId;
-	}
 	public String getRank() {
 		return rank;
 	}
@@ -136,6 +123,6 @@ public class User implements Serializable{
 	public boolean equals(User obj) {
 		return (this.getUserId().equals(obj.getUserId()) && this.getUsername().equals(obj.getUsername()) 
 				&& this.getEmail().equals(obj.getEmail()) && this.getRank().equals(obj.getRank())
-				&& this.getUserId().equals(obj.getUserId()));
+				&& this.getUsername().equals(obj.getUsername()));
 	}
 }
