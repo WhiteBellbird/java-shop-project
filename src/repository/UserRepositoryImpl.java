@@ -67,12 +67,14 @@ public class UserRepositoryImpl implements UserRepository{
 		}
 		return null;
 	}
+	@Override
 	public void display(){
 		users = FileManager.readObject(DATA_FILE);
 		for(User clone : users) {
 			System.out.println(clone);
 		}
 	}
+	@Override
 	public void resetData(){
 		List <User> forReset = new ArrayList<User>();
 		FileManager.writeObject(DATA_FILE, forReset);

@@ -14,14 +14,20 @@ import repository.UserRepositoryImpl;
 import java.io.*;
 
 public class UserRepositoryTest {
-	
 	static UserRepositoryImpl repo = new UserRepositoryImpl();
-	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+	public static void main(String[] args){
+		
+		
+		
+		
 		repo.resetData();
 		createUsers();
 		updateUser();
 		replaceUser();		
 		displayData();
+		
+		
+	
 	}
 	
 	public static void createUsers() {

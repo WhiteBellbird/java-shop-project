@@ -118,8 +118,9 @@ public class User implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "계정이름: "+username+" | 등급: "+rank+" | 이메일: "+ email+" | 주소: "+address+" | 전화번호: "+phone + " | 관리자 여부: " + isAdmin();	
+		return "userId: " + userId+ "계정이름: "+username+" | 등급: "+rank+" | 이메일: "+ email+" | 주소: "+address+" | 전화번호: "+phone + " | 관리자 여부: " + isAdmin();	
 	}
+	//아이디가 같으면 동등하게 취급 hash-code 비교는 불필요
 	public boolean equals(User obj) {
 		return (this.getUserId().equals(obj.getUserId()) && this.getUsername().equals(obj.getUsername()) 
 				&& this.getEmail().equals(obj.getEmail()) && this.getRank().equals(obj.getRank())
