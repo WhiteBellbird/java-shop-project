@@ -15,7 +15,11 @@ import java.io.*;
 
 public class UserRepositoryTest {
 	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+		
+		
 		UserRepositoryImpl repo = new UserRepositoryImpl();
+		
+		repo.resetData();
 		
 		User saved1 = repo.saveUser(new User("001", "KwonLee", "1234", "kwon@gmail.com", null, null));
 		User saved2 = repo.saveUser(new User("002", "SusanLee", "1234", "su@gmail.com", null, null));
@@ -25,14 +29,16 @@ public class UserRepositoryTest {
 		System.out.println();
 		System.out.println("확인 메세지 출력: ");
 		System.out.println(repo.findUserByEmail("su@gmail.com"));
+		
 		System.out.println(repo.findUserByUserId("001")); 
+	
 		System.out.println(repo.changeUser(saved2 , saved3));
+	
 		System.out.println(repo.updateUser(saved1));
 		
 		System.out.println();
 		System.out.println("업데이트한 데이타 출력");
 		repo.display();
-		
-		
 	}
 }
+

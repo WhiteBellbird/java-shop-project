@@ -8,9 +8,9 @@ public interface UserRepository {
 
 	User saveUser(User user);
 	
-	User findUserByEmail(String email) throws ClassNotFoundException;
+	User findUserByEmail(String email);
 	
-	User findUserByUserId(String userId) throws ClassNotFoundException;
+	User findUserByUserId(String userId);
 	
 	User updateUser(User user);
 	
