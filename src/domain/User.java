@@ -44,14 +44,15 @@ public class User implements Serializable{
 		}
 	}
 	public void removePoint(int point) throws InvalidatedInputException{
-		if(point > 0 && (this.point - point < 0)) {
+		if(point > 0 && !(this.point - point < 0)) {
 			this.point -= point;
 		}else {
 			throw new InvalidatedInputException("적절하지않은 포인트입력값입니다. 다시 확인하시고 입력해주십시오");
 		}
 	}
-	//쿠폰을 가지고 있나의 여부에서 쿠폰 적용할지 안할지(관리자가 따로 고객에게 쿠폰지급) 아니면 고객이 주문시에 쿠폰아이디입력시 주문한 총가격에서 자동적용?
-	//고객이 가지고있는 쿠폰은 REPOSITORY 파일에 저장된 쿠폰아이디와 일치여부 확인후 적용 
+	//쿠폰을 가지고 있나의 여부에서 쿠폰 적용할지 안할지(관리자가 따로 고객에게 쿠폰지급) 
+	//아니면
+	//고객이 주문시에 쿠폰아이디입력시 주문한 총가격에서 자동적용? -고객이 가지고있는 쿠폰은 REPOSITORY 파일에 저장된 쿠폰아이디와 일치여부 확인후 적용 
 	public void addCoupon(String couponId) {
 		this.coupon = couponId;
 	}
