@@ -47,6 +47,8 @@ public class UserServiceImpl implements UserService {
 		// 결과 값 출력할 때 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
 		return updated;
 	}
+	
+
 
 	private void isRegisteredUserEmail(String email) throws UserDuplicatedException {
 		User user = repository.findUserByEmail(email);
