@@ -18,7 +18,7 @@ public class User implements Serializable{
 	private boolean isAdmin;
 	
 	
-	public User(String userId, String username, String password, String email, String address, String phone) {
+	public User(String userId, String username, String email, String password, String address, String phone) {
 		//super();
 		this.userId = userId;
 		this.username = username;
