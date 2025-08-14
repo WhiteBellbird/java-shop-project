@@ -44,7 +44,7 @@ public class UserRepositoryTest {
 		repo.replaceUser(repo.findUserByEmail("su@gmail.com"), repo.findUserByUserId("001"));
 	}
 	public static void updateUser() {
-		repo.updateUser(repo.findUserByUserId("001"));
+		repo.authorizeUser(repo.findUserByUserId("001"));
 	}
 }
 

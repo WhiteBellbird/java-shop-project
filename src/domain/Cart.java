@@ -1,31 +1,38 @@
 package domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.*;
+
 
 public class Cart implements Serializable {
+	class Log{
+		private LocalDateTime addedDate;
+	    private LocalDateTime removedDate;
+	    
+	    LocalDateTime added() {this.addedDate = LocalDateTime.now(); return this.addedDate;}
+	    LocalDateTime removed() {this.removedDate = LocalDateTime.now(); return this.removedDate;}
+	}
+	Log log = new Log();
     private static final long serialVersionUID = 1L;
-    
     // 상품을 담을수 있는 맥심 50개
     private static final int MAX_PRODUCT = 50;
-    
+    // 카트 넣었다 뺐다한 기록
+    private Map<String, Log> history;
     // key: 상품 ID, value: 상품과 수량을 담는 CartItem 객체
     private Map<String, CartItem> items;
-    
     public Cart() {
         this.items = new HashMap<>();
     }
-
-    /*
-     *  product 추가할 상품 객체
-     *  quantity 추가할 수량
-     */
+    
+    
+    //product 추가할 상품 객체 AND quantity 추가할 수량
     public void addProduct(Product product, int quantity) {
         if (product == null || quantity <= 0) {
             throw new IllegalArgumentException("상품 또는 수량이 유효하지 않습니다.");
         }
-        
         // 재고 수량 초과 불가 제약사항
         if (product.getStock() < quantity) {
             throw new IllegalArgumentException("재고가 부족합니다. 현재 재고: " + product.getStock() + "개");
@@ -47,9 +54,10 @@ public class Cart implements Serializable {
                 throw new IllegalStateException("장바구니에 담을 수 있는 상품 종류는 최대 " + MAX_PRODUCT + "개입니다.");
             }
             items.put(productId, new CartItem(product, quantity));
+            log.added();
+            history.put(productId, log);
         }
     }
-
     /**
      * 장바구니에서 상품을 삭제합니다.
      *  productId 삭제할 상품의 ID
@@ -57,9 +65,10 @@ public class Cart implements Serializable {
     public void removeProduct(String productId) {
         if (productId != null && items.containsKey(productId)) {
             items.remove(productId);
+            log.removed();
+            history.put(productId, log);
         }
     }
-
     /**
      * 장바구니 상품의 수량을 변경합니다.
      *  productId 수량을 변경할 상품의 ID
@@ -80,11 +89,7 @@ public class Cart implements Serializable {
             throw new IllegalArgumentException("상품 ID 또는 수량이 유효하지 않습니다.");
         }
     }
-
-    /**
-     * .
-     *  장바구니의 총 가격
-     */
+    //장바구니의 총 가격
     public int getTotalPrice() {
         int total = 0;
         for (CartItem item : items.values()) {
@@ -92,29 +97,20 @@ public class Cart implements Serializable {
         }
         return total;
     }
-
-    /**
-     * 장바구니를 비웁니다.
-     */
+    //장바구니를 비웁니다.
     public void clearCart() {
         this.items.clear();
     }
-    
-    // Getter
     public Map<String, CartItem> getItems() {
         return items;
-        
     }
-    
     @Override
     public String toString() {
         if (items.isEmpty()) {
             return "--- 장바구니 목록 ---\n장바구니가 비어있습니다.\n--------------------\n총 가격: 0원\n";
         }
-
-        // 장바구니가 비어있지 않으면 , StringBuilder로 목록만들기 stringbjilder는 덧붙이기 기능
+        // 장바구니가 비어있지 않으면 , StringBuilder로 목록만들기 stringBuilder는 덧붙이기 기능
         StringBuilder sb = new StringBuilder("--- 장바구니 목록 ---\n");
-
         for (CartItem item : items.values()) {
             String itemInfo = String.format("%s - 수량: %d개, 가격: %,d원\n",
                     item.getProduct().getName(),
@@ -122,11 +118,9 @@ public class Cart implements Serializable {
                     item.getProduct().getPrice() * item.getQuantity());
             sb.append(itemInfo);
         }
-        
         // 총 가격 정보를 추가하기
         sb.append("--------------------\n");
         sb.append(String.format("총 가격: %,d원\n", getTotalPrice()));
-        
         return sb.toString();
     }
 }
