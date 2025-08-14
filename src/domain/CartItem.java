@@ -12,21 +12,18 @@ public class CartItem implements Serializable {
         this.product = product;
         this.quantity = quantity;
     }
-
     public Product getProduct() {
         return product;
     }
-
     public int getQuantity() {
         return quantity;
     }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
     @Override
     public String toString() {
         return String.format("%s - 수량: %d개", product.getName(), quantity);
     }
+    
 }

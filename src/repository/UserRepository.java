@@ -12,7 +12,7 @@ public interface UserRepository {
 	
 	User findUserByUserId(String userId);
 	
-	User updateUser(User user);
+	User authorizeUser(User user);
 	
 	User replaceUser(User previousUser, User changedUser);
 

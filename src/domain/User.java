@@ -1,8 +1,14 @@
 package domain;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 import exception.InvalidatedInputException;
 import exception.UserInvalidCoupon;
+import java.time.LocalDateTime;
 
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -12,24 +18,57 @@ public class User implements Serializable{
 	private String password;
 	private String rank;
 	private String address;
+	//적립 포인트
 	private int point;
 	private String coupon;
 	private String phone;
 	private boolean isAdmin;
+	//아이디 만든 시간
+	private LocalDateTime createdDate;
+	//로그인한 시간
+	private PriorityQueue<LocalDateTime> loggedInTime;
+	//로그아웃한 시간
+	private PriorityQueue<LocalDateTime> loggedOutTime;
+	//로그인한 상태
+	private boolean isLoggedin;
 	
 	
-	public User(String userId, String username, String password, String email, String address, String phone) {
+	
+	
+	public User(String userId, String username, String email, String password, String rank, String address, int point,
+			String coupon, String phone, boolean isAdmin, LocalDateTime createdDate,
+			PriorityQueue<LocalDateTime> loggedInTime, PriorityQueue<LocalDateTime> loggedOutTime, boolean isLoggedin) {
 		//super();
 		this.userId = userId;
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.isAdmin = false;
-		this.rank = "SILVER"; // SILVER - GOLD - PLATINUM - DIAMOND
+		this.rank = rank;
 		this.address = address;
-		this.point = 0;
-		this.coupon = null; // 쿠폰은 한개만 소지가능
+		this.point = point;
+		this.coupon = coupon;
 		this.phone = phone;
+		this.isAdmin = isAdmin;
+		this.createdDate = createdDate;
+		this.loggedInTime = loggedInTime;
+		this.loggedOutTime = loggedOutTime;
+		this.isLoggedin = isLoggedin;
+	}
+	public boolean isLoggedIn() {
+		return this.isLoggedin;
+	}
+	public boolean login() {
+		this.isLoggedin = true;
+		return this.isLoggedin;
+	}
+	public boolean logout() {
+		this.isLoggedin = false;
+		return this.isLoggedin;
+	}
+	public static User createUser(String userId, String username, String email, String password, String phone) {
+		User user = new User(userId, username, email, password, username, email, 0, password, phone, false, 
+				LocalDateTime.now(), new PriorityQueue<LocalDateTime>(), new PriorityQueue<LocalDateTime>(), false);
+		return user;
 	}
 	public void updatePassword (String password) {
 		if(password != null && !password.isEmpty()) {

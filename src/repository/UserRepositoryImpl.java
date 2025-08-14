@@ -26,6 +26,9 @@ public class UserRepositoryImpl implements UserRepository{
 		}
 	}
 	List<User> users = new ArrayList<User>();
+	
+	
+	
 	@Override
 	public User saveUser(User user) {
 		users = FileManager.readObject(DATA_FILE);
@@ -44,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository{
 		return users.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);
 	}
 	@Override
-	public User updateUser(User user) {
+	public User authorizeUser(User user) {
 		users = FileManager.readObject(DATA_FILE);
 		for(User clone : users) {
 			if(clone.equals(user)) {
@@ -74,6 +77,7 @@ public class UserRepositoryImpl implements UserRepository{
 			System.out.println(clone);
 		}
 	}
+	//needs a fix***********************************************
 	@Override
 	public void resetData(){
 		List <User> forReset = new ArrayList<User>();
