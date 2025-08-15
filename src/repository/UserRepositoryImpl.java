@@ -27,8 +27,6 @@ public class UserRepositoryImpl implements UserRepository{
 	}
 	List<User> users = new ArrayList<User>();
 	
-	
-	
 	@Override
 	public User saveUser(User user) {
 		users = FileManager.readObject(DATA_FILE);
@@ -70,17 +68,14 @@ public class UserRepositoryImpl implements UserRepository{
 		}
 		return null;
 	}
-	@Override
-	public void display(){
-		users = FileManager.readObject(DATA_FILE);
-		for(User clone : users) {
-			System.out.println(clone);
-		}
-	}
 	//needs a fix***********************************************
 	@Override
 	public void resetData(){
 		List <User> forReset = new ArrayList<User>();
 		FileManager.writeObject(DATA_FILE, forReset);
+	}
+	@Override
+	public List<User> getUsersList() {
+		return users;
 	}
 }

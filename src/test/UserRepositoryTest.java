@@ -15,30 +15,21 @@ import java.io.*;
 
 public class UserRepositoryTest {
 	static UserRepositoryImpl repo = new UserRepositoryImpl();
-	public static void main(String[] args){
-		
-		
-		
-		
+	public static void main(String[] args){	
 		repo.resetData();
 		createUsers();
 		updateUser();
 		replaceUser();		
-		displayData();
 		
 		
 	
 	}
 	
 	public static void createUsers() {
-		repo.saveUser(new User("001", "KwonLee", "kwon@gmail.com","1234",  null, null));
-		repo.saveUser(new User("002", "SusanLee", "su@gmail.com", "1234", null, null));
-		repo.saveUser(new User("003", "BruceLee", "Bruce@gmail.com","1234",  null, null));
-		repo.saveUser(new User("004", "RobertLee", "Robert@gmail.com", "1234",  null, null));
-	}
-	public static void displayData() {
-		System.out.println("업데이트한 데이타 출력");
-		repo.display();
+		repo.saveUser(new User("001", "Kwon Lee", "kwon9973@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
+		repo.saveUser(new User("002", "Susan Lee", "su@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
+		repo.saveUser(new User("003", "Bruce Lee", "bu@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
+		repo.saveUser(new User("004", "Robert Lee", "ro@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
 	}
 	public static void replaceUser() {
 		repo.replaceUser(repo.findUserByEmail("su@gmail.com"), repo.findUserByUserId("001"));

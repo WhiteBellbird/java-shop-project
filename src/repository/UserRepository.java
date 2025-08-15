@@ -15,10 +15,9 @@ public interface UserRepository {
 	User authorizeUser(User user);
 	
 	User replaceUser(User previousUser, User changedUser);
+	
+	List<User> getUsersList();
 
 	public void resetData();
-	
-	public void display();
-	
 	
 }
