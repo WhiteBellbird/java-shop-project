@@ -26,9 +26,9 @@ public class User implements Serializable{
 	//아이디 만든 시간
 	private LocalDateTime createdDate;
 	//로그인한 시간
-	private PriorityQueue<LocalDateTime> loggedInTime;
+	private PriorityQueue<LocalDateTime> loginTime;
 	//로그아웃한 시간
-	private PriorityQueue<LocalDateTime> loggedOutTime;
+	private PriorityQueue<LocalDateTime> logoutTime;
 	//로그인한 상태
 	private boolean isLoggedin;
 	
@@ -50,8 +50,8 @@ public class User implements Serializable{
 		this.phone = phone;
 		this.isAdmin = isAdmin;
 		this.createdDate = createdDate;
-		this.loggedInTime = loggedInTime;
-		this.loggedOutTime = loggedOutTime;
+		this.loginTime = loggedInTime;
+		this.logoutTime = loggedOutTime;
 		this.isLoggedin = isLoggedin;
 	}
 	public boolean isLoggedIn() {
@@ -125,7 +125,7 @@ public class User implements Serializable{
 		if(this.isAdmin) return;
 		// 관리자로 승격
 		this.isAdmin = true;
-	}
+	} 
 	public String getRank() {
 		return rank;
 	}
@@ -155,6 +155,12 @@ public class User implements Serializable{
 	}
 	public boolean isAdmin() {
 		return isAdmin;
+	}
+	public PriorityQueue<LocalDateTime> getLoginTime(){
+		return this.loginTime;
+	}
+	public PriorityQueue<LocalDateTime> getLogoutTime(){
+		return this.logoutTime;
 	}
 	@Override
 	public String toString() {

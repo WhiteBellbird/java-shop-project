@@ -16,8 +16,9 @@ public class UserServiceTest {
 		creatUser();
 		updateUser();
 		displayUser();
-		
-		
+		login();
+		logout();
+		viewLog(2025, 8, 16);
 		
 		
 		
@@ -40,4 +41,15 @@ public class UserServiceTest {
 	public static void displayUser() {
 		service.displayUsers();
 	}
+	public static void login() {
+		
+	}
+	public static void logout() {
+		
+	}
+	public static void viewLog(int year, int month, int day) {
+		
+	}
+	
+	
 }
