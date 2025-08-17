@@ -6,8 +6,6 @@ import java.util.HashMap;
 
 public interface OrderService {
 
-
-
     void IndividualOrder();
 
     void AllOrder(String sessionId);
