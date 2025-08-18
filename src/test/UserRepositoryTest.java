@@ -57,12 +57,15 @@ public class UserRepositoryTest {
 		repo.saveLoginTime(repo.findUserByUserId("002"), LocalDateTime.now());
 	}
 	public static void findLog() {
+		
+		//리포에 저장한건 바로 못쓰는게 당연한것 - 리포에서 바로 쓸수 있는 방법 구상하기 
+		
 		repo.saveUser(new User("001", "Kwon Lee", "kwon9973@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
 		repo.saveUser(new User("002", "Susan Lee", "su@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
 		repo.saveUser(new User("003", "Bruce Lee", "bu@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
 		repo.saveUser(new User("004", "Robert Lee", "ro@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
-		System.out.println(repo.findLoginByMonth(repo.findUserByUserId("001"), 2025, 8));
-		System.out.println(repo.findLoginByMonth(repo.findUserByUserId("002"), 2025, 8)); 
+		System.out.println(repo.findLoginByMonth(repo.findUserByUserId("001"), 2025, 8)); // repository 에 hashMap 르 <UserId/User , List<LocalDateTime> loginList> 으로 login list 를 저장해야하나 고민  
+		System.out.println(repo.findLoginByMonth(repo.findUserByUserId("002"), 2025, 8)); // repository 에서 써주고 그떄부터 비교
 	}
 }
 

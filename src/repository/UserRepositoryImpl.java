@@ -129,6 +129,8 @@ public class UserRepositoryImpl implements UserRepository{
 		users = FileManager.readObject(DATA_FILE);
 		return users;
 	}
+	
+	// userId로 다 바꾸기 그리고 userId로 USER 찾기 저장된 파일에서 그렇게하면 굳이 service 에서 로컬 유저 값이 없어도 바로 ID 로 retrieve 가능
 	@Override
 	public LocalDateTime saveLoginTime(User user1, LocalDateTime now) {
 		UserLogData LogData = new UserLogData(user1.getUsername());
@@ -164,7 +166,6 @@ public class UserRepositoryImpl implements UserRepository{
 		UserLogData logData = new UserLogData(user1.getUsername());
 		List<LocalDateTime> section = new ArrayList<>();
 		login = FileManager.readObject(logData.getPathIn());
-		
 		//section = login.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).toList();
 		section = login.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).collect(Collectors.toList());
 		return section;
