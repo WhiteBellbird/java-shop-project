@@ -74,4 +74,21 @@ public class UserServiceImpl implements UserService {
 	public void displayUsers() {
 		repository.getUsersList().forEach(u -> System.out.println(u));
 	}
+
+	@Override
+	public User login(String email, String password) throws InvalidatedInputException {
+		if(repository.findUserByEmail(email) == null && repository.findUserByEmail(email).getPassword() != password) {
+			throw new InvalidatedInputException("올바르지 않은 이메일이거나 비밀번호입니다.");
+		}
+		User user = repository.findUserByEmail(email);
+		user.login();
+		
+		return user;
+	}
+
+	@Override
+	public User logout(String email, String password) {
+		
+		return null;
+	}
 }

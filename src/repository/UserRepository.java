@@ -17,23 +17,23 @@ public interface UserRepository {
 	
 	User replaceUser(User previousUser, User changedUser);
 	
-	LocalDateTime saveLoginTime(LocalDateTime now);
+	LocalDateTime saveLoginTime(User user1, LocalDateTime now);
 	
-	LocalDateTime saveLogoutTime(LocalDateTime now);
-	
-	
-	List<LocalDateTime> findLoginByDay(int year, int month, int day) ;
-	
-	List<LocalDateTime> findLoginByMonth(int year, int moneth);
-	
-	List<LocalDateTime> findLogoutByDay(int year, int month, int day);
-	
-	List<LocalDateTime> findLogoutByMonth(int year, int moneth);
+	LocalDateTime saveLogoutTime(User user1, LocalDateTime now);
 	
 	
-	List<LocalDateTime> getLoginTime();
+	List<LocalDateTime> findLoginByDay(User user1, int year, int month, int day) ;
 	
-	List<LocalDateTime> getLogoutTime();
+	List<LocalDateTime> findLoginByMonth(User user1,int year, int moneth);
+	
+	List<LocalDateTime> findLogoutByDay(User user1,int year, int month, int day);
+	
+	List<LocalDateTime> findLogoutByMonth(User user1, int year, int moneth);
+	
+	
+	List<LocalDateTime> getLoginTime(User user1);
+	
+	List<LocalDateTime> getLogoutTime(User user1);
 	
 	
 	List<User> getUsersList();

@@ -1,8 +1,10 @@
 package repository;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,59 +14,50 @@ import java.util.List;
 import domain.User;
 
 public class FileManager {
-	//파일 읽어주는 메서드
+	//파일 읽어주는 메서드 빈 리스트 반환 null 반환 안하는게 목적
 	public static <T> List<T> readObject(Path file) {
-		try(ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(file))){
-			Object obj = ois.readObject();
-			List<T> received = (List<T>) obj;
-			System.out.println("파일 읽어짐");
-			return received;
-		}catch(IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		try {
+			if(file == null) {
+				return new ArrayList<T>();
+			}
+			if(Files.notExists(file) || Files.size(file) == 0) {
+				return new ArrayList<T>();
+			}
+			try(ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(file))){
+				Object obj = ois.readObject();
+				List<T> received = (List<T>) obj;
+				System.out.println("파일 읽어짐");
+				return (received != null) ? received : new ArrayList<T>();
+			}
+		}catch(EOFException | StreamCorruptedException e) {
+			return new ArrayList<T>();
+		}catch(IOException | ClassNotFoundException e) {
+			return new ArrayList<T>();
 		}
-		return null;
 	}
 	//파일 써주는 메서드
 	public static <T> void writeObject(Path file, List <T> data){
-		try(ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(file))){
-			// null 체크
-			if(data == null) {
-				System.err.println("[FileManager] 저장할 데이터가 null입니다.");
-				return;
+		try {
+			Path parent = file.getParent();
+			if(parent != null) {
+				Files.createDirectories(parent);
 			}
-			oos.writeObject(data);
-			oos.flush();
+			
+			if(data == null) {
+				data = new ArrayList<T>();
+			}
+			try(ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(file))){
+				oos.writeObject(data);
+				oos.flush();
+			}
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
+	
+	
+	
+	
+	
+	

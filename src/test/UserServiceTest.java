@@ -12,6 +12,8 @@ public class UserServiceTest {
 	
 	
 	public static void main(String[] args) {
+		
+		
 		repo.resetData();
 		creatUser();
 		updateUser();
@@ -40,6 +42,7 @@ public class UserServiceTest {
 	}
 	public static void displayUser() {
 		service.displayUsers();
+		
 	}
 	public static void login() {
 		
