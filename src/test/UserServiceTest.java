@@ -17,7 +17,7 @@ public class UserServiceTest {
 		repo.resetData();
 		creatUser();
 		updateUser();
-		displayUser();
+		
 		login();
 		logout();
 		viewLog(2025, 8, 16);
@@ -40,10 +40,7 @@ public class UserServiceTest {
 			e.printStackTrace();
 		}
 	}
-	public static void displayUser() {
-		service.displayUsers();
-		
-	}
+	
 	public static void login() {
 		
 	}
