@@ -26,7 +26,9 @@ public class CartServiceImpl implements CartService {
             Cart saved = cartRepository.saveCart(cart);
             System.out.println("saved = " + saved);
             cartRepository.commit();
+            // userRepository.commit();
         } catch (Exception e) {
+            // userRepository.rollback();
             cartRepository.rollback();
         }
     }
