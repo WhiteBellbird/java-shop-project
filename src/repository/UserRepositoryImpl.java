@@ -131,6 +131,11 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
+	public void delete(User user) {
+		users.remove(user);
+	}
+
+	@Override
 	public List<User> getUsersList() {
 		return users;
 	}

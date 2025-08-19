@@ -45,5 +45,7 @@ public interface UserRepository {
 	List<User> getUsersList();
 	
 	public void resetData();
-	
+
+
+	void delete(User user);
 }
