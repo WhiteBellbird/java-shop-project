@@ -10,5 +10,4 @@ public interface UserService {
 	
 	public User updateManager(String userId) throws ShopException, ClassNotFoundException;
 	
-	public void displayUsers();
 }

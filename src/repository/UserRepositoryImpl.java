@@ -41,7 +41,7 @@ public class UserRepositoryImpl implements UserRepository{
 		users.add(user);
 		FileManager.writeObject(DATA_FILE, users);
 		return user;
-	}
+	}   
 	@Override
 	public User findUserByEmail(String email){
 		users = FileManager.readObject(DATA_FILE);
