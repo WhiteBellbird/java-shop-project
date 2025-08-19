@@ -1,4 +1,6 @@
 package repository;
+import java.util.Optional;
+
 import domain.*;
 
 public interface CartRepository {
@@ -6,9 +8,9 @@ public interface CartRepository {
 	
 	public Cart updateCart(Cart cart);
 	
-	public Cart removeCart(Cart cart);
+	public void removeCart(Cart cart);
 	
-	public Cart getCart(Cart cart);
+	public Optional<Cart> findCartByUserId(String userId);
 	
 	public void organizeCartList();
 	
