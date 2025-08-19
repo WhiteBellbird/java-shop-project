@@ -7,6 +7,12 @@ import domain.User;
 
 public interface UserRepository {
 
+	// commit: 현재 상태를 파일에 저장하고 tmpUsers 갱신
+	void commit();
+
+	// rollback: tmpUsers 상태로 되돌린 후 파일에 덮어쓰기
+	void rollback();
+
 	User saveUser(User user);
 	
 	User findUserByEmail(String email);
