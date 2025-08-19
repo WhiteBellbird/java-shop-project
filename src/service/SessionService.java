@@ -1,9 +1,9 @@
 package service;
 
 public interface SessionService {
-	void successlogin(String userId);
+	void successlogin(String username, String password);
 	
-	void successLogout(String userId);
+	void successLogout(String username);
 	
 	//String getSessionId(String UserId);
 	
