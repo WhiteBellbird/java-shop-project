@@ -25,6 +25,11 @@ public class Cart implements Serializable {
         this.items = new HashMap<>();
         this.history = new HashMap<String, Log>();
     }
+
+    public static Cart createCart(String userId) {
+        Cart cart = new Cart(userId);
+        return cart;
+    }
     
     //product 추가할 상품 객체 AND quantity 추가할 수량
     public void addProduct(Product product, int quantity) throws CustomIllegalArgumentException {
