@@ -39,10 +39,7 @@ public class FileManager {
 	public static <T> void writeObject(Path file, List <T> data){
 		try {
 			Path parent = file.getParent();
-			if(parent != null) {
-				Files.createDirectories(parent);
-			}
-			
+			Files.createDirectories(parent);
 			if(data == null) {
 				data = new ArrayList<T>();
 			}

@@ -26,19 +26,15 @@ public class UserRepositoryImpl implements UserRepository{
 	private final Path DATA_FILE = Paths.get("userData", "users.dat");
 	//각 유저의 로그인/로그아웃 기록이 생성되야한다 그러기에 repository 에서 아래 방법으로 폴더와 파일을 생성하는건 hard coding & 옳바르지않다. 
 	//class 를 만들고 field 를 login & logout 으로 틀을 만들자  
-	class UserLogData{
+	class UserLogData{ // UserLogPath
 		public String username;
 		private Path pathLogin;
 		private Path pathLogout;
-		private List<LocalDateTime> listLogin;
-		private List<LocalDateTime> listLogout;
 		
 		public UserLogData(String username) {
 			this.username = username;	
 			this.pathLogin = Paths.get("userData", username + "Login.dat");
 			this.pathLogout = Paths.get("userData", username + "Logout.dat");
-			//List<LocalDateTime> listLogin = new ArrayList<LocalDateTime>();
-			//List<LocalDateTime> listLogout = new ArrayList<LocalDateTime>();
 		}
 		public Path getPathIn() {
 			return this.pathLogin;
@@ -46,24 +42,6 @@ public class UserRepositoryImpl implements UserRepository{
 		public Path getPathOut() {
 			return this.pathLogout;
 		}
-		public List<LocalDateTime> getLoginList(){
-			return this.listLogin;
-		}
-		public List<LocalDateTime> getLogoutList(){
-			return this.listLogout;
-		}
-		/*
-		public List<LocalDateTime> overrideLoginList(List list){
-			this.listLogin.clear();
-			this.listLogin.addAll(list);
-			return this.listLogin;
-		}
-		public List<LocalDateTime> overrideLogoutList(List list){
-			this.listLogout.clear();
-			this.listLogout.addAll(list);
-			return this.listLogout;
-		}
-		*/
 	}
 	
 	
@@ -98,11 +76,25 @@ public class UserRepositoryImpl implements UserRepository{
 	@Override
 	public User findUserByEmail(String email){
 		users = FileManager.readObject(DATA_FILE);
-		return users.stream().filter(u -> u.getEmail().equals(email)).findFirst().orElse(null);
+		//users contains every users no worry.
+		// stream() is unable to find user by email
+		
+		users.forEach(u -> {
+			System.out.println(u.getEmail());
+			System.out.println();
+		});
+		System.out.println(email);
+		
+		return users.stream()
+			    .filter(u -> u.getEmail() != null)
+			    .filter(u -> u.getEmail().trim().equalsIgnoreCase(email.trim()))
+			    .findFirst()
+			    .orElse(null);
 	}
 	@Override
 	public User findUserByUserId(String userId) {
 		users = FileManager.readObject(DATA_FILE);
+		
 		return users.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);
 	}
 	@Override
@@ -149,8 +141,6 @@ public class UserRepositoryImpl implements UserRepository{
 	// userId로 다 바꾸기 그리고 userId로 USER 찾기 저장된 파일에서 그렇게하면 굳이 service 에서 로컬 유저 값이 없어도 바로 ID 로 retrieve 가능
 	@Override
 	public LocalDateTime saveLoginTime(String email, LocalDateTime now) {
-		
-		
 		System.out.println("this is a returned value of finduserbyemail" + findUserByEmail(email));
 		User user = findUserByEmail(email);
 		UserLogData LogData = new UserLogData(user.getUsername());
