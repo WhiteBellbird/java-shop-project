@@ -1,6 +1,7 @@
 package domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -26,18 +27,18 @@ public class User implements Serializable{
 	//아이디 만든 시간
 	private LocalDateTime createdDate;
 	//로그인한 시간
-	private PriorityQueue<LocalDateTime> loginTime;
+	private List<LocalDateTime> loginTime;
 	//로그아웃한 시간
-	private PriorityQueue<LocalDateTime> logoutTime;
+	private List<LocalDateTime> logoutTime;
 	//로그인한 상태
-	private boolean isLoggedin;
+	private boolean isLogin;
 	
 	
 	
 	
 	public User(String userId, String username, String email, String password, String rank, String address, int point,
 			String coupon, String phone, boolean isAdmin, LocalDateTime createdDate,
-			PriorityQueue<LocalDateTime> loggedInTime, PriorityQueue<LocalDateTime> loggedOutTime, boolean isLoggedin) {
+			List<LocalDateTime> loggedInTime, List<LocalDateTime> loggedOutTime, boolean isLoggedin) {
 		//super();
 		this.userId = userId;
 		this.username = username;
@@ -52,22 +53,22 @@ public class User implements Serializable{
 		this.createdDate = createdDate;
 		this.loginTime = loggedInTime;
 		this.logoutTime = loggedOutTime;
-		this.isLoggedin = isLoggedin;
+		this.isLogin = isLoggedin;
 	}
-	public boolean isLoggedIn() {
-		return this.isLoggedin;
+	public boolean isLogIn() {
+		return this.isLogin;
 	}
 	public boolean login() {
-		this.isLoggedin = true;
-		return this.isLoggedin;
+		this.isLogin = true;
+		return this.isLogin;
 	}
 	public boolean logout() {
-		this.isLoggedin = false;
-		return this.isLoggedin;
+		this.isLogin = false;
+		return this.isLogin;
 	}
 	public static User createUser(String userId, String username, String email, String password, String phone) {
 		User user = new User(userId, username, email, password, username, email, 0, password, phone, false, 
-				LocalDateTime.now(), new PriorityQueue<LocalDateTime>(), new PriorityQueue<LocalDateTime>(), false);
+				LocalDateTime.now(), new ArrayList<LocalDateTime>(), new ArrayList<LocalDateTime>(), false);
 		return user;
 	}
 	public void updatePassword (String password) {
@@ -156,11 +157,21 @@ public class User implements Serializable{
 	public boolean isAdmin() {
 		return isAdmin;
 	}
-	public PriorityQueue<LocalDateTime> getLoginTime(){
+	public List<LocalDateTime> getLoginTime(){
 		return this.loginTime;
 	}
-	public PriorityQueue<LocalDateTime> getLogoutTime(){
+	public List<LocalDateTime> getLogoutTime(){
 		return this.logoutTime;
+	}
+	public LocalDateTime saveLoginTime(){
+		LocalDateTime time = LocalDateTime.now();
+		this.loginTime.add(time);
+		return time;
+	}
+	public LocalDateTime saveLogoutTime(){
+		LocalDateTime time = LocalDateTime.now();
+		this.loginTime.add(time);
+		return time;
 	}
 	@Override
 	public String toString() {

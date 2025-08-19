@@ -12,9 +12,15 @@ public class UserServiceTest {
 	
 	
 	public static void main(String[] args) {
+		
+		
 		repo.resetData();
 		creatUser();
 		updateUser();
+<<<<<<< HEAD
+=======
+		
+>>>>>>> origin
 		login();
 		logout();
 		viewLog(2025, 8, 16);
