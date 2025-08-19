@@ -22,10 +22,9 @@ import java.nio.file.Paths;
 
 
 public class UserRepositoryImpl implements UserRepository{
-	// src 폴더 밖에 있는 data 폴더안에 있는 users.dat에 path 지정 
-	private final Path DATA_FILE = Paths.get("userData", "users.dat");
 	//각 유저의 로그인/로그아웃 기록이 생성되야한다 그러기에 repository 에서 아래 방법으로 폴더와 파일을 생성하는건 hard coding & 옳바르지않다. 
 	//class 를 만들고 field 를 login & logout 으로 틀을 만들자  
+	//각 유저를 위한 로그인&아웃기록파일 PATH를 저장하는 클래스 **********************************************************
 	class UserLogData{ // UserLogPath
 		public String username;
 		private Path pathLogin;
@@ -43,8 +42,7 @@ public class UserRepositoryImpl implements UserRepository{
 			return this.pathLogout;
 		}
 	}
-	
-	
+	// 생성자**************************************************************************************
 	// users.dat를 위한 폴더(/data)가 없다면 생성해준다.
 	public UserRepositoryImpl(){
 		try {
@@ -53,10 +51,14 @@ public class UserRepositoryImpl implements UserRepository{
 			System.out.println("데이터 파일을 위한 폴더 생성 불가");
 		}
 	}
+	//변수*********************************************************************************************
+	// source 폴더 밖에 있는 data 폴더안에 있는 users.dat에 path 지정 
+	private final Path DATA_FILE = Paths.get("userData", "users.dat");
 	List<User> users = new ArrayList<User>();
 	List<LocalDateTime> login = new ArrayList<LocalDateTime>(); // just a dummyList to serialize and de-serialize 
 	List<LocalDateTime> logout = new ArrayList<LocalDateTime>(); // just a dummyList to serialize and de-serialize
 	
+	//함수***********************************************************************************************
 	@Override
 	public User saveUser(User user) {
 		users = FileManager.readObject(DATA_FILE);
@@ -65,14 +67,6 @@ public class UserRepositoryImpl implements UserRepository{
 		System.out.println(FileManager.readObject(DATA_FILE).size());
 		return user;
 	}   
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public User findUserByEmail(String email){
 		users = FileManager.readObject(DATA_FILE);
@@ -131,13 +125,6 @@ public class UserRepositoryImpl implements UserRepository{
 		users = FileManager.readObject(DATA_FILE);
 		return users;
 	}
-	
-	
-	
-	
-	
-	
-	
 	// userId로 다 바꾸기 그리고 userId로 USER 찾기 저장된 파일에서 그렇게하면 굳이 service 에서 로컬 유저 값이 없어도 바로 ID 로 retrieve 가능
 	@Override
 	public LocalDateTime saveLoginTime(String email, LocalDateTime now) {
