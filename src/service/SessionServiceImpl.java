@@ -3,17 +3,22 @@ import java.util.*;
 import repository.*;
 
 public class SessionServiceImpl implements SessionService{
-	private HashMap<String, String> sessionIdList = new HashMap<>();
-	
-	@Override
-	public void successlogin(String userId) {
-		String sessionId = UUID.randomUUID().toString();
-		sessionIdList.put(userId, sessionId);
+	private HashMap<String, String> sessionIdList;
+	private UserRepository userRepository;
+
+    public SessionServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+		sessionIdList = new HashMap<>();
+    }
+
+    @Override
+	public void successlogin(String username, String password) {
+
 	}
 
 	@Override
-	public void successLogout(String userId) {
-		sessionIdList.remove(userId);
+	public void successLogout(String username) {
+
 	}
 
 	@Override
