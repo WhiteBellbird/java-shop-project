@@ -78,37 +78,85 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User displayUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = repository.findUserByUsername(username);
+		return user;
 	}
 	@Override
-	public User withdrawUser(String username) {
-		// TODO Auto-generated method stub
+	public List<User> withdrawUser(String username) {
+		try {
+			if(repository.findUserByUsername(username) == null) {
+				throw new ShopException("유저가 존재하지 않습니다/ 찾을 수 없습니다");
+			}
+			repository.delete(repository.findUserByUsername(username));
+			repository.commit();
+			return repository.getUsersList();
+		}catch(ShopException e){
+			repository.rollback();
+			System.out.println(e.getClass() + ": 퇴출과정중 에러 발생");
+		}
 		return null;
 	}
 	@Override
 	public User findUser(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		if(repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
+			throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
+		}
+		return repository.findUserByUsername(username);
 	}
 	@Override
 	public List<User> displayAllUsers(String adminUsername, String adminPassword) {
-		// TODO Auto-generated method stub
+		if(repository.findUserByUsername(adminUsername) == null || repository.findUserByUsername(adminUsername).getPassword() != adminPassword) {
+			throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
+		}
+		return repository.getUsersList();
+	}
+	@Override
+	public User changePassword(String username, String password) {
+		try {
+			if(repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
+				throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
+			}
+			User user = repository.findUserByUsername(username);
+			repository.delete(user);
+			user.updatePassword(password);
+			repository.saveUser(user);
+			
+			repository.commit();
+		}catch(ShopException e) {
+			repository.rollback();
+			System.out.println(e.getClass() + "패스워드 변경중 문제 발생");
+		}
 		return null;
 	}
 	@Override
-	public User changePassword(String paswword) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public User updateUser(String username) {
-		// TODO Auto-generated method stub
+	public User updateUser(User previousUser, User changedUser) {
+		try {
+			if(repository.findUserByUserId(previousUser.getUserId()) == null) {
+				throw new ShopException("옳바르지 않은 유저이거나 찾을수 없습니다.");
+			}
+			repository.replaceUser(previousUser, changedUser);
+			
+			repository.commit();
+		}catch(ShopException e) {
+			repository.rollback();
+			System.out.println(e.getClass() + "고객정보 변경중 문제 발생");
+		}
 		return null;
 	}
 	@Override
 	public User withdrawl(String username, String password) {
-		// TODO Auto-generated method stub
+		try {
+			if(repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
+				throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
+			}
+			User user = repository.findUserByUsername(username);
+			repository.delete(user);
+			
+			repository.commit();
+		}catch(ShopException e) {
+			repository.rollback();
+			System.out.println(e.getClass() + "회원 탈퇴중 문제 발생");
+		}
 		return null;
 	}
 }

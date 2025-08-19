@@ -67,27 +67,23 @@ public class UserRepositoryImpl implements UserRepository {
 	private List<User> deepCopy(List<User> source) {
 		return new ArrayList<>(source);
 	}
-
 	// commit: 현재 상태를 파일에 저장하고 tmpUsers 갱신
 	@Override
 	public void commit() {
 		FileManager.writeObject(DATA_FILE, users);
 		tmpUsers = deepCopy(users);
 	}
-
 	// rollback: tmpUsers 상태로 되돌린 후 파일에 덮어쓰기
 	@Override
 	public void rollback() {
 		users = deepCopy(tmpUsers);
 		FileManager.writeObject(DATA_FILE, users);
 	}
-
 	@Override
 	public User saveUser(User user) {
 		users.add(user);
 		return user;
 	}
-
 	@Override
 	public User findUserByEmail(String email) {
 		return users.stream()

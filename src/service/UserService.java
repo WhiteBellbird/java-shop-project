@@ -18,9 +18,9 @@ public interface UserService {
 	
 	public User findUser(String username, String password);
 	
-	public User changePassword(String paswword);
+	public User changePassword(String username, String paswword);
 	
-	public User updateUser(String username);
+	public User updateUser(User previousUser, User changedUser);
 	
 	public User withdrawl(String username, String password);
 	
@@ -35,5 +35,5 @@ public interface UserService {
 	
 	//public List<LocalDateTime> displayLogout(String username);
 	
-	public User withdrawUser(String username);
+	public List<User> withdrawUser(String username);
 }
