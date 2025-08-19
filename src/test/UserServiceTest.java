@@ -10,30 +10,49 @@ public class UserServiceTest {
 	static UserRepositoryImpl repo = new UserRepositoryImpl();
 	static UserService service = new UserServiceImpl(new UserRepositoryImpl());
 	
-	static User user = new User("001" ,"susanLee", "susan9973@gmail.com", "Asdf1234!", null, null);
 	
 	public static void main(String[] args) {
+		
+		
+		repo.resetData();
 		creatUser();
 		updateUser();
+<<<<<<< HEAD
+=======
+		
+>>>>>>> origin
+		login();
+		logout();
+		viewLog(2025, 8, 16);
+		
+		
+		
 	}
 	public static void creatUser() {
 		try {
 			User user1 = service.createUser("susanLee", "susan9973@gmail.com", "Asdf1234!", null, null);
-			User user2 = service.createUser("bruceLee", "bruce9973@gmail.com", "Asdf1234!", null, null);
-			
-			repo.saveUser(user1);
-			repo.saveUser(user2);
-			
+			User user2 = service.createUser("bruceLee", "bruce9973@gmail.com", "Asdf1234!", null, null);	
 		} catch (ShopException e) {
 			e.printStackTrace();
 		}
 	}
 	public static void updateUser() {
 		try {
-			service.updateManager(user.getUserId());
-			
+			service.updateManager(repo.findUserByEmail("susan9973@gmail.com").getUserId());
 		} catch (ClassNotFoundException | ShopException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void login() {
+		
+	}
+	public static void logout() {
+		
+	}
+	public static void viewLog(int year, int month, int day) {
+		
+	}
+	
+	
 }
