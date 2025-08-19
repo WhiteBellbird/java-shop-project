@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import exception.CustomIllegalArgumentException;
 import exception.QuantityException;
 
 import java.util.*;
@@ -26,13 +27,13 @@ public class Cart implements Serializable {
     }
     
     //product 추가할 상품 객체 AND quantity 추가할 수량
-    public void addProduct(Product product, int quantity) {
+    public void addProduct(Product product, int quantity) throws CustomIllegalArgumentException {
         if (product == null || quantity <= 0) {
-            throw new IllegalArgumentException("상품 또는 수량이 유효하지 않습니다.");
+            throw new CustomIllegalArgumentException("상품 또는 수량이 유효하지 않습니다.");
         }
         // 재고 수량 초과 불가 제약사항
         if (product.getStock() < quantity) {
-            throw new IllegalArgumentException("재고가 부족합니다. 현재 재고: " + product.getStock() + "개");
+            throw new CustomIllegalArgumentException("재고가 부족합니다. 현재 재고: " + product.getStock() + "개");
         }
         //상품이 카트 아이템에 존재하는지 확인하고 추가하는거
         String productId = product.getProductId();
@@ -42,7 +43,7 @@ public class Cart implements Serializable {
             existingItem.addQuantity(quantity);
             // 재고 초과 여부 재확인
 //            if (product.getStock() < newTotalQuantity) {
-//                 throw new IllegalArgumentException("재고를 초과할 수 없습니다. 현재 재고: " + product.getStock() + "개");
+//                 throw new CustomIllegalArgumentException("재고를 초과할 수 없습니다. 현재 재고: " + product.getStock() + "개");
 //            }
 //            existingItem.setQuantity(newTotalQuantity);
         } else {
@@ -69,9 +70,6 @@ public class Cart implements Serializable {
         }
     }
     /**
-     * 장바구니 상품의 수량을 변경합니다.
-     *  productId 수량을 변경할 상품의 ID
-     *  newQuantity 변경할 수량
      */
     public void addProductQuantity(String productId, int newQuantity) {
     	CartItem item = items.get(productId);
@@ -80,14 +78,14 @@ public class Cart implements Serializable {
 //            CartItem item = items.get(productId);
 //            // 재고 수량 초과 불가 제약사항
 //            if (item.getProduct().getStock() < newQuantity) {
-//                throw new IllegalArgumentException("재고를 초과할 수 없습니다. 현재 재고: " + item.getProduct().getStock() + "개");
+//                throw new CustomIllegalArgumentException("재고를 초과할 수 없습니다. 현재 재고: " + item.getProduct().getStock() + "개");
 //            }
 //            item.setQuantity(newQuantity);
 //        } else if (newQuantity <= 0) {
 //            // 수량이 0 이하면 상품 삭제
 //            removeProduct(productId);
 //        } else {
-//            throw new IllegalArgumentException("상품 ID 또는 수량이 유효하지 않습니다.");
+//            throw new CustomIllegalArgumentException("상품 ID 또는 수량이 유효하지 않습니다.");
 //        }
     }
     

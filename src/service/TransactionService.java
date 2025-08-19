@@ -1,6 +1,6 @@
 package service;
 
-public interface TransactionService {
+public interface TransactionService<T extends OrderService, K extends UserService> {
 
-	void transaction();
+	T transaction(T doit);
 }
