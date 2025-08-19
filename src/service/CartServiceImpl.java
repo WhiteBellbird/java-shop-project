@@ -10,6 +10,8 @@ import repository.CartRepository;
 import repository.ProductRepository;
 import repository.UserRepository;
 
+import java.time.LocalDateTime;
+
 public class CartServiceImpl implements CartService {
 
     private CartRepository cartRepository;
@@ -33,7 +35,6 @@ public class CartServiceImpl implements CartService {
             Cart saved = cartRepository.saveCart(cart);
             System.out.println("saved = " + saved);
             cartRepository.commit();
-            userRepository.commit();
         } catch (ShopException e) {
             userRepository.rollback();
             cartRepository.rollback();
@@ -44,20 +45,17 @@ public class CartServiceImpl implements CartService {
     @Override
     public void addProduct(String userId, String productId, int quantity) {
         try {
-            Product product = productRepository.findById(productId);
-            if (product == null) {
-                throw new ProductNotfoundException("Product not found By Id : " + productId);
-            }
+            Product product = productRepository.findById(productId).orElseThrow(() ->
+                    new ProductNotfoundException("Product not found By Id : " + productId));
             Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
                     new CartNotFoundException("Cart not found By Id : " + userId));
             cart.addProduct(product, quantity);
             cartRepository.saveCart(cart);
-
             cartRepository.commit();
-            // productRepository.commit();
+            productRepository.commit();
         } catch (ShopException e) {
             cartRepository.rollback();
-            // productRepository.rollback();
+            productRepository.rollback();
             System.out.println("error Msg is : " + e.getMessage());
         }
     }
@@ -84,19 +82,38 @@ public class CartServiceImpl implements CartService {
             Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
                     new CartNotFoundException("Cart not found By Id : " + userId));
             cart.addProductQuantity(productId, quantity);
+            cartRepository.saveCart(cart);
+            cartRepository.commit();
+            return cart.getItems().get(productId).getQuantity();
         } catch (ShopException e) {
-
+            cartRepository.rollback();
+            throw new ShopException(e.getMessage());
         }
-        return 0;
     }
 
     @Override
     public Integer subProductQuantity(String userId, String productId, Integer quantity) {
-        return 0;
+        try {
+            Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
+                    new CartNotFoundException("Cart not found By Id : " + userId));
+            cart.subProductQuantity(productId, quantity);
+            cartRepository.saveCart(cart);
+            cartRepository.commit();
+            return cart.getItems().get(productId).getQuantity();
+        } catch (ShopException e) {
+            cartRepository.rollback();
+            throw new ShopException(e.getMessage());
+        }
     }
 
     @Override
     public Integer totalProductsPrice(String userId) {
-        return 0;
+        try {
+            Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
+                    new CartNotFoundException("Cart not found By Id : " + userId));
+            return cart.getTotalPrice();
+        } catch (ShopException e) {
+            throw new ShopException(e.getMessage());
+        }
     }
 }

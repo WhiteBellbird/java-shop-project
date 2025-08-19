@@ -4,6 +4,7 @@ import java.util.List;
 
 import domain.Product;
 import exception.ProductNotfoundException;
+import exception.ShopException;
 import repository.ProductRepository;
 
 public class ProductServiceImpl implements ProductService{
@@ -21,42 +22,65 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public Product getProductById(String productId) throws ProductNotfoundException {
-		Product product = repository.findById(productId);
-		//상품이 null일 경우 예외를 던짐
-		if(product==null) {
-			throw new ProductNotfoundException(productId + "에 해당하는 상품이 없습니다.");
-		}
-		return product;
+		return repository.findById(productId).orElseThrow(() ->
+				new ProductNotfoundException(productId + "에 해당하는 상품이 없습니다."));
 	}
 
+	// 상품이 추가될 파라미터로 바꾸시고, 객체 만드신다음에 저장하세요.
 	@Override
 	public void addProduct(Product product) {
-		//상품ID가 null이거나 비어있을 경우 자동생성
-		if(product.getProductId()==null || product.getProductId().isEmpty()) {
-			int nextId = repository.getNextProductId() + 1;
-			product.setProductId("P"+ nextId);
- 		}
-		repository.save(product);
+		try {
+			// 아래부터 객체를 생성하고 저장해주세요.
+
+
+			repository.commit();
+		} catch (ShopException e) {
+			repository.rollback();
+		}
 	}
 
 	@Override
 	public void updateProduct(Product product) throws ProductNotfoundException {
-		//수정을 위한 상품이 존재하는지 확인 후 수정
-		Product existingProduct = repository.findById(product.getProductId());
-		if(existingProduct==null) {
-			throw new ProductNotfoundException("id에 맞는 상품이 없습니다.");
+		try {
+			// 무엇이 업데이트 될지, 파라미터로 바꾸시고 프로덕트를 업데이트 하시고, 리포지토리에 저장해주세요.
+			repository.commit();
+		} catch (ShopException e) {
+			repository.rollback();
 		}
-		repository.save(product);
 	}
 
 	@Override
-	public void deleteProduct(Product product) throws ProductNotfoundException {
+	public void deleteProduct(String productId) throws ProductNotfoundException {
+		try {
+			Product willDelete = repository.findById(productId).orElseThrow(
+					() -> new ProductNotfoundException(String.format("product not found by Id : %s",
+							productId))
+			);
+			repository.delete(willDelete);
+			repository.commit();
+		} catch (ShopException e) {
+			repository.rollback();
+			throw new ProductNotfoundException(e.getMessage());
+		}
 		//삭제를 위한 상품이 존재하는지 확인 후 삭제
-		 Product existingProduct = repository.findById(product.getProductId());
-		 if(existingProduct==null) {
-			 throw new ProductNotfoundException("id에 맞는 상품이 없습니다.");
-		 }
-		repository.delete(product.getProductId());
+//		 Product existingProduct = repository.findById(product.getProductId());
+//		 if(existingProduct==null) {
+//			 throw new ProductNotfoundException("id에 맞는 상품이 없습니다.");
+//		 }
+//		repository.delete(product.getProductId());
+	}
+
+	@Override
+	public void reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException {
+		try {
+			Product product = repository.findById(productId).get();
+			product.reduceStock(quantity);
+			repository.save(product);
+			repository.commit();
+		} catch (ProductNotfoundException e) {
+			repository.rollback();
+			throw new ProductNotfoundException(e.getMessage());
+		}
 	}
 
 }

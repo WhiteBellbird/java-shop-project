@@ -15,9 +15,8 @@ public interface ProductService {
 	
 	void updateProduct(Product product) throws ProductNotfoundException;
 	
-	void deleteProduct(Product product) throws ProductNotfoundException;
+	void deleteProduct(String productId) throws ProductNotfoundException;
 
-	
-	
-	
+
+	void reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException;
 }
