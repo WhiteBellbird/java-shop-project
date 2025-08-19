@@ -1,19 +1,20 @@
 package service;
 
 import domain.Product;
+import exception.ProductNotfoundException;
 
 public interface CartService {
 
 	
 	void createCart(String userId);
 
-	void addProduct(Product product, int quantity);
+    void addProduct(String userId, String productId, int quantity);
+
+    String removeProduct(String userId,String productId) throws ProductNotfoundException;
 	
-	String removeProduct(String productId);
+	Integer addProductQuantity(String userId,String productId, Integer quantity);
 	
-	Integer addProductQuantity(String productId, Integer quantity);
-	
-	Integer subProductQuantity(String productId, Integer quantity);
+	Integer subProductQuantity(String userId,String productId, Integer quantity);
 	
 	Integer totalProductsPrice(String userId);
 }

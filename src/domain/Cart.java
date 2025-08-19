@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import exception.CustomIllegalArgumentException;
+import exception.ProductNotfoundException;
 import exception.QuantityException;
 
 import java.util.*;
@@ -19,9 +20,9 @@ public class Cart implements Serializable {
     private Map<String, Log> history;
     // key: 상품 ID, value: 상품과 수량을 담는 CartItem 객체
     private Map<String, CartItem> items;
-    
+
     public Cart(String userId) {
-    	this.userId = userId;
+        this.userId = userId;
         this.items = new HashMap<>();
         this.history = new HashMap<String, Log>();
     }
@@ -30,7 +31,7 @@ public class Cart implements Serializable {
         Cart cart = new Cart(userId);
         return cart;
     }
-    
+
     //product 추가할 상품 객체 AND quantity 추가할 수량
     public void addProduct(Product product, int quantity) throws CustomIllegalArgumentException {
         if (product == null || quantity <= 0) {
@@ -62,23 +63,27 @@ public class Cart implements Serializable {
             history.put(productId, log);
         }
     }
+
     /**
      * 장바구니에서 상품을 삭제합니다.
-     *  productId 삭제할 상품의 ID
+     * productId 삭제할 상품의 ID
      */
-    public void removeProduct(String productId) {
-        if (productId != null && items.containsKey(productId)) {
-            items.remove(productId);
-            Log log = new Log();
-            log.removed();
-            history.put(productId, log);
+    public void removeProduct(String productId) throws ProductNotfoundException {
+        if (productId == null || !items.containsKey(productId)) {
+            throw new ProductNotfoundException("Product not found by Id: " + productId);
         }
+        items.remove(productId);
+        Log log = new Log();
+        log.removed();
+        history.put(productId, log);
     }
+
     /**
+     *
      */
     public void addProductQuantity(String productId, int newQuantity) {
-    	CartItem item = items.get(productId);
-    	item.addQuantity(newQuantity);
+        CartItem item = items.get(productId);
+        item.addQuantity(newQuantity);
 //        if (productId != null && items.containsKey(productId) && newQuantity > 0) {
 //            CartItem item = items.get(productId);
 //            // 재고 수량 초과 불가 제약사항
@@ -93,12 +98,12 @@ public class Cart implements Serializable {
 //            throw new CustomIllegalArgumentException("상품 ID 또는 수량이 유효하지 않습니다.");
 //        }
     }
-    
+
     public void subProductQuantity(String productId, int newQuantity) throws QuantityException {
-    	CartItem item = items.get(productId);
-    	item.subQuantity(newQuantity);
+        CartItem item = items.get(productId);
+        item.subQuantity(newQuantity);
     }
-    
+
     //장바구니의 총 가격
     public int getTotalPrice() {
         int total = 0;
@@ -107,7 +112,7 @@ public class Cart implements Serializable {
         }
         return total;
     }
-    
+
     //장바구니를 비웁니다.
     public void clearCart() {
         this.items.clear();
@@ -116,11 +121,11 @@ public class Cart implements Serializable {
     public Map<String, CartItem> getItems() {
         return items;
     }
-    
+
     public String getUserId() {
-		return userId;
-	}
-    
+        return userId;
+    }
+
     @Override
     public String toString() {
         if (items.isEmpty()) {

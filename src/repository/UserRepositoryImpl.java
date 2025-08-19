@@ -1,6 +1,8 @@
 package repository;
 
 import domain.User;
+import persistence.FileManager;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

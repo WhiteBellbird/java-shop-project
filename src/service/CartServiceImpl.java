@@ -3,18 +3,25 @@ package service;
 import domain.Cart;
 import domain.Product;
 import domain.User;
+import exception.CartNotFoundException;
+import exception.ProductNotfoundException;
+import exception.ShopException;
 import repository.CartRepository;
+import repository.ProductRepository;
 import repository.UserRepository;
 
 public class CartServiceImpl implements CartService {
 
     private CartRepository cartRepository;
     private UserRepository userRepository;
+    private ProductRepository productRepository;
 
     public CartServiceImpl(CartRepository cartRepository,
-                           UserRepository userRepository) {
+                           UserRepository userRepository,
+                           ProductRepository productRepository) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -22,34 +29,69 @@ public class CartServiceImpl implements CartService {
         // 커밋과 롤백 예시
         try {
             User user = userRepository.findUserByUserId(userId);
-            Cart cart = Cart.createCart(userId);
+            Cart cart = Cart.createCart(user.getUserId());
             Cart saved = cartRepository.saveCart(cart);
             System.out.println("saved = " + saved);
             cartRepository.commit();
-            // userRepository.commit();
-        } catch (Exception e) {
-            // userRepository.rollback();
+            userRepository.commit();
+        } catch (ShopException e) {
+            userRepository.rollback();
             cartRepository.rollback();
+            System.out.println("error Msg is : " + e.getMessage());
         }
     }
 
     @Override
-    public void addProduct(Product product, int quantity) {
+    public void addProduct(String userId, String productId, int quantity) {
+        try {
+            Product product = productRepository.findById(productId);
+            if (product == null) {
+                throw new ProductNotfoundException("Product not found By Id : " + productId);
+            }
+            Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
+                    new CartNotFoundException("Cart not found By Id : " + userId));
+            cart.addProduct(product, quantity);
+            cartRepository.saveCart(cart);
 
+            cartRepository.commit();
+            // productRepository.commit();
+        } catch (ShopException e) {
+            cartRepository.rollback();
+            // productRepository.rollback();
+            System.out.println("error Msg is : " + e.getMessage());
+        }
     }
 
     @Override
-    public String removeProduct(String productId) {
-        return "";
+    public String removeProduct(String userId, String productId) throws ProductNotfoundException {
+        try {
+            Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
+                    new CartNotFoundException("Cart not found By Id : " + userId));
+            cart.removeProduct(productId);
+            cartRepository.saveCart(cart);
+            cartRepository.commit();
+            return productId;
+        } catch (ShopException e) {
+            cartRepository.rollback();
+            System.out.println("error Msg is : " + e.getMessage());
+            throw new ProductNotfoundException(e.getMessage());
+        }
     }
 
     @Override
-    public Integer addProductQuantity(String productId, Integer quantity) {
+    public Integer addProductQuantity(String userId, String productId, Integer quantity) {
+        try {
+            Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
+                    new CartNotFoundException("Cart not found By Id : " + userId));
+            cart.addProductQuantity(productId, quantity);
+        } catch (ShopException e) {
+
+        }
         return 0;
     }
 
     @Override
-    public Integer subProductQuantity(String productId, Integer quantity) {
+    public Integer subProductQuantity(String userId, String productId, Integer quantity) {
         return 0;
     }
 

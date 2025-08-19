@@ -1,4 +1,4 @@
-package repository;
+package persistence;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -7,11 +7,8 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import domain.User;
 
 public class FileManager {
 	//파일 읽어주는 메서드 빈 리스트 반환 null 반환 안하는게 목적
