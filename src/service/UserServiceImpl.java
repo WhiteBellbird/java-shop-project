@@ -33,23 +33,6 @@ public class UserServiceImpl implements UserService {
 		System.out.println(saved.toString());
 		return saved;
 	}
-	@Override
-	public User updateManager(String userId) throws ShopException {
-		User findUser = repository.findUserByUserId(userId);
-		// 유저를 찾을 수 없다면 예외처리
-		if(findUser == null) {
-			throw new UserNotfoundException(String.format("%s 아이디의 유저를 찾을 수 없습니다.",userId));
-		}
-		// 유저를 관리자로 승격
-		findUser.giveManagerAuthentication();
-		// 리포지토리에서 유저를 업데이트
-		User updated = repository.authorizeUser(findUser);
-		// 결과 값 출력할 때 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
-		return updated;
-	}
-	
-
-
 	private void isRegisteredUserEmail(String email) throws UserDuplicatedException {
 		User user = repository.findUserByEmail(email);
 		if(user != null) {
@@ -71,27 +54,61 @@ public class UserServiceImpl implements UserService {
 			throw new InvalidatedInputException("필수사항:\n아이디 또는 비밀번호 5자리 이상\n비밀번호 최소 한글자는 대문자 그리고 특수문저 !,@,#,$,%,^,&,* 중 포함\n이메일에 '@' 포함");
 		}
 	}
+	@Override
+	public User updateManager(String userId) throws ShopException {
+		User findUser = repository.findUserByUserId(userId);
+		// 유저를 찾을 수 없다면 예외처리
+		if(findUser == null) {
+			throw new UserNotfoundException(String.format("%s 아이디의 유저를 찾을 수 없습니다.",userId));
+		}
+		// 유저를 관리자로 승격
+		findUser.giveManagerAuthentication();
+		// 리포지토리에서 유저를 업데이트
+		User updated = repository.authorizeUser(findUser);
+		// 결과 값 출력할 때 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
+		return updated;
+	}
+	
 
 	// DisplayUsers 를 유저 서비스에서 출력하는건 SRP 위반이야.
 	// 비즈니스 로직만 처리하는게 유저 서비스의 궁극적인 역할이야
 	// 유저 리포지토리에서 조회한 결과를 그대로 그냥 return 해줘서 이 서비스의 역할을 지키는 것이 맞다고 생각해.
 	// 다시 한 번, 말하지만 유저 서비스는 '출력'을 담당하는 것이 아닌 '객체의 변화'에 스탠스를 가지는 클래스라는 점
-	// 서비스는 리포지토리에서 조회한걸 그대로 리턴해주고, 출력은 IO Layer에서 해줬으면 해.
-
+	// 서비스는 리포지토리에서 조회한걸 그대로 리턴해주고, 출력은 IO Layer 에서 해줬으면 해.
+	
 	@Override
-	public User login(String email, String password) throws InvalidatedInputException {
-		if(repository.findUserByEmail(email) == null && repository.findUserByEmail(email).getPassword() != password) {
-			throw new InvalidatedInputException("올바르지 않은 이메일이거나 비밀번호입니다.");
-		}
-		User user = repository.findUserByEmail(email);
-		user.login();
-		
-		return user;
+	public User displayUser(String username) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
 	@Override
-	public User logout(String email, String password) {
-		
+	public User withdrawUser(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public User findUser(String username, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public List<User> displayAllUsers(String adminUsername, String adminPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public User changePassword(String paswword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public User updateUser(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public User withdrawl(String username, String password) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

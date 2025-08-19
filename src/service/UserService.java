@@ -6,18 +6,34 @@ import exception.InvalidatedInputException;
 import exception.ShopException;
 import exception.UserDuplicatedException;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 public interface UserService {
 
-	HashMap<String, Order> orders = new HashMap<>();
-
 	public User createUser(String username, String email, String password, String address, String phone) throws ShopException;
-	
-	public User login(String email, String password) throws InvalidatedInputException;
-	
-	public User logout(String email, String password);
 	
 	public User updateManager(String userId) throws ShopException, ClassNotFoundException;
 	
+	public User findUser(String username, String password);
+	
+	public User changePassword(String paswword);
+	
+	public User updateUser(String username);
+	
+	public User withdrawl(String username, String password);
+	
+	
+	
+	// 관리자용
+	public List<User> displayAllUsers(String adminUsername, String adminPassword);
+	
+	public User displayUser(String username); // 고객 정보 찾기
+	
+	//public List<LocalDateTime> displayLogin(String username);
+	
+	//public List<LocalDateTime> displayLogout(String username);
+	
+	public User withdrawUser(String username);
 }

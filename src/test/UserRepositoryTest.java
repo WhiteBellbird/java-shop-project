@@ -23,7 +23,7 @@ public class UserRepositoryTest {
 		createUsers();
 		updateUser();		
 		saveLog();
-//		findLog();
+		findLog();
 		
 		//클래스 안에서도 list 에 잘 알맞게 저장되도록 너무 dummy 로만 사용하지않기 - 다행히 리스트에 저장이 잘되서 출력 가능 
 		
@@ -42,17 +42,17 @@ public class UserRepositoryTest {
 		repo.authorizeUser(repo.findUserByUserId("001"));
 	}
 	public static void saveLog() {
-		repo.saveLoginTime("kwon9973@gmail.com", LocalDateTime.now());
-		repo.saveLoginTime("susan@gmail.com", LocalDateTime.of(2025, 7, 3, 13, 45));
-		repo.saveLoginTime("brutal@gmail.com", LocalDateTime.of(2025, 8, 3, 13, 45));
+		repo.saveLoginTime("Kwon Lee", LocalDateTime.now());
+		repo.saveLoginTime("Susan Lee", LocalDateTime.of(2025, 8, 3, 13, 45));
+		repo.saveLoginTime("Robert Lee", LocalDateTime.of(2025, 8, 3, 13, 45));
 		
-		repo.saveLogoutTime("kwon9973@gmail.com", LocalDateTime.of(2025, 8, 3, 13, 45));
-		repo.saveLogoutTime("susan@gmail.com", LocalDateTime.now());
+		repo.saveLogoutTime("Kwon Lee", LocalDateTime.of(2025, 8, 3, 13, 45));
+		repo.saveLogoutTime("Susan Lee", LocalDateTime.now());
 	}
 	public static void findLog() {
 		//리포에 저장한건 바로 못쓰는게 당연한것 - 리포에서 바로 쓸수 있는 방법 구상하기 
-		System.out.println(repo.findLoginByMonth("kwon9973@gmail.com", 2025, 8)); // repository 에 hashMap 르 <UserId/User , List<LocalDateTime> loginList> 으로 login list 를 저장해야하나 고민  
-		System.out.println(repo.findLoginByMonth("susan@gmail.com", 2025, 8)); // repository 에서 써주고 그떄부터 비교
+		System.out.println(repo.findLoginByMonth("Kwon Lee", 2025, 8)); // repository 에 hashMap 르 <UserId/User , List<LocalDateTime> loginList> 으로 login list 를 저장해야하나 고민  
+		System.out.println(repo.findLoginByMonth("Susan Lee", 2025, 8)); // repository 에서 써주고 그떄부터 비교
 	}
 }
 

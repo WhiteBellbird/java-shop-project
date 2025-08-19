@@ -96,12 +96,14 @@ public class UserRepositoryImpl implements UserRepository {
 				.findFirst()
 				.orElse(null);
 	}
-
 	@Override
 	public User findUserByUserId(String userId) {
 		return users.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);
 	}
-
+	@Override
+	public User findUserByUsername(String username) {
+		return users.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+	}
 	@Override
 	public User authorizeUser(User user) {
 		for (User clone : users) {
@@ -137,8 +139,8 @@ public class UserRepositoryImpl implements UserRepository {
 
 	// 로그인/로그아웃 기록 저장
 	@Override
-	public LocalDateTime saveLoginTime(String email, LocalDateTime now) {
-		User user = findUserByEmail(email);
+	public LocalDateTime saveLoginTime(String username, LocalDateTime now) {
+		User user = findUserByUsername(username);
 		UserLogData logData = new UserLogData(user.getUsername());
 		List<LocalDateTime> login = FileManager.readObject(logData.getPathIn());
 		if (login == null) login = new ArrayList<>();
@@ -148,8 +150,8 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public LocalDateTime saveLogoutTime(String email, LocalDateTime now) {
-		User user = findUserByEmail(email);
+	public LocalDateTime saveLogoutTime(String username, LocalDateTime now) {
+		User user = findUserByUsername(username);
 		UserLogData logData = new UserLogData(user.getUsername());
 		List<LocalDateTime> logout = FileManager.readObject(logData.getPathOut());
 		if (logout == null) logout = new ArrayList<>();
@@ -160,8 +162,8 @@ public class UserRepositoryImpl implements UserRepository {
 
 	// 로그인/로그아웃 기록 조회
 	@Override
-	public List<LocalDateTime> getLoginTime(String email) {
-		User user = findUserByEmail(email);
+	public List<LocalDateTime> getLoginTime(String username) {
+		User user = findUserByUsername(username);
 		UserLogData logData = new UserLogData(user.getUsername());
 		List<LocalDateTime> login = FileManager.readObject(logData.getPathIn());
 		if (login == null) login = new ArrayList<>();
@@ -169,8 +171,8 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public List<LocalDateTime> getLogoutTime(String email) {
-		User user = findUserByEmail(email);
+	public List<LocalDateTime> getLogoutTime(String username) {
+		User user = findUserByUsername(username);
 		UserLogData logData = new UserLogData(user.getUsername());
 		List<LocalDateTime> logout = FileManager.readObject(logData.getPathOut());
 		if (logout == null) logout = new ArrayList<>();
@@ -178,30 +180,32 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public List<LocalDateTime> findLoginByDay(String email, int year, int month, int day) {
-		return getLoginTime(email).stream()
+	public List<LocalDateTime> findLoginByDay(String username, int year, int month, int day) {
+		return getLoginTime(username).stream()
 				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month && dt.getDayOfMonth() == day)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<LocalDateTime> findLoginByMonth(String email, int year, int month) {
-		return getLoginTime(email).stream()
+	public List<LocalDateTime> findLoginByMonth(String username, int year, int month) {
+		return getLoginTime(username).stream()
 				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<LocalDateTime> findLogoutByDay(String email, int year, int month, int day) {
-		return getLogoutTime(email).stream()
+	public List<LocalDateTime> findLogoutByDay(String username, int year, int month, int day) {
+		return getLogoutTime(username).stream()
 				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month && dt.getDayOfMonth() == day)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<LocalDateTime> findLogoutByMonth(String email, int year, int month) {
-		return getLogoutTime(email).stream()
+	public List<LocalDateTime> findLogoutByMonth(String username, int year, int month) {
+		return getLogoutTime(username).stream()
 				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month)
 				.collect(Collectors.toList());
 	}
+
+	
 }

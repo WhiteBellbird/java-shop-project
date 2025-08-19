@@ -19,27 +19,29 @@ public interface UserRepository {
 	
 	User findUserByUserId(String userId);
 	
+	User findUserByUsername(String username);
+	
 	User authorizeUser(User user);
 	
 	User replaceUser(User previousUser, User changedUser);
 	
-	LocalDateTime saveLoginTime(String email, LocalDateTime now);
+	LocalDateTime saveLoginTime(String username, LocalDateTime now);
 	
-	LocalDateTime saveLogoutTime(String email, LocalDateTime now);
-	
-	
-	List<LocalDateTime> findLoginByDay(String email, int year, int month, int day) ;
-	
-	List<LocalDateTime> findLoginByMonth(String email,int year, int moneth);
-	
-	List<LocalDateTime> findLogoutByDay(String email,int year, int month, int day);
-	
-	List<LocalDateTime> findLogoutByMonth(String email, int year, int moneth);
+	LocalDateTime saveLogoutTime(String username, LocalDateTime now);
 	
 	
-	List<LocalDateTime> getLoginTime(String email);
+	List<LocalDateTime> findLoginByDay(String username, int year, int month, int day) ;
 	
-	List<LocalDateTime> getLogoutTime(String email);
+	List<LocalDateTime> findLoginByMonth(String username , int year, int moneth);
+	
+	List<LocalDateTime> findLogoutByDay(String username ,int year, int month, int day);
+	
+	List<LocalDateTime> findLogoutByMonth(String username , int year, int moneth);
+	
+	
+	List<LocalDateTime> getLoginTime(String username);
+	
+	List<LocalDateTime> getLogoutTime(String username);
 	
 	
 	List<User> getUsersList();
