@@ -12,7 +12,6 @@ public class ProductRepositoryTest {
 	static ProductRepositoryImpl repo = new ProductRepositoryImpl();
 	public static void main(String[] args) {
 		
-		repo.resetData();
 		createProducts();
 		displayAllProducts();
 		displayFindById("P1");
