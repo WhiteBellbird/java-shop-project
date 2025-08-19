@@ -101,6 +101,7 @@ public class Cart implements Serializable {
     public void clearCart() {
         this.items.clear();
     }
+
     public Map<String, CartItem> getItems() {
         return items;
     }
