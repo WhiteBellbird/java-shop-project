@@ -71,6 +71,11 @@ public class SortingTest {
 		for(/*LinkedHashMap <String, CartItem> sort*/ Map.Entry<String, CartItem> entry : entryList) {
 			sortedMap.put(entry.getKey(),entry.getValue());
 		}
+		
 		sortedMap.forEach((u,v) -> System.out.println(v));
+		
+		System.out.println();
+		
+		cartRepo.organizeUserCart(user.getUserId());
 	}
 }

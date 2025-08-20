@@ -82,6 +82,8 @@ public class CartRepositoryImpl implements CartRepository {
 	public HashMap<String, CartItem> organizeUserCart(String userId) {
 		Cart cart = carts.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);
 		
+		// 오답 노트
+		/*
 		Set<Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
 		List<Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
 		
@@ -93,6 +95,30 @@ public class CartRepositoryImpl implements CartRepository {
 		LinkedHashMap<String, CartItem> sortedMap = new LinkedHashMap<String, CartItem>();
 		for(Map.Entry<String, CartItem> entry : entrySet) {
 			sortedMap.put(entry.getKey(), entry.getValue());
+			
+		}
+		*/
+		
+		Set<Map.Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
+		List<Map.Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
+		
+		
+		Collections.sort(entryList, new Comparator<Map.Entry<String, CartItem>>() {
+			 public int compare(Map.Entry<String,CartItem> entry1, Map.Entry<String,CartItem> entry2) {
+				 return entry1.getValue().compareTo(entry2.getValue());
+			 };
+		});
+		LinkedHashMap <String, CartItem> sortedMap = new LinkedHashMap<>();
+		for(/*LinkedHashMap <String, CartItem> sort*/ Map.Entry<String, CartItem> entry : entryList) {
+			sortedMap.put(entry.getKey(),entry.getValue());
+		}
+		
+		sortedMap.forEach((u,v) -> System.out.println(v));
+		//save the sortedMap to the hashMap inside the list of Carts
+		for(int i = 0; i < carts.size(); i++) {
+			if(carts.get(i).getUserId().equals(userId)) {
+				carts.get(i)
+			}
 		}
 		return sortedMap;
 	}

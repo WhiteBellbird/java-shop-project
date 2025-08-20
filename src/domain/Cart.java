@@ -77,7 +77,13 @@ public class Cart implements Serializable {
         log.removed();
         //history.put(productId, log);
     }
-
+  
+    public void replaceCartItem(HashMap<String, CartItem> changedCartItem) {
+    	
+    }
+    
+    
+    
     /**
      *
      */
