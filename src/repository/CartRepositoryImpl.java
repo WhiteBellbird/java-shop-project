@@ -5,10 +5,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 
 import domain.Cart;
+import domain.CartItem;
 import persistence.FileManager;
 
 public class CartRepositoryImpl implements CartRepository {
@@ -61,10 +69,32 @@ public class CartRepositoryImpl implements CartRepository {
 	public Optional<Cart> findCartByUserId(String userId) {
 		return carts.stream().filter(c -> c.getUserId().equals(userId)).findAny();
 	}
+	/*
 	@Override
-	public void organizeCartList() {
-		// 필요 시 정렬/정리 로직 구현
+	public List<CartItem> organizeCartList() {
 		
+		
+		return;
+	}
+	*/
+	
+	@Override
+	public HashMap<String, CartItem> organizeUserCart(String userId) {
+		Cart cart = carts.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);
+		
+		Set<Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
+		List<Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
+		
+		Collections.sort(entryList, new Comparator<Map.Entry<String, CartItem>>() {
+			public int compare(Map.Entry<String, CartItem> entry1, Map.Entry<String, CartItem> entry2) {
+				return entry1.getValue().compareTo(entry2.getValue());
+			}
+		});
+		LinkedHashMap<String, CartItem> sortedMap = new LinkedHashMap<String, CartItem>();
+		for(Map.Entry<String, CartItem> entry : entrySet) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		return sortedMap;
 	}
 	@Override
 	public void displayCarts() {
@@ -82,5 +112,10 @@ public class CartRepositoryImpl implements CartRepository {
 	private List<Cart> deepCopy(List<Cart> source) {
         List<Cart> copy = new ArrayList<>(source);
 		return copy;
+	}
+	@Override
+	public List<CartItem> organizeCartList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

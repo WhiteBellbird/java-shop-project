@@ -33,7 +33,7 @@ public class SortingTest {
 		
 		User user = new User("001", "kwon Lee", "kwon9973@gmail.com", "Asdf1234!", "SILVER", null, 0,
 				null, null, false, LocalDateTime.now(),
-				null, null, false);
+				null, null);
 		
 		Cart cart = new Cart(user.getUserId());
 		
@@ -58,22 +58,19 @@ public class SortingTest {
 		//values.forEach(u -> System.out.println(u));
 		
 		
-		 Set<Map.Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
-		 List<Map.Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
-		 
-		 
-		 Collections.sort(entryList, new Comparator<Map.Entry<String, CartItem>>() {
+		Set<Map.Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
+		List<Map.Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
+		
+		
+		Collections.sort(entryList, new Comparator<Map.Entry<String, CartItem>>() {
 			 public int compare(Map.Entry<String,CartItem> entry1, Map.Entry<String,CartItem> entry2) {
 				 return entry1.getValue().compareTo(entry2.getValue());
 			 };
 		});
-		
 		LinkedHashMap <String, CartItem> sortedMap = new LinkedHashMap<>();
 		for(/*LinkedHashMap <String, CartItem> sort*/ Map.Entry<String, CartItem> entry : entryList) {
 			sortedMap.put(entry.getKey(),entry.getValue());
 		}
 		sortedMap.forEach((u,v) -> System.out.println(v));
-		
-		
 	}
 }
