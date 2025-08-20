@@ -20,7 +20,7 @@ public class User implements Serializable{
 	private String rank;
 	private String address;
 	//적립 포인트
-	private int point;
+	private double point;
 	private String coupon;
 	private String phone;
 	private boolean isAdmin;
@@ -31,14 +31,11 @@ public class User implements Serializable{
 	//로그아웃한 시간
 	private List<LocalDateTime> logoutTime;
 	//로그인한 상태
-	private boolean isLogin;
 	
 	
-	
-	
-	public User(String userId, String username, String email, String password, String rank, String address, int point,
+	public User(String userId, String username, String email, String password, String rank, String address, double point,
 			String coupon, String phone, boolean isAdmin, LocalDateTime createdDate,
-			List<LocalDateTime> loggedInTime, List<LocalDateTime> loggedOutTime, boolean isLoggedin) {
+			List<LocalDateTime> loggedInTime, List<LocalDateTime> loggedOutTime) {
 		//super();
 		this.userId = userId;
 		this.username = username;
@@ -53,22 +50,11 @@ public class User implements Serializable{
 		this.createdDate = createdDate;
 		this.loginTime = loggedInTime;
 		this.logoutTime = loggedOutTime;
-		this.isLogin = isLoggedin;
 	}
-	public boolean isLogIn() {
-		return this.isLogin;
-	}
-	public boolean login() {
-		this.isLogin = true;
-		return this.isLogin;
-	}
-	public boolean logout() {
-		this.isLogin = false;
-		return this.isLogin;
-	}
+	
 	public static User createUser(String userId, String username, String email, String password, String phone) {
 		User user = new User(userId, username, email, password, username, email, 0, password, phone, false, 
-				LocalDateTime.now(), new ArrayList<LocalDateTime>(), new ArrayList<LocalDateTime>(), false);
+				LocalDateTime.now(), new ArrayList<LocalDateTime>(), new ArrayList<LocalDateTime>());
 		return user;
 	}
 	public void updatePassword (String password) {
@@ -133,7 +119,7 @@ public class User implements Serializable{
 	public String getAddress() {
 		return address;
 	}
-	public int getPoint() {
+	public double getPoint() {
 		return point;
 	}
 	public String getCoupon() {

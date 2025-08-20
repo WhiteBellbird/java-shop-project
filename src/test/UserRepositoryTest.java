@@ -30,10 +30,10 @@ public class UserRepositoryTest {
 	}
 	
 	public static void createUsers() {
-		repo.saveUser(new User("001", "Kwon Lee", "kwon9973@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
-		repo.saveUser(new User("002", "Susan Lee", "susan@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
-		repo.saveUser(new User("003", "Bruce Lee", "brutal@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
-		repo.saveUser(new User("004", "Robert Lee", "rogate@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null, false));
+		repo.saveUser(new User("001", "Kwon Lee", "kwon9973@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null));
+		repo.saveUser(new User("002", "Susan Lee", "susan@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null));
+		repo.saveUser(new User("003", "Bruce Lee", "brutal@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null));
+		repo.saveUser(new User("004", "Robert Lee", "rogate@gmail.com", "Asdf1234!", "SILVER", null, 0, null, null, false, null, null, null));
 	}
 	public static void replaceUser() {
 		System.out.println(repo.replaceUser(repo.findUserByEmail("susan@gmail.com"), repo.findUserByUserId("001")));

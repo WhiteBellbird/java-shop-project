@@ -1,4 +1,6 @@
 package repository;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import domain.*;
@@ -12,8 +14,9 @@ public interface CartRepository {
 	
 	Optional<Cart> findCartByUserId(String userId);
 	
-	void organizeCartList();
+	HashMap<String, CartItem> organizeUserCart(String userId);
 	
+	List<CartItem> organizeCartList();
 	// for test
 	void displayCarts();
 

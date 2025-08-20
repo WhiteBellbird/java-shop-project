@@ -26,7 +26,10 @@ public class UserServiceImpl implements UserService {
 		validateCreateUser(username, email, password); // 입력한 입력값들이 실제로 타당한 값인지? 빈값이 없다든가
 		// UUID.randomUUID()는 랜덤한 String 문자열을 생성하는 static 메서드입니다.
 		// 유저 객체를 생성
-		User newUser = new User(UUID.randomUUID().toString(), username, email, password, "SILVER", address, 0, null, phone, false, LocalDateTime.now(), null, null, false);
+		
+		
+		
+		User newUser = new User(UUID.randomUUID().toString(), username, email, password, "SILVER", address, 0, null, phone, false, LocalDateTime.now(), null, null);
 		// 유저 객체를 생성하고 파일에서 생성된 유저 값을 불러옴
 		User saved = repository.saveUser(newUser);
 		// 아 참고로, 결과 값을 출력할 때, 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.

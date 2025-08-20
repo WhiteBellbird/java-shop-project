@@ -24,7 +24,6 @@ public class OrderServiceImpl implements OrderService{
 		this.productRepository = productRepository;
 		this.userRepository = userRepository;
 	}
-    
     @Override
     public void CancelOrder(String orderId) {
     	try {
@@ -112,7 +111,10 @@ public class OrderServiceImpl implements OrderService{
         //orderRepository.saveOrder(order);
 
         //장바구니 비우기
+<<<<<<< HEAD
+=======
         cart.clearCart();
+>>>>>>> 0d4702e436f6499af4d9a97f2d9f89f704aafb5a
     }
 
     @Override
