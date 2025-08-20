@@ -15,14 +15,24 @@ public class CartItem implements Serializable {
         this.product = product;
         this.quantity = quantity;
     }
-    
+
+
+
     public Product getProduct() {
         return product;
     }
     public int getQuantity() {
         return quantity;
     }
-    
+
+    public int getTotalPrice() {
+        return product.getPrice() * quantity;
+    }
+
+    public int getPaymentPrice(int willPayQuantity) {
+        return product.getPrice() * willPayQuantity;
+    }
+
     public void addQuantity(int newValue) {
     	this.quantity = this.quantity + newValue;
     }

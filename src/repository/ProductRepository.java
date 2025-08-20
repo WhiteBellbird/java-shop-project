@@ -16,6 +16,8 @@ public interface ProductRepository {
     // 상품 정보 저장 (새 상품 등록 또는 기존 상품 수정)
     Product save(Product product);
 
+    Optional<Product> findByName(String productName);
+
 	// 상품 ID로 상품 삭제
     void delete(Product product);
     

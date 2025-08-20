@@ -1,8 +1,8 @@
 package service;
 
 import domain.*;
-import exception.ShopException;
-import exception.UserNotfoundException;
+import exception.*;
+import helper.DiscountRate;
 import repository.*;
 
 import java.time.LocalDateTime;
@@ -15,8 +15,6 @@ public class OrderServiceImpl implements OrderService{
     private ProductRepository productRepository;
     private UserRepository userRepository;
 
-    Cart cart;
-
     public OrderServiceImpl(OrderRepository orderRepository, CartRepository cartRepository, 
     		ProductRepository productRepository, UserRepository userRepository) {
 		this.orderRepository = orderRepository;
@@ -27,23 +25,78 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void CancelOrder(String orderId) {
     	try {
-    		//주문한 지 12시간 내라면 취소 가능
-            LocalDateTime deadLine = orderRepository.getOrderByOrderId(orderId).getOrderDate().plusHours(12);
-            LocalDateTime now = LocalDateTime.now();
-            if(!now.isBefore(deadLine)){
-                throw new ShopException("주문은 12시간내에만 취소가능합니다");
-            }else{
-            	orderRepository.getOrderByOrderId(orderId).setStatus("cancel");
-            }
+            Order order = Optional.of(orderRepository.getOrderByOrderId(orderId)).orElseThrow(() ->
+                    new OrderNotFoundException("Order Not Found"));
+            order.cancelOrder();
             orderRepository.commit();
     	}catch(ShopException e) {
     		orderRepository.rollback();
+            System.out.println("e.getMessage() = " + e.getMessage());
     	}
     }
 
     @Override
-    public void DisplayOrderList(String userId) {
-        orderRepository.getOrder();
+    public List<Order> DisplayOrderList(String userId) {
+        return orderRepository.getOrder();
+    }
+
+    @Override
+    public Order createOrder(String userId, String productName, int amount, int quantity, String address) {
+        try {
+            // 유저 찾는 메서드
+            User user = Optional.of(userRepository.findUserByUserId(userId)).orElseThrow(() ->
+                    new UserNotfoundException(String.format("useId %s is not found.", userId)));
+            // 제품 찾는 메서드
+            Product product = productRepository.findByName(productName).orElseThrow(() -> new ProductNotfoundException(
+                    String.format("productName %s is not found.", productName)
+            ));
+            // 카트 찾는 메서드
+            Cart userCart = cartRepository.findCartByUserId(user.getUserId()).get();
+            // 카트 안에서 카트 아이템 조회
+            CartItem cartItem = userCart.getItems().get(product.getProductId());
+            // 카트 아이템에서 수량에 따라 지불할 최종 금액 정산
+            int willPaymentPriceByCustomer = cartItem.getPaymentPrice(quantity);
+            // 거스름돈
+            int changeMoney = 0;
+            // 지불해야 할 금액보다 크면 정상처리 아니면 반려
+            if(willPaymentPriceByCustomer < amount) {
+                changeMoney = amount - willPaymentPriceByCustomer;
+            } else {
+                throw new InSufficientMoneyException("Insufficient money");
+            }
+            // 포인트 적립
+            double earn = willPaymentPriceByCustomer * DiscountRate.defaultDiscountRate;
+            user.accumulatePoint(changeMoney + earn);
+
+            // 카트아이템에서 수량 줄였어.
+            cartItem.subQuantity(quantity);
+            // 프로덕트에 재고 줄였어
+            product.reduceStock(cartItem.getQuantity());
+            // 그 수량이 0이면 카트에서 사라져야지.
+            if (cartItem.getQuantity() == 0) {
+                userCart.removeProduct(product.getProductId());
+            }
+            // 주문 생성
+            Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
+            // 카트 수정된거 저장
+            cartRepository.saveCart(userCart);
+            // 제품 수정된거 저장
+            productRepository.save(product);
+            userRepository.saveUser(user);
+            Order saved = orderRepository.saveOrder(order);
+
+            userRepository.commit();
+            orderRepository.commit();
+            productRepository.commit();
+            cartRepository.commit();
+            return saved;
+         } catch (ShopException e) {
+            userRepository.rollback();
+            productRepository.rollback();
+            cartRepository.rollback();
+            orderRepository.rollback();
+            throw e;
+        }
     }
 
     @Override
@@ -71,13 +124,16 @@ public class OrderServiceImpl implements OrderService{
         //orderRepository.saveOrder(order);
 
         //장바구니 비우기
+<<<<<<< HEAD
 
         cart.clearCart();
 
+=======
+>>>>>>> 15a034200e4cc472b5f5bd2ca9d5755514040c8f
     }
 
     @Override
-    public void CreateAllOrders(String userId) {
+    public void CreateAllOrders(String userId, int totalAmount, String address) {
         //Cart 목록 출력(메인에서 구축예정)
         //특정 상품 선택(제외)
         //제외된 상품 Order 리스트에서 제외

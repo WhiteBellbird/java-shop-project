@@ -62,7 +62,7 @@ public class User implements Serializable{
 			this.password = password;
 		}
 	}
-	public void accumulatePoint(int point) throws InvalidatedInputException{
+	public void accumulatePoint(double point) throws InvalidatedInputException{
 		if(point > 0) {
 			this.point += point;
 		}else {
