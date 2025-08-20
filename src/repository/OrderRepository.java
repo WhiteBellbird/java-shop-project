@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface OrderRepository {
 
-    public Order saveOrder(Order order);
+    public void saveOrder(Order order);
 
     public Order replaceOrder(Order previousOrder, Order changedOrder);
 

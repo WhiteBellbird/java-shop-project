@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Cart;
 import domain.CartItem;
 import domain.Order;
 import domain.User;
@@ -14,6 +15,9 @@ import java.util.*;
 
 public class OrderRepositoryImpl implements OrderRepository{
     // src 폴더 밖에 있는 data 폴더안에 있는 orders.dat에 path 지정
+	CartRepository cartRepository;
+	Order order;
+
     private final Path DATA_FILE = Paths.get("orderData", "orders.dat");
     // orders.dat를 위한 폴더(/data)가 없다면 생성해준다.
     public OrderRepositoryImpl(){
@@ -54,12 +58,8 @@ public class OrderRepositoryImpl implements OrderRepository{
 
     
     @Override
-    public Order saveOrder(Order order) {
-    	if(order == null) {
-    		throw new ShopException("오더가 null 존재하지않습니다");
-    	}
+    public void saveOrder(Order order) {
     	orders.add(order);
-        return order;
     }
     @Override
 	public Order updateOrder(Order order) {
