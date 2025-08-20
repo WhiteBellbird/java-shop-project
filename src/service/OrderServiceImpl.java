@@ -15,8 +15,6 @@ public class OrderServiceImpl implements OrderService{
     private ProductRepository productRepository;
     private UserRepository userRepository;
 
-    Cart cart;
-
     public OrderServiceImpl(OrderRepository orderRepository, CartRepository cartRepository, 
     		ProductRepository productRepository, UserRepository userRepository) {
 		this.orderRepository = orderRepository;
@@ -33,12 +31,13 @@ public class OrderServiceImpl implements OrderService{
             orderRepository.commit();
     	}catch(ShopException e) {
     		orderRepository.rollback();
+            System.out.println("e.getMessage() = " + e.getMessage());
     	}
     }
 
     @Override
-    public void DisplayOrderList(String userId) {
-        orderRepository.getOrder();
+    public List<Order> DisplayOrderList(String userId) {
+        return orderRepository.getOrder();
     }
 
     @Override
@@ -66,23 +65,38 @@ public class OrderServiceImpl implements OrderService{
                 throw new InSufficientMoneyException("Insufficient money");
             }
             // 포인트 적립
-            user.accumulatePoint(changeMoney);
             double earn = willPaymentPriceByCustomer * DiscountRate.defaultDiscountRate;
+            user.accumulatePoint(changeMoney + earn);
 
-            Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
-
+            // 카트아이템에서 수량 줄였어.
+            cartItem.subQuantity(quantity);
+            // 프로덕트에 재고 줄였어
             product.reduceStock(cartItem.getQuantity());
-//            cart.removeProduct(product.getProductId());
-            cartRepository.saveCart(cart);
+            // 그 수량이 0이면 카트에서 사라져야지.
+            if (cartItem.getQuantity() == 0) {
+                userCart.removeProduct(product.getProductId());
+            }
+            // 주문 생성
+            Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
+            // 카트 수정된거 저장
+            cartRepository.saveCart(userCart);
+            // 제품 수정된거 저장
             productRepository.save(product);
-            return orderRepository.saveOrder(order);
+            userRepository.saveUser(user);
+            Order saved = orderRepository.saveOrder(order);
+
+            userRepository.commit();
             orderRepository.commit();
             productRepository.commit();
             cartRepository.commit();
+            return saved;
          } catch (ShopException e) {
+            userRepository.rollback();
             productRepository.rollback();
             cartRepository.rollback();
             orderRepository.rollback();
+            System.out.println("e.getMessage() = " + e.getMessage());
+            throw e;
         }
     }
 
@@ -111,11 +125,10 @@ public class OrderServiceImpl implements OrderService{
         //orderRepository.saveOrder(order);
 
         //장바구니 비우기
-        cart.clearCart();
     }
 
     @Override
-    public void CreateAllOrders(String userId) {
+    public void CreateAllOrders(String userId, int totalAmount, String address) {
         //Cart 목록 출력(메인에서 구축예정)
         //특정 상품 선택(제외)
         //제외된 상품 Order 리스트에서 제외

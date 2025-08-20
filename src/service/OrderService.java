@@ -4,6 +4,7 @@ import domain.Order;
 import domain.Product;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface OrderService {
 
@@ -11,9 +12,9 @@ public interface OrderService {
 
     void CreateSomeOrders(String userId);
 
-    void CreateAllOrders(String userId);
+    void CreateAllOrders(String userId,int totalAmount,String address);
 
-    void DisplayOrderList(String userId);
+    List<Order> DisplayOrderList(String userId);
 
     void CancelOrder(String orderId);
 }
