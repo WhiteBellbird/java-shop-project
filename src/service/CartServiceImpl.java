@@ -116,4 +116,30 @@ public class CartServiceImpl implements CartService {
             throw new ShopException(e.getMessage());
         }
     }
+     @Override
+     public void updateProductQuantity(String userId, String productId, int newQuantity) {
+         try {
+
+             cartRepository.findCartByUserId(userId).orElseThrow(() ->
+                     new CartNotFoundException("Cart not found By Id : " + userId));
+
+             cartRepository.updateProductQuantity(userId, productId, newQuantity);
+             cartRepository.commit();
+         } catch (ShopException e) {
+             cartRepository.rollback();
+             System.out.println("error Msg is : " + e.getMessage());
+         }
+     }
+
+     @Override
+     public void clearCart(String userId) {
+         try {
+             cartRepository.clearCartByUserId(userId);
+.
+             cartRepository.commit();
+         } catch (ShopException e) {
+             cartRepository.rollback();
+             System.out.println("error Msg is : " + e.getMessage());
+         }
+     }
 }

@@ -69,6 +69,53 @@ public class CartRepositoryImpl implements CartRepository {
 	public Optional<Cart> findCartByUserId(String userId) {
 		return carts.stream().filter(c -> c.getUserId().equals(userId)).findAny();
 	}
+	//여기부터 추가
+    @Override
+    public void clearCartByUserId(String userId) throws ProductNotfoundException {
+        Optional<Cart> optionalCart = findCartByUserId(userId);
+        if (optionalCart.isPresent()) {
+            Cart cart = optionalCart.get();
+            cart.clearCart();
+            System.out.println("장바구니가 비워졌습니다.");
+        } else {
+            throw new ProductNotfoundException("해당 사용자의 장바구니를 찾을 수 없습니다.");
+        }
+    }
+    
+    @Override
+    public void updateProductQuantity(String userId, String productId, int newQuantity) throws ProductNotfoundException, CustomIllegalArgumentException {
+        Optional<Cart> optionalCart = findCartByUserId(userId);
+        if (optionalCart.isPresent()) {
+            Cart cart = optionalCart.get();
+            Map<String, CartItem> items = cart.getItems();
+            
+            if (items.containsKey(productId)) {
+                CartItem item = items.get(productId);
+                
+                if (newQuantity <= 0) {
+                    throw new CustomIllegalArgumentException("수량은 0보다 커야 합니다.");
+                }
+
+                // CartItem에 수량을 직접 설정하는 메서드가 없으므로, 기존 수량과의 차이를 계산하여 추가/삭제
+                int currentQuantity = item.getQuantity();
+                int difference = newQuantity - currentQuantity;
+
+                if (difference > 0) {
+                    item.addQuantity(difference);
+                } else if (difference < 0) {
+                    // 수량이 감소하는 경우, 0 이하가 되지 않도록
+                    try {
+                        item.subQuantity(-difference);
+                    } catch (exception.QuantityException e) {
+                        throw new CustomIllegalArgumentException("수량 감소 오류: " + e.getMessage());
+                    }
+                }
+            } else {
+                throw new ProductNotfoundException("상품 없음" );
+            }
+        }
+    }
+
 	/*
 	@Override
 	public List<CartItem> organizeCartList() {
