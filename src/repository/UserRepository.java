@@ -48,6 +48,5 @@ public interface UserRepository {
 	
 	public void resetData();
 
-
 	void delete(User user);
 }

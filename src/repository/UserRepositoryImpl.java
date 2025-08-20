@@ -19,7 +19,8 @@ public class UserRepositoryImpl implements UserRepository {
 	// 현재 작업 리스트 & commit 백업 리스트
 	private List<User> users;
 	private List<User> tmpUsers;
-
+	//private HashMap<String, UserLogData> login;
+	//private HashMap<String, UserLogData> logout;
 	// UserLogData 내부 클래스
 	class UserLogData {
 		public String username;

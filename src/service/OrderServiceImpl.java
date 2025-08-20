@@ -10,22 +10,35 @@ import java.util.HashMap;
 
 public class OrderServiceImpl implements OrderService{
 
-    User user;
-    Cart cart;
-    Order order;
-    OrderRepository orderRepository;
-
+    private OrderRepository orderRepository;
+    private CartRepository cartRepository;
+    private ProductRepository productRepository;
+    private UserRepository userRepository;
+    
+    public OrderServiceImpl(OrderRepository orderRepository, CartRepository cartRepository, 
+    		ProductRepository productRepository, UserRepository userRepository) {
+		this.orderRepository = orderRepository;
+		this.cartRepository = cartRepository;
+		this.productRepository = productRepository;
+		this.userRepository = userRepository;
+	}
+    
     @Override
-    public void CancelOrder() {
-        //주문한 지 12시간 내라면 취소 가능
-        LocalDateTime deadLine = order.getOrderDate().plusHours(12);
-        LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(deadLine)){
-            order.OrderStatus("cancel");
-            orderRepository.updateOrder();
-        }else{
-
-        }
+    public void CancelOrder(String orderId) {
+    	try {
+    		//주문한 지 12시간 내라면 취소 가능
+            LocalDateTime deadLine = orderRepository.getOrderByOrderId(orderId).getOrderDate().plusHours(12);
+            LocalDateTime now = LocalDateTime.now();
+            if(!now.isBefore(deadLine)){
+                throw new ShopException("주문은 12시간내에 취소가능합니다");
+            }else{
+            	orderRepository.getOrderByOrderId(orderId).setStatus("cancel");
+                orderRepository.updateOrder();
+            }
+            orderRepository.commit();
+    	}catch(ShopException e) {
+    		orderRepository.rollback();
+    	}
     }
 
     @Override
@@ -39,13 +52,14 @@ public class OrderServiceImpl implements OrderService{
         //User user = SessionService.();
 
         //Cart에 물건 있는지 확인 //주문생성및저장
-        if(cart != null){
+        /*
+    	if(cart != null){
             //주문ID 생성
 
             //데이터 저장
             orderRepository.saveOrder(cart.getItems());
         }
-
+		*/
 
         //장바구니 비우기
 

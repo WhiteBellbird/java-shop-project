@@ -74,15 +74,9 @@ public class UserServiceImpl implements UserService {
 	// 비즈니스 로직만 처리하는게 유저 서비스의 궁극적인 역할이야
 	// 유저 리포지토리에서 조회한 결과를 그대로 그냥 return 해줘서 이 서비스의 역할을 지키는 것이 맞다고 생각해.
 	// 다시 한 번, 말하지만 유저 서비스는 '출력'을 담당하는 것이 아닌 '객체의 변화'에 스탠스를 가지는 클래스라는 점
-<<<<<<< HEAD
-	// 서비스는 리포지토리에서 조회한걸 그대로 리턴해주고, 출력은 IO Layer에서 해줬으면 해.
-
-	// 권형이 확인
-
-=======
 	// 서비스는 리포지토리에서 조회한걸 그대로 리턴해주고, 출력은 IO Layer 에서 해줬으면 해.
 	
->>>>>>> 20c09ff565a1b512b20a7e6f726eaaedb1278d9d
+
 	@Override
 	public User displayUser(String username) {
 		User user = repository.findUserByUsername(username);
@@ -166,8 +160,5 @@ public class UserServiceImpl implements UserService {
 		}
 		return null;
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> 20c09ff565a1b512b20a7e6f726eaaedb1278d9d
 }

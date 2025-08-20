@@ -4,58 +4,43 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Order {
-    private int orderId;
+    private String orderId;
     private User user;
-    private Cart items;
+    private Cart cart;
     private String address;
     private String status;
     private LocalDateTime orderDate;
-
-    public void OrderStatus(String newStatus){
-        status = newStatus;
+  
+    public Order(String orderId, User user, Cart cart, String address, String status , LocalDateTime orderDate) {
+        this.orderId = orderId;
+        this.user = user;
+        this.cart = cart;
+        this.status = status;
+        this.address = address;
+        this.orderDate = orderDate;
     }
-
-    public void CreateOrderId(){
-        //orderId = ;
-    }
-
     public void changeAddress(String newAddress){
         address = newAddress;
     }
-
-    public Order(int orderId, User user, Cart items, String address, String status, LocalDateTime orderDate) {
-        this.orderId = orderId;
-        this.user = user;
-        this.items = items;
-        this.address = address;
-        this.status = status;
-        this.orderDate = orderDate;
-    }
-
-    //getter
-    public int getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
-
     public User getUser() {
         return user;
     }
-
-    public Cart getItems() {
-        return items;
+    public Cart getCart() {
+        return cart;
     }
-
     public String getAddress() {
         return address;
     }
-
+    public void setStatus(String currentStatus) {
+        this.status = currentStatus;
+    }
     public String getStatus() {
         return status;
     }
-
     public LocalDateTime getOrderDate() {
         return orderDate;
     }
-
-
 }

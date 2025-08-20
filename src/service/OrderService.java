@@ -12,5 +12,5 @@ public interface OrderService {
 
     void DisplayOrderList(String orderId);
 
-    void CancelOrder();
+    void CancelOrder(String orderId);
 }
