@@ -33,7 +33,10 @@ public class OrderServiceImpl implements OrderService{
                 throw new ShopException("주문은 12시간내에 취소가능합니다");
             }else{
             	orderRepository.getOrderByOrderId(orderId).setStatus("cancel");
+
                 //orderRepository.updateOrder();
+            	//orderRepository.updateOrder();
+
             }
             orderRepository.commit();
     	}catch(ShopException e) {
