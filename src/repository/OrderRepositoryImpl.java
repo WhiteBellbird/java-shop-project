@@ -24,6 +24,9 @@ public class OrderRepositoryImpl implements OrderRepository{
         }
         load();
     }
+    List<Order> orders = new ArrayList<Order>();
+    List<Order> tempOrders = new ArrayList<Order>();
+
     private void load() {
 		List<Order> read = FileManager.readObject(DATA_FILE);
 		if (read != null) {
@@ -48,22 +51,18 @@ public class OrderRepositoryImpl implements OrderRepository{
 	private List<Order> deepCopy(List<Order> source) {
 		return new ArrayList<>(source);
 	}
-	
-    List<Order> orders = new ArrayList<Order>();
-    List<Order> tempOrders = new ArrayList<Order>();
-
-    
-    @Override
-    public Order saveOrder(Order order) {
-    	if(order == null) {
-    		throw new ShopException("오더가 null 존재하지않습니다");
-    	}
-    	orders.add(order);
-        return order;
-    }
-    @Override
+	@Override
+	public Order replaceOrder(Order previousOrder, Order changedOrder) {
+	    for (int i = 0; i < orders.size(); i++) {
+			if (orders.get(i).getOrderId().equals(previousOrder.getOrderId())) {
+				orders.set(i, changedOrder);
+			}
+	    }
+		return changedOrder;
+	}
+	@Override
 	public Order updateOrder(Order order) {
-    	for (int i = 0; i < orders.size(); i++) {
+	    for (int i = 0; i < orders.size(); i++) {
 			if (orders.get(i).getOrderId().equals(order.getOrderId())) {
 				orders.set(i, order); // 기존 객체 교체
 				return order;
@@ -72,18 +71,10 @@ public class OrderRepositoryImpl implements OrderRepository{
 		orders.add(order); // 없으면 새로 추가
 		return order;
 	}
-    
     @Override
-    public Order replaceOrder(Order previousOrder, Order changedOrder) {
-    	if(!orders.contains(previousOrder)) {
-    		throw new ShopException("바꾸려는 유저를 차지 못했습니다.");
-    	}
-    	for (int i = 0; i < orders.size(); i++) {
-			if (orders.get(i).getOrderId().equals(previousOrder.getOrderId())) {
-				orders.set(i, changedOrder);
-			}
-    	}
-		return changedOrder;
+    public Order saveOrder(Order order) {
+    	orders.add(order);
+        return order;
     }
     @Override
     public List<Order> getOrder() {

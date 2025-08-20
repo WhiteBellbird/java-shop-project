@@ -38,5 +38,11 @@ public class CartItem implements Serializable {
     public String toString() {
         return String.format("%s - 수량: %d개", product.getName(), quantity);
     }
+
+	public int compareTo(CartItem value) {
+		if(this.getProduct().getName().charAt(0) < value.getProduct().getName().charAt(0)) return -1;
+		if(this.getProduct().getName().charAt(0) > value.getProduct().getName().charAt(0)) return 1;
+		return 0;
+	}
     
 }

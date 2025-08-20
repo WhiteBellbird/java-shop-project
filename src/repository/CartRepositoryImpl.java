@@ -27,7 +27,6 @@ public class CartRepositoryImpl implements CartRepository {
 		tmpCarts = new ArrayList<>();
 		load(); // 초기 데이터 로딩
 	}
-
 	private void load() {
 		List<Cart> read = FileManager.readObject(DATA_FILE);
 		if (read != null) {
@@ -38,13 +37,11 @@ public class CartRepositoryImpl implements CartRepository {
 			tmpCarts = new ArrayList<>();
 		}
 	}
-
 	@Override
 	public Cart saveCart(Cart cart) {
 		carts.add(cart);
 		return cart;
 	}
-
 	@Override
 	public Cart updateCart(Cart cart) {
 		for (int i = 0; i < carts.size(); i++) {
@@ -56,38 +53,32 @@ public class CartRepositoryImpl implements CartRepository {
 		carts.add(cart); // 없으면 새로 추가
 		return cart;
 	}
-
 	@Override
 	public void removeCart(Cart cart) {
 		carts.removeIf(c -> c.getUserId().equals(cart.getUserId()));
 	}
-
 	@Override
 	public Optional<Cart> findCartByUserId(String userId) {
 		return carts.stream().filter(c -> c.getUserId().equals(userId)).findAny();
 	}
-
 	@Override
 	public void organizeCartList() {
 		// 필요 시 정렬/정리 로직 구현
+		
 	}
-
 	@Override
 	public void displayCarts() {
 	}
-
 	@Override
 	public void commit() {
 		FileManager.writeObject(DATA_FILE, carts);
 		tmpCarts = deepCopy(carts); // commit 후 tmpCarts 갱신
 	}
-
 	@Override
 	public void rollback() {
 		carts = deepCopy(tmpCarts); // 깊은 복사로 이전 상태 복원
 		FileManager.writeObject(DATA_FILE, carts);
 	}
-
 	private List<Cart> deepCopy(List<Cart> source) {
         List<Cart> copy = new ArrayList<>(source);
 		return copy;

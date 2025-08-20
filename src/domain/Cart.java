@@ -17,14 +17,14 @@ public class Cart implements Serializable {
     private static final int MAX_PRODUCT = 50;
     private String userId;
     // 카트 넣었다 뺐다한 기록
-    private Map<String, Log> history;
+    //private Map<String, Log> history;
     // key: 상품 ID, value: 상품과 수량을 담는 CartItem 객체
     private Map<String, CartItem> items;
 
     public Cart(String userId) {
         this.userId = userId;
         this.items = new HashMap<>();
-        this.history = new HashMap<String, Log>();
+        //this.history = new HashMap<String, Log>();
     }
 
     public static Cart createCart(String userId) {
@@ -60,7 +60,7 @@ public class Cart implements Serializable {
             items.put(productId, new CartItem(product, quantity));
             Log log = new Log();
             log.added();
-            history.put(productId, log);
+            //history.put(productId, log);
         }
     }
 
@@ -75,7 +75,7 @@ public class Cart implements Serializable {
         items.remove(productId);
         Log log = new Log();
         log.removed();
-        history.put(productId, log);
+        //history.put(productId, log);
     }
 
     /**

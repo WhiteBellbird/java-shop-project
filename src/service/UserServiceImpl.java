@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 		Pattern pattern2 = Pattern.compile("[!@#$%^&*]");
 		Matcher matcher = pattern.matcher(password);
 		Matcher matcher2 = pattern2.matcher(password);
-		if(username.length() <= 4 || password.length() <= 4 || !email.contains("@") || !matcher.find() || !matcher2.find()) {
+		if(username.length() < 4 || password.length() < 4 || !email.contains("@") || !matcher.find() || !matcher2.find()) {
 			throw new InvalidatedInputException("필수사항:\n아이디 또는 비밀번호 5자리 이상\n비밀번호 최소 한글자는 대문자 그리고 특수문저 !,@,#,$,%,^,&,* 중 포함\n이메일에 '@' 포함");
 		}
 	}
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 			throw new UserNotfoundException(String.format("%s 아이디의 유저를 찾을 수 없습니다.",userId));
 		}
 		// 유저를 관리자로 승격
-		findUser.giveManagerAuthentication();
+		findUser.giveManagerAuthentication(); 
 		// 리포지토리에서 유저를 업데이트
 		User updated = repository.authorizeUser(findUser);
 		// 결과 값 출력할 때 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
