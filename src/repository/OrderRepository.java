@@ -12,7 +12,7 @@ public interface OrderRepository {
 
     public Order replaceOrder(Order previousOrder, Order changedOrder);
 
-    public Order updateOrder();
+    public Order updateOrder(Order order);
     
     public List<Order> getOrder();
     

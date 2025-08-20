@@ -61,11 +61,16 @@ public class OrderRepositoryImpl implements OrderRepository{
     	orders.add(order);
         return order;
     }
-    
-    // unfinished ******
     @Override
-	public Order updateOrder() {
-		return null;
+	public Order updateOrder(Order order) {
+    	for (int i = 0; i < orders.size(); i++) {
+			if (orders.get(i).getOrderId().equals(order.getOrderId())) {
+				orders.set(i, order); // 기존 객체 교체
+				return order;
+			}
+		}
+		orders.add(order); // 없으면 새로 추가
+		return order;
 	}
     
     @Override
