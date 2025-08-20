@@ -3,21 +3,26 @@ import java.util.*;
 
 import domain.User;
 import exception.UserNotfoundException;
+import helper.PasswordEncoder;
 import repository.*;
 
 public class SessionServiceImpl implements SessionService{
 	private HashMap<String, User> sessionIdList;
 	private UserRepository userRepository;
+	private PasswordEncoder passwordEncoder;
 
-    public SessionServiceImpl(UserRepository userRepository) {
+    public SessionServiceImpl(UserRepository userRepository,
+							  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-		sessionIdList = new HashMap<>();
+        this.passwordEncoder = passwordEncoder;
+        sessionIdList = new HashMap<>();
     }
 
     @Override
 	public void successlogin(String username, String password) {
 		User user = findUserByUsername(username);
-		if(user.getPassword().equals(password)) {
+		String encoded = passwordEncoder.encode(password);
+		if(user.getPassword().equals(encoded)) {
 			sessionIdList.put(user.getUsername(), user);
 		}
 	}
