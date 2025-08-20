@@ -95,7 +95,6 @@ public class OrderServiceImpl implements OrderService{
             productRepository.rollback();
             cartRepository.rollback();
             orderRepository.rollback();
-            System.out.println("e.getMessage() = " + e.getMessage());
             throw e;
         }
     }
