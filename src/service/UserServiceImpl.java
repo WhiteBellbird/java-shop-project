@@ -75,9 +75,7 @@ public class UserServiceImpl implements UserService {
 	// 유저 리포지토리에서 조회한 결과를 그대로 그냥 return 해줘서 이 서비스의 역할을 지키는 것이 맞다고 생각해.
 	// 다시 한 번, 말하지만 유저 서비스는 '출력'을 담당하는 것이 아닌 '객체의 변화'에 스탠스를 가지는 클래스라는 점
 	// 서비스는 리포지토리에서 조회한걸 그대로 리턴해주고, 출력은 IO Layer에서 해줬으면 해.
-<<<<<<< HEAD
-	
-=======
+
 	// 권형이 확인
 
 	@Override
@@ -96,5 +94,5 @@ public class UserServiceImpl implements UserService {
 		
 		return null;
 	}
->>>>>>> origin
+
 }
