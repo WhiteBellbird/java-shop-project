@@ -1,203 +1,212 @@
 package repository;
 
 import domain.User;
+import persistence.FileManager;
 
-import java.time.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
+public class UserRepositoryImpl implements UserRepository {
 
-public class UserRepositoryImpl implements UserRepository{
-	// src 폴더 밖에 있는 data 폴더안에 있는 users.dat에 path 지정 
+	// DATA_FILE 경로
 	private final Path DATA_FILE = Paths.get("userData", "users.dat");
-	//각 유저의 로그인/로그아웃 기록이 생성되야한다 그러기에 repository 에서 아래 방법으로 폴더와 파일을 생성하는건 hard coding & 옳바르지않다. 
-	//class 를 만들고 field 를 login & logout 으로 틀을 만들자  
-	class UserLogData{
+
+	// 현재 작업 리스트 & commit 백업 리스트
+	private List<User> users;
+	private List<User> tmpUsers;
+
+	// UserLogData 내부 클래스
+	class UserLogData {
 		public String username;
 		private Path pathLogin;
 		private Path pathLogout;
-		private List<LocalDateTime> listLogin;
-		private List<LocalDateTime> listLogout;
-		
+
 		public UserLogData(String username) {
-			this.username = username;	
-			this.pathLogin = Paths.get("userLogData", username + "Login.dat");
-			this.pathLogout = Paths.get("userLogData", username + "Logout.dat");
-			//List<LocalDateTime> listLogin = new ArrayList<LocalDateTime>();
-			//List<LocalDateTime> listLogout = new ArrayList<LocalDateTime>();
+			this.username = username;
+			this.pathLogin = Paths.get("userData", username + "Login.dat");
+			this.pathLogout = Paths.get("userData", username + "Logout.dat");
 		}
+
 		public Path getPathIn() {
 			return this.pathLogin;
 		}
+
 		public Path getPathOut() {
 			return this.pathLogout;
 		}
-		public List<LocalDateTime> getLoginList(){
-			return this.listLogin;
-		}
-		public List<LocalDateTime> getLogoutList(){
-			return this.listLogout;
-		}
-		/*
-		public List<LocalDateTime> overrideLoginList(List list){
-			this.listLogin.clear();
-			this.listLogin.addAll(list);
-			return this.listLogin;
-		}
-		public List<LocalDateTime> overrideLogoutList(List list){
-			this.listLogout.clear();
-			this.listLogout.addAll(list);
-			return this.listLogout;
-		}
-		*/
 	}
-	
-	
-	// users.dat를 위한 폴더(/data)가 없다면 생성해준다.
-	public UserRepositoryImpl(){
+
+	// 생성자
+	public UserRepositoryImpl() {
 		try {
 			Files.createDirectories(DATA_FILE.getParent());
-		}catch (IOException e) {
+		} catch (IOException e) {
 			System.out.println("데이터 파일을 위한 폴더 생성 불가");
 		}
+		load();
 	}
-	List<User> users = new ArrayList<User>();
-	List<LocalDateTime> login = new ArrayList<LocalDateTime>(); // just a dummyList to serialize and de-serialize 
-	List<LocalDateTime> logout = new ArrayList<LocalDateTime>(); // just a dummyList to serialize and de-serialize
-	
+
+	// 초기 데이터 로딩
+	private void load() {
+		List<User> read = FileManager.readObject(DATA_FILE);
+		if (read != null) {
+			users = read;
+			tmpUsers = deepCopy(read);
+		} else {
+			users = new ArrayList<>();
+			tmpUsers = new ArrayList<>();
+		}
+	}
+
+	// 깊은 복사 (얕은 복사로 충분)
+	private List<User> deepCopy(List<User> source) {
+		return new ArrayList<>(source);
+	}
+	// commit: 현재 상태를 파일에 저장하고 tmpUsers 갱신
+	@Override
+	public void commit() {
+		FileManager.writeObject(DATA_FILE, users);
+		tmpUsers = deepCopy(users);
+	}
+	// rollback: tmpUsers 상태로 되돌린 후 파일에 덮어쓰기
+	@Override
+	public void rollback() {
+		users = deepCopy(tmpUsers);
+		FileManager.writeObject(DATA_FILE, users);
+	}
 	@Override
 	public User saveUser(User user) {
-		users = FileManager.readObject(DATA_FILE);
 		users.add(user);
-		FileManager.writeObject(DATA_FILE, users);
 		return user;
-	}   
+	}
 	@Override
-	public User findUserByEmail(String email){
-		users = FileManager.readObject(DATA_FILE);
-		return users.stream().filter(u -> u.getEmail().equals(email)).findFirst().orElse(null);
+	public User findUserByEmail(String email) {
+		return users.stream()
+				.filter(u -> u.getEmail() != null)
+				.filter(u -> u.getEmail().trim().equalsIgnoreCase(email.trim()))
+				.findFirst()
+				.orElse(null);
 	}
 	@Override
 	public User findUserByUserId(String userId) {
-		users = FileManager.readObject(DATA_FILE);
 		return users.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);
 	}
 	@Override
+	public User findUserByUsername(String username) {
+		return users.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+	}
+	@Override
 	public User authorizeUser(User user) {
-		users = FileManager.readObject(DATA_FILE);
-		for(User clone : users) {
-			if(clone.equals(user)) {
+		for (User clone : users) {
+			if (clone.equals(user)) {
 				clone.giveManagerAuthentication();
-				FileManager.writeObject(DATA_FILE, users);
 				return clone;
 			}
 		}
 		return null;
 	}
+
 	@Override
 	public User replaceUser(User previousUser, User changedUser) {
-		users = FileManager.readObject(DATA_FILE);
 		for (int i = 0; i < users.size(); i++) {
-		    if (users.get(i).equals(previousUser)) {
-		        users.set(i, changedUser);  // replaces the element in the list
-		        FileManager.writeObject(DATA_FILE, users);
-		        return changedUser;
-		    }
+			if (users.get(i).equals(previousUser)) {
+				users.set(i, changedUser);
+				return changedUser;
+			}
 		}
-		return null;
+		users.add(changedUser);
+		return changedUser;
 	}
+
 	@Override
-	public void resetData(){
-		List <User> forReset = new ArrayList<User>();
-		FileManager.writeObject(DATA_FILE, forReset);
+	public void resetData() {
+		users.clear();
 	}
+
+	@Override
+	public void delete(User user) {
+		users.remove(user);
+	}
+
 	@Override
 	public List<User> getUsersList() {
-		users = FileManager.readObject(DATA_FILE);
 		return users;
 	}
-	
-	// userId로 다 바꾸기 그리고 userId로 USER 찾기 저장된 파일에서 그렇게하면 굳이 service 에서 로컬 유저 값이 없어도 바로 ID 로 retrieve 가능
+
+	// 로그인/로그아웃 기록 저장
 	@Override
-	public LocalDateTime saveLoginTime(User user1, LocalDateTime now) {
-		UserLogData LogData = new UserLogData(user1.getUsername());
-		
-		login = FileManager.readObject(LogData.getPathIn());
-		
+	public LocalDateTime saveLoginTime(String username, LocalDateTime now) {
+		User user = findUserByUsername(username);
+		UserLogData logData = new UserLogData(user.getUsername());
+		List<LocalDateTime> login = FileManager.readObject(logData.getPathIn());
+		if (login == null) login = new ArrayList<>();
 		login.add(now);
-		FileManager.writeObject(LogData.getPathIn(), login);
+		FileManager.writeObject(logData.getPathIn(), login);
 		return now;
 	}
+
 	@Override
-	public LocalDateTime saveLogoutTime(User user1, LocalDateTime now) {
-		UserLogData logData = new UserLogData(user1.getUsername());
-		logout = FileManager.readObject(logData.getPathOut());
+	public LocalDateTime saveLogoutTime(String username, LocalDateTime now) {
+		User user = findUserByUsername(username);
+		UserLogData logData = new UserLogData(user.getUsername());
+		List<LocalDateTime> logout = FileManager.readObject(logData.getPathOut());
+		if (logout == null) logout = new ArrayList<>();
 		logout.add(now);
 		FileManager.writeObject(logData.getPathOut(), logout);
 		return now;
 	}
+
+	// 로그인/로그아웃 기록 조회
 	@Override
-	public List<LocalDateTime> getLoginTime(User user1) {
-		UserLogData logData = new UserLogData(user1.getUsername());
-		login = FileManager.readObject(logData.getPathIn());
-		return this.login;
+	public List<LocalDateTime> getLoginTime(String username) {
+		User user = findUserByUsername(username);
+		UserLogData logData = new UserLogData(user.getUsername());
+		List<LocalDateTime> login = FileManager.readObject(logData.getPathIn());
+		if (login == null) login = new ArrayList<>();
+		return login;
 	}
+
 	@Override
-	public List<LocalDateTime> getLogoutTime(User user1) {
-		UserLogData logData = new UserLogData(user1.getUsername());
-		logout = FileManager.readObject(logData.getPathOut());
-		return this.logout;
+	public List<LocalDateTime> getLogoutTime(String username) {
+		User user = findUserByUsername(username);
+		UserLogData logData = new UserLogData(user.getUsername());
+		List<LocalDateTime> logout = FileManager.readObject(logData.getPathOut());
+		if (logout == null) logout = new ArrayList<>();
+		return logout;
 	}
+
 	@Override
-	public List<LocalDateTime> findLoginByDay(User user1,int year, int month, int day) {
-		UserLogData logData = new UserLogData(user1.getUsername());
-		List<LocalDateTime> section = new ArrayList<>();
-		login = FileManager.readObject(logData.getPathIn());
-		//section = login.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).toList();
-		section = login.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).collect(Collectors.toList());
-		return section;
+	public List<LocalDateTime> findLoginByDay(String username, int year, int month, int day) {
+		return getLoginTime(username).stream()
+				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month && dt.getDayOfMonth() == day)
+				.collect(Collectors.toList());
 	}
+
 	@Override
-	public List<LocalDateTime> findLoginByMonth(User user1,int year, int month) {
-		UserLogData logData = new UserLogData(user1.getUsername());
-		List<LocalDateTime> section = new ArrayList<>();
-		login = FileManager.readObject(logData.getPathIn());
-		
-		//section = login.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).toList();
-		section = login.stream().filter(u -> (u.getMonthValue() == month && u.getYear() == year)).collect(Collectors.toList());
-		return section;
+	public List<LocalDateTime> findLoginByMonth(String username, int year, int month) {
+		return getLoginTime(username).stream()
+				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month)
+				.collect(Collectors.toList());
 	}
+
 	@Override
-	public List<LocalDateTime> findLogoutByDay(User user1,int year, int month, int day) {
-		UserLogData logData = new UserLogData(user1.getUsername());
-		List<LocalDateTime> section = new ArrayList<>();
-		logout = FileManager.readObject(logData.getPathOut());
-		
-		//section = login.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).toList();
-		section = logout.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).collect(Collectors.toList());
-		return section;
+	public List<LocalDateTime> findLogoutByDay(String username, int year, int month, int day) {
+		return getLogoutTime(username).stream()
+				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month && dt.getDayOfMonth() == day)
+				.collect(Collectors.toList());
 	}
+
 	@Override
-	public List<LocalDateTime> findLogoutByMonth(User user1,int year, int month) {
-		UserLogData logData = new UserLogData(user1.getUsername());
-		List<LocalDateTime> section = new ArrayList<>();
-		logout = FileManager.readObject(logData.getPathOut());
-		
-		//section = login.stream().filter(u -> (u.getDayOfMonth() == day && u.getMonthValue() == month && u.getYear() == year)).toList();
-		section = logout.stream().filter(u -> (u.getMonthValue() == month && u.getYear() == year)).collect(Collectors.toList());
-		return section;
+	public List<LocalDateTime> findLogoutByMonth(String username, int year, int month) {
+		return getLogoutTime(username).stream()
+				.filter(dt -> dt.getYear() == year && dt.getMonthValue() == month)
+				.collect(Collectors.toList());
 	}
+
+	
 }

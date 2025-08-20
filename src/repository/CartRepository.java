@@ -1,17 +1,23 @@
 package repository;
+import java.util.Optional;
+
 import domain.*;
 
 public interface CartRepository {
-	public Cart saveCart(Cart cart);
+	Cart saveCart(Cart cart);
 	
-	public Cart updateCart(Cart cart);
+	Cart updateCart(Cart cart);
 	
-	public Cart removeCart(Cart cart);
+	void removeCart(Cart cart);
 	
-	public Cart getCart(Cart cart);
+	Optional<Cart> findCartByUserId(String userId);
 	
-	public void organizeCartList();
+	void organizeCartList();
 	
 	// for test
-	public void displayCarts();
+	void displayCarts();
+
+	void commit();
+
+	void rollback();
 }

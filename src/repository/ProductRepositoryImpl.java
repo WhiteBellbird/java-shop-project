@@ -6,95 +6,78 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import domain.Product;
+import persistence.FileManager;
 
-public class ProductRepositoryImpl implements ProductRepository{
+public class ProductRepositoryImpl implements ProductRepository {
+
 	private final Path DATA_FILE = Paths.get("productData", "products.dat");
-	private int sequence = 0;
-	
+	private List<Product> products;
+	private List<Product> tmpProducts;
+
 	public ProductRepositoryImpl() {
 		try {
 			Files.createDirectories(DATA_FILE.getParent());
-			initializeSequence();
+			load();               // 초기 데이터 로딩
 		} catch (IOException e) {
 			System.out.println("데이터 파일을 위한 폴더 생성 불가");
 		}
 	}
-	//파일에 저장된 상품들의 ID 중 최댓값을 찾아 시퀀스를 초기화하는 메서드
-	private void initializeSequence() {
-		 List<Product> products = FileManager.readObject(DATA_FILE);
-	        if (products != null && !products.isEmpty()) {
-	            int maxId = 0;
-	            for (Product product : products) {
-	                try {
-	                    int currentId = Integer.parseInt(product.getProductId().substring(1));
-	                    if (currentId > maxId) {
-	                        maxId = currentId;
-	                    }
-	                } catch (NumberFormatException e) {
-	                	System.out.println("잘못된 ID 입니다.");
-	                    // ID 형식이 'P123'과 같지 않을 경우 처리
-	                }
-	            }
-	            this.sequence = maxId;
-	        }		
+
+	private void load() {
+		List<Product> read = FileManager.readObject(DATA_FILE);
+		if (read != null) {
+			products = read;
+			tmpProducts = deepCopy(read);
+		} else {
+			products = new ArrayList<>();
+			tmpProducts = new ArrayList<>();
+		}
 	}
+
 
 	@Override
 	public List<Product> findAll() {
-		List<Product> products = FileManager.readObject(DATA_FILE);
-		return products != null ? products : new ArrayList<>();
+		return new ArrayList<>(products); // 깊은 복사 반환
 	}
 
 	@Override
-	public Product findById(String productId) {
-		List<Product> products = findAll();
-		for(Product product : products) {
-			if(product.getProductId().equals(productId)) {
+	public Optional<Product> findById(String productId) {
+		return products.stream().filter(p -> p.getProductId().equals(productId)).findFirst();
+	}
+
+	@Override
+	public Product save(Product product) {
+		for (int i = 0; i < products.size(); i++) {
+			if (products.get(i).getProductId().equals(product.getProductId())) {
+				products.set(i, product); // 기존 객체 교체
 				return product;
 			}
-		}		
-		return null;
-	}
-
-	@Override
-	public void save(Product product) {
-		List<Product> products = findAll();
-		for(int i=0; i<products.size(); i++) {
-			if(products.get(i).getProductId().equals(product.getProductId())) {
-				products.remove(i); //같은 id 삭제
-				break;
-			}
 		}
-		products.add(product);	//상품 추가
-		FileManager.writeObject(DATA_FILE, products);     //데이터 저장
-		
+		products.add(product); // 없으면 새로 추가
+		return product;
 	}
 
 	@Override
-	public void delete(String productId) {
-		List<Product> products = findAll();
-		for(int i=0; i<products.size(); i++) {
-			if(products.get(i).getProductId().equals(productId)) {
-				products.remove(i); // 상품 삭제
-				break;
-			}
-		}		
-		FileManager.writeObject(DATA_FILE, products);     //데이터 저장
-		
+	public void delete(Product product) {
+		products.remove(product);
 	}
 
 	@Override
-	public int getNextProductId() {
-		return sequence++;	//상품 ID에 반환
-	}
-	@Override
-	public void resetData() {
-		List<Product> forReset = new ArrayList<>();
-		FileManager.writeObject(DATA_FILE, forReset);
+	public void commit() {
+		FileManager.writeObject(DATA_FILE, products);
+		tmpProducts = deepCopy(products);
 	}
 
-	
-	
+	@Override
+	public void rollback() {
+		products = deepCopy(tmpProducts);
+		FileManager.writeObject(DATA_FILE, products);
+	}
+
+	private List<Product> deepCopy(List<Product> source) {
+		return new ArrayList<>(source);
+	}
 }
