@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public interface OrderService {
 
-    void IndividualOrder();
+    void CreateSomeOrders(String userId);
 
-    void AllOrder(String sessionId);
+    void CreateAllOrders(String userId);
 
-    void DisplayOrderList(String orderId);
+    void DisplayOrderList(String userId);
 
     void CancelOrder(String orderId);
 }
