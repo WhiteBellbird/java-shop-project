@@ -61,6 +61,11 @@ public class ProductRepositoryImpl implements ProductRepository {
 	}
 
 	@Override
+	public Optional<Product> findByName(String productName) {
+		return products.stream().filter(product -> product.getName().equals(productName)).findFirst();
+	}
+
+	@Override
 	public void delete(Product product) {
 		products.remove(product);
 	}

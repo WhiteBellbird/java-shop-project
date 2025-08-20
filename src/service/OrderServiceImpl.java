@@ -1,8 +1,8 @@
 package service;
 
 import domain.*;
-import exception.ShopException;
-import exception.UserNotfoundException;
+import exception.*;
+import helper.DiscountRate;
 import repository.*;
 
 import java.time.LocalDateTime;
@@ -28,14 +28,9 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void CancelOrder(String orderId) {
     	try {
-    		//주문한 지 12시간 내라면 취소 가능
-            LocalDateTime deadLine = orderRepository.getOrderByOrderId(orderId).getOrderDate().plusHours(12);
-            LocalDateTime now = LocalDateTime.now();
-            if(!now.isBefore(deadLine)){
-                throw new ShopException("주문은 12시간내에만 취소가능합니다");
-            }else{
-            	orderRepository.getOrderByOrderId(orderId).setStatus("cancel");
-            }
+            Order order = Optional.of(orderRepository.getOrderByOrderId(orderId)).orElseThrow(() ->
+                    new OrderNotFoundException("Order Not Found"));
+            order.cancelOrder();
             orderRepository.commit();
     	}catch(ShopException e) {
     		orderRepository.rollback();
@@ -45,6 +40,51 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void DisplayOrderList(String userId) {
         orderRepository.getOrder();
+    }
+
+    @Override
+    public Order createOrder(String userId, String productName, int amount, int quantity, String address) {
+        try {
+            // 유저 찾는 메서드
+            User user = Optional.of(userRepository.findUserByUserId(userId)).orElseThrow(() ->
+                    new UserNotfoundException(String.format("useId %s is not found.", userId)));
+            // 제품 찾는 메서드
+            Product product = productRepository.findByName(productName).orElseThrow(() -> new ProductNotfoundException(
+                    String.format("productName %s is not found.", productName)
+            ));
+            // 카트 찾는 메서드
+            Cart userCart = cartRepository.findCartByUserId(user.getUserId()).get();
+            // 카트 안에서 카트 아이템 조회
+            CartItem cartItem = userCart.getItems().get(product.getProductId());
+            // 카트 아이템에서 수량에 따라 지불할 최종 금액 정산
+            int willPaymentPriceByCustomer = cartItem.getPaymentPrice(quantity);
+            // 거스름돈
+            int changeMoney = 0;
+            // 지불해야 할 금액보다 크면 정상처리 아니면 반려
+            if(willPaymentPriceByCustomer < amount) {
+                changeMoney = amount - willPaymentPriceByCustomer;
+            } else {
+                throw new InSufficientMoneyException("Insufficient money");
+            }
+            // 포인트 적립
+            user.accumulatePoint(changeMoney);
+            double earn = willPaymentPriceByCustomer * DiscountRate.defaultDiscountRate;
+
+            Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
+
+            product.reduceStock(cartItem.getQuantity());
+//            cart.removeProduct(product.getProductId());
+            cartRepository.saveCart(cart);
+            productRepository.save(product);
+            return orderRepository.saveOrder(order);
+            orderRepository.commit();
+            productRepository.commit();
+            cartRepository.commit();
+         } catch (ShopException e) {
+            productRepository.rollback();
+            cartRepository.rollback();
+            orderRepository.rollback();
+        }
     }
 
     @Override
