@@ -18,8 +18,8 @@ public class UserValidationTest {
 		User user2 = userService.createUser("bruceLee", "bruce9973@gmail.com", "Asdf1234!", null, null);
 		
 		
-		System.out.println(ctrl.createUser(user1)); 
-		System.out.println(ctrl.createUser(user2)); 
+		System.out.println(ctrl.createUser("susanLee", "susan9973@gmail.com", "Asdf1234!", null, null)); 
+		System.out.println(ctrl.createUser("bruceLee", "bruce9973@gmail.com", "Asdf1234!", null, null)); 
 		
 		
 	}
