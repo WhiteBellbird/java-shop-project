@@ -134,8 +134,11 @@ public class CartServiceImpl implements CartService {
      @Override
      public void clearCart(String userId) {
          try {
-             cartRepository.clearCartByUserId(userId);
-.
+//             cartRepository.clearCartByUserId(userId);
+             Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
+                     new CartNotFoundException("Cart not found By Id : " + userId));
+             cart.clearCart();
+             Cart saved = cartRepository.saveCart(cart);
              cartRepository.commit();
          } catch (ShopException e) {
              cartRepository.rollback();
