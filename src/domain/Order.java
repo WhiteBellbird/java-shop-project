@@ -28,6 +28,7 @@ public class Order {
                                     LocalDateTime orderDate) {
         String newOrderId = UUID.randomUUID().toString();
         Order order = new Order(newOrderId, user, cartItem, address, OrderStatus.PENDING, orderDate);
+		return order;
     }
 
     public void changeAddress(String newAddress) {

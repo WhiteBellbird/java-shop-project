@@ -17,6 +17,8 @@ import java.util.Set;
 
 import domain.Cart;
 import domain.CartItem;
+import exception.CustomIllegalArgumentException;
+import exception.ProductNotfoundException;
 import persistence.FileManager;
 
 public class CartRepositoryImpl implements CartRepository {
@@ -164,7 +166,7 @@ public class CartRepositoryImpl implements CartRepository {
 		//save the sortedMap to the hashMap inside the list of Carts
 		for(int i = 0; i < carts.size(); i++) {
 			if(carts.get(i).getUserId().equals(userId)) {
-				carts.get(i)
+				carts.get(i);
 			}
 		}
 		return sortedMap;
