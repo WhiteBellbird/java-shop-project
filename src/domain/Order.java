@@ -23,11 +23,13 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public static Order craeteOrder(User user, CartItem cartItem,
-                                    String address,
+    public static Order craeteOrder(User user, 
+    								CartItem cartItem,
+                               		String address,
                                     LocalDateTime orderDate) {
         String newOrderId = UUID.randomUUID().toString();
         Order order = new Order(newOrderId, user, cartItem, address, OrderStatus.PENDING, orderDate);
+		return order;
     }
 
     public void changeAddress(String newAddress) {
@@ -48,10 +50,9 @@ public class Order {
             throw new OrderAlreadyProcessingException("Order has been cancelled");
         }
         this.status = OrderStatus.CANCELLED;
-
     }
-
-
+    
+    
     public CartItem getCartItem() {
         return cartItem;
     }

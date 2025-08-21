@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Comparator;
+
 
 import exception.CustomIllegalArgumentException;
 import exception.ProductNotfoundException;
@@ -19,11 +21,11 @@ public class Cart implements Serializable {
     // 카트 넣었다 뺐다한 기록
     //private Map<String, Log> history;
     // key: 상품 ID, value: 상품과 수량을 담는 CartItem 객체
-    private Map<String, CartItem> items;
+    private LinkedHashMap<String, CartItem> items;
 
     public Cart(String userId) {
         this.userId = userId;
-        this.items = new HashMap<>();
+        this.items = new LinkedHashMap<>();
         //this.history = new HashMap<String, Log>();
     }
 
@@ -77,16 +79,10 @@ public class Cart implements Serializable {
         log.removed();
         //history.put(productId, log);
     }
-  
-    public void replaceCartItem(HashMap<String, CartItem> changedCartItem) {
-    	
+    public LinkedHashMap<String, CartItem> replaceCartItem(LinkedHashMap<String, CartItem> changedCartItem) {
+    	this.items = new LinkedHashMap<String, CartItem>(changedCartItem);
+    	return this.items;
     }
-    
-    
-    
-    /**
-     *
-     */
     public void addProductQuantity(String productId, int newQuantity) {
         CartItem item = items.get(productId);
         item.addQuantity(newQuantity);
@@ -124,7 +120,7 @@ public class Cart implements Serializable {
         this.items.clear();
     }
 
-    public Map<String, CartItem> getItems() {
+    public LinkedHashMap<String, CartItem> getItems() {
         return items;
     }
 
@@ -132,13 +128,14 @@ public class Cart implements Serializable {
         return userId;
     }
 
+    
     @Override
     public String toString() {
         if (items.isEmpty()) {
             return "--- 장바구니 목록 ---\n장바구니가 비어있습니다.\n--------------------\n총 가격: 0원\n";
         }
         // 장바구니가 비어있지 않으면 , StringBuilder로 목록만들기 stringBuilder는 덧붙이기 기능
-        StringBuilder sb = new StringBuilder("--- 장바구니 목록 ---\n");
+        StringBuilder sb = new StringBuilder("USERID: " + this.getUserId() + "\n--- 장바구니 목록 ---\n");
         for (CartItem item : items.values()) {
             String itemInfo = String.format("%s - 수량: %d개, 가격: %,d원\n",
                     item.getProduct().getName(),
@@ -149,6 +146,13 @@ public class Cart implements Serializable {
         // 총 가격 정보를 추가하기
         sb.append("--------------------\n");
         sb.append(String.format("총 가격: %,d원\n", getTotalPrice()));
+        sb.append(String.format("USERID: %s 의 카트정보 끝 \n\n", this.getUserId()));
         return sb.toString();
     }
+    
+    
+    
+    
+    
+    
 }
