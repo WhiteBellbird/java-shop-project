@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface UserService {
 
-	public User createUser(String username, String email, String password, String address, String phone) throws ShopException;
+	public User createUser(String username, String email, String password, String address, String phone);
 	
-	public User updateManager(String userId) throws ShopException, ClassNotFoundException;
+	public User updateManager(String userId);
 	
 	public User findUser(String username, String password);
 	

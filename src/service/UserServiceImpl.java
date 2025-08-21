@@ -52,13 +52,14 @@ public class UserServiceImpl implements UserService {
             // 유저를 관리자로 승격
             findUser.giveManagerAuthentication();
             // 리포지토리에서 유저를 업데이트
-            User updated = repository.authorizeUser(findUser);
+//            User updated = repository.authorizeUser(findUser);
+            User saved = repository.saveUser(findUser);
             // 결과 값 출력할 때 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
             repository.commit();
-            return updated;
+            return saved;
         } catch (ShopException e) {
             repository.rollback();
-            throw e;
+            throw new ShopException(e.getMessage());
         }
     }
 

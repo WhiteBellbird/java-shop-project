@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,34 +12,6 @@ import exception.UserDuplicatedException;
 import exception.UserNotfoundException;
 import repository.*;
 import service.*;
-
-class Result <t> {
-	private boolean ok;
-	private t data;
-	private String error;
-	
-	public Result(boolean ok, t data, String error){
-		this.ok = ok;
-		this.data = data;
-		this.error = error;
-	}
-	static <t> Result<t> good(t data) {
-		return new Result(true, data, null);
-	}
-	static <t> Result<t> bad(String error) {
-		return new Result(false, null, error);
-	}
-	@Override
-	public String toString() {
-		return ok ? "ok: " + data : "bad: " + error;
-	}
-}
-
-
-
-
-
-
 
 public class UserValidationController{
 	private UserService userService;
@@ -59,13 +32,27 @@ public class UserValidationController{
 	}
 	
 	// session service 에서 유저 가져온다
-	public User updateManager(User user){
-		//userService.updateManager(user.getUserId());
-		return user;
-		
+	public User updateManager(User user) throws ShopException {
+		return userService.updateManager(user.getUserId());		
 	}
-	
-	
+	public List<User> displayAllUser(User user) throws ShopException{
+		return userService.displayAllUsers(user.getUsername(), user.getPassword());
+	}
+	public List<User> withdrawUser(String username) throws ShopException{
+		return userService.withdrawUser(username);
+	}
+	public User findUser(User user) throws ShopException{
+		return userService.findUser(user.getUsername(), user.getPassword());
+	}
+	public User changePassword(String username, String password) throws ShopException{
+		return userService.changePassword(username, password);
+	}
+	public User updateUser(User user, User user2) throws ShopException{
+		return userService.updateUser(user, user2);
+	}
+	public void withdrawl(User user) throws ShopException{
+		userService.withdrawl(user.getUsername(), user.getPassword());;
+	}	
 }
 
 
