@@ -17,10 +17,6 @@ public class UserServiceTest {
 		repo.resetData();
 		creatUser();
 		updateUser();
-		login();
-		logout();
-		viewLog(2025, 8, 16);
-		
 		
 		
 	}
@@ -40,15 +36,6 @@ public class UserServiceTest {
 		}
 	}
 	
-	public static void login() {
-		
-	}
-	public static void logout() {
-		
-	}
-	public static void viewLog(int year, int month, int day) {
-		
-	}
 	
 	
 }

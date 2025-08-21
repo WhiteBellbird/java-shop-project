@@ -157,9 +157,11 @@ public class CartRepositoryImpl implements CartRepository {
 			
 		}
 		*/
+		// hashMap 의 값을 정렬하려면 일단 set 로 변환 -> list 로 변환 -> 그 list 정렬 -> 새로운 linkedListHashMap 에 주입
 		Set<Map.Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
 		List<Map.Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
-		
+		// comparing 으로 간단명료하게 가능함
+		// Collections.sort(entryList, Comparator.comparing(String::length)); // 글자수에 따라 비교하고 정렬
 		Collections.sort(entryList, new Comparator<Map.Entry<String, CartItem>>() {
 			 public int compare(Map.Entry<String,CartItem> entry1, Map.Entry<String,CartItem> entry2) {
 				 return entry1.getValue().compareTo(entry2.getValue());

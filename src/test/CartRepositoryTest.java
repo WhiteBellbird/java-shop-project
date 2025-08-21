@@ -8,7 +8,7 @@ import domain.User;
 import repository.*;
 
 
-public class CartRepoTest {
+public class CartRepositoryTest {
 	private static CartRepository cartRepo = new CartRepositoryImpl();
 	
 	public static void main(String[] args) {
@@ -60,8 +60,6 @@ public class CartRepoTest {
 		
 		System.out.println("***************************************************");
 		System.out.println(cartRepo.getUsersCart());
-		
-		
 	}
 	
 }
