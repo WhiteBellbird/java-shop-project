@@ -22,7 +22,7 @@ public interface UserService {
 	
 	public User updateUser(User previousUser, User changedUser);
 	
-	public User withdrawl(String username, String password);
+	public void withdrawl(String username, String password);
 	
 	
 	
