@@ -60,8 +60,12 @@ public class UserValidationController{
 	
 	// session service 에서 유저 가져온다
 	public User updateManager(User user){
+		//userService.updateManager(user.getUserId());
 		return user;
+		
 	}
+	
+	
 }
 
 
