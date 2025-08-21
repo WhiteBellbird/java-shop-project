@@ -124,12 +124,9 @@ public class OrderServiceImpl implements OrderService{
         //orderRepository.saveOrder(order);
 
         //장바구니 비우기
-<<<<<<< HEAD
 
 		/* cart.clearCart(); */
-=======
         //cart.clearCart();
->>>>>>> f2375cf47bbd16698a8abb387b06eeea45bf7c3a
     }
 
     @Override

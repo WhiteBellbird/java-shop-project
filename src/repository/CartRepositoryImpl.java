@@ -173,13 +173,11 @@ public class CartRepositoryImpl implements CartRepository {
 		}
 		for(int i = 0; i < carts.size(); i++) {
 			if(carts.get(i).getUserId().equals(userId)) {
-<<<<<<< HEAD
 				carts.get(i);
-=======
-				System.out.println(carts.get(i));
+			System.out.println(carts.get(i));
 				carts.get(i).replaceCartItem(sortedMap);
 				return sortedMap;
->>>>>>> f2375cf47bbd16698a8abb387b06eeea45bf7c3a
+
 			}
 		}
 		// test
