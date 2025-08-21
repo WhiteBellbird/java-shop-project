@@ -31,7 +31,7 @@ public class UserServiceTest {
 	public static void updateUser() {
 		try {
 			service.updateManager(repo.findUserByEmail("susan9973@gmail.com").getUserId());
-		} catch (ClassNotFoundException | ShopException e) {
+		} catch (ShopException e) {
 			e.printStackTrace();
 		}
 	}
