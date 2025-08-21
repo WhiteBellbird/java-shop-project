@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void withdrawl(String username, String password) {
+    public Boolean withdrawl(String username, String password) {
         try {
             if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
                 throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
@@ -154,9 +154,11 @@ public class UserServiceImpl implements UserService {
             User user = repository.findUserByUsername(username);
             repository.delete(user);
             repository.commit();
+            return Boolean.TRUE;
         } catch (ShopException e) {
             repository.rollback();
             System.out.println(e.getClass() + "회원 탈퇴중 문제 발생");
+            return Boolean.FALSE;
         }
     }
 

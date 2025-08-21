@@ -23,15 +23,16 @@ public class OrderServiceImpl implements OrderService{
 		this.userRepository = userRepository;
 	}
     @Override
-    public void CancelOrder(String orderId) {
+    public Boolean CancelOrder(String orderId) {
     	try {
             Order order = Optional.of(orderRepository.getOrderByOrderId(orderId)).orElseThrow(() ->
                     new OrderNotFoundException("Order Not Found"));
             order.cancelOrder();
             orderRepository.commit();
+            return true;
     	}catch(ShopException e) {
-    		orderRepository.rollback();
-            System.out.println("e.getMessage() = " + e.getMessage());
+            orderRepository.rollback();
+            return false;
     	}
     }
 
@@ -99,8 +100,9 @@ public class OrderServiceImpl implements OrderService{
         }
     }
 
+    @Deprecated
     @Override
-    public void CreateSomeOrders(String userId) {
+    public Boolean CreateSomeOrders(String userId) {
         //List<T> carts = cartRepository.findCartByUserId(userId);
 
 
@@ -127,10 +129,11 @@ public class OrderServiceImpl implements OrderService{
 
 		/* cart.clearCart(); */
         //cart.clearCart();
+        return null;
     }
 
     @Override
-    public void CreateAllOrders(String userId, int userTotalAmount, String address) {
+    public Boolean CreateAllOrders(String userId, int userTotalAmount, String address) {
         //Cart 목록 출력(메인에서 구축예정)
         //특정 상품 선택(제외)
         //제외된 상품 Order 리스트에서 제외
@@ -164,11 +167,13 @@ public class OrderServiceImpl implements OrderService{
             orderRepository.commit();
             productRepository.commit();
             cartRepository.commit();
+            return Boolean.TRUE;
         } catch (ShopException e) {
             userRepository.rollback();
             productRepository.rollback();
             cartRepository.rollback();
             orderRepository.rollback();
+            return Boolean.FALSE;
         }
     }
 }

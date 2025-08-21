@@ -28,11 +28,8 @@ public class SessionServiceImpl implements SessionService{
 	}
 
 	@Override
-	public void logout(String username) {
-		User userByUsername = findUserByUsername(username);
-		if(userByUsername != null) {
-			sessionIdList.remove(userByUsername.getUsername());
-		}
+	public void logout() {
+		sessionIdList.clear();
 	}
 
 	@Override

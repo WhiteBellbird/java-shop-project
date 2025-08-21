@@ -5,7 +5,7 @@ import domain.User;
 public interface SessionService {
 	void login(String username, String password);
 	
-	void logout(String username);
+	void logout();
 	
 	//String getSessionId(String UserId);
 

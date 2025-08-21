@@ -9,7 +9,7 @@ import service.SessionService;
 
 public class CartValidationController {
 	
-	private final CartService cartService;
+	private CartService cartService;
 	private SessionService sessionService;
 	
 	private void clearCart() {
