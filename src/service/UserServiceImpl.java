@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 	@Override
-	public List<User> withdrawUser(String username) {
+	public List<User> withdrawUser( String username) {
 		try {
 			if(repository.findUserByUsername(username) == null) {
 				throw new ShopException("유저가 존재하지 않습니다/ 찾을 수 없습니다");

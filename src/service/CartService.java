@@ -5,7 +5,6 @@ import exception.ProductNotfoundException;
 
 public interface CartService {
 
-	
 	void createCart(String userId);
 
     void addProduct(String userId, String productId, int quantity);
@@ -21,6 +20,11 @@ public interface CartService {
 	Integer subProductQuantity(String userId,String productId, Integer quantity);
 	
 	Integer totalProductsPrice(String userId);
+
 	
+	void organizeUsersCartsByTotalPrice();
 	
+	void organizeUsersCartByUserId();
+	
+	void organizeUsersCarts(String userId);
 }

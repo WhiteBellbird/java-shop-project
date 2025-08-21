@@ -145,4 +145,34 @@ public class CartServiceImpl implements CartService {
              System.out.println("error Msg is : " + e.getMessage());
          }
      }
+	@Override
+	public void organizeUsersCartsByTotalPrice() {
+		try {
+			cartRepository.organizeCartListByTotalPrice();
+			cartRepository.commit();
+		}catch(ShopException e) {
+			cartRepository.rollback();
+			System.out.println("error msg is : " + e.getMessage());
+		}
+	}
+	@Override
+	public void organizeUsersCartByUserId() {
+		try {
+			cartRepository.organizeCartListByUserId();
+			cartRepository.commit();
+		}catch(ShopException e) {
+			cartRepository.rollback();
+			System.out.println("error msg is : " + e.getMessage());
+		}
+	}
+	@Override
+	public void organizeUsersCarts(String userId) {
+		try {
+			cartRepository.organizeUserCart(userId);
+			cartRepository.commit();
+		}catch(ShopException e) {
+			cartRepository.rollback();
+			System.out.println("error msg is : " + e.getMessage());
+		}
+	}
 }
