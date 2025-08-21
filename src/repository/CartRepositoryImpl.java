@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import domain.Cart;
 import domain.CartItem;
@@ -117,22 +118,31 @@ public class CartRepositoryImpl implements CartRepository {
             }
         }
     }
-
-	/*
 	@Override
-	public List<CartItem> organizeCartList() {
-		
-		
-		return;
+	public List<Cart> organizeCartListByTotalPrice() {
+			//각 유저의 총 지불해야 할 값에 따라 유저를 정렬한다.
+			// reference 가 잘 안되나보다 ERROR
+			/*
+			List<Cart> sorted = carts.stream().sorted((u,v)-> v.getTotalPrice()).collect(Collectors.toList());
+			carts = new ArrayList<Cart>(sorted);
+			*/
+			Collections.sort(carts, (cart1,cart2) -> String.valueOf(cart2.getTotalPrice()).compareTo(String.valueOf(cart1.getTotalPrice())));
+		return carts;
 	}
-	*/
-	
 	@Override
-	public HashMap<String, CartItem> organizeUserCart(String userId) {
+	public List<Cart> organizeCartListByUserId() {
+		//userId 로 비교하고 정렬한다.
+		Collections.sort(carts, (cart1,cart2) -> cart1.getUserId().compareTo(cart2.getUserId()));
+		return carts;
+	}
+	@Override
+	public LinkedHashMap<String, CartItem> organizeUserCart(String userId) {
 		Cart cart = carts.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);
-		
 		// 오답 노트
 		/*
+		//Map.entry<String,CartItem> - wrong ****
+		// 만약에 import java.util.Map.Entry 하면 상관이 없음 entry 는 짮은 버젼이라 
+		// entry 가 어디를 reference 하는지 정하면 됨 아니면 어디로 reference 해야할지 몰라 에러남 - 그냥 map.entry 가 확실함
 		Set<Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
 		List<Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
 		
@@ -147,11 +157,11 @@ public class CartRepositoryImpl implements CartRepository {
 			
 		}
 		*/
-		
+		// hashMap 의 값을 정렬하려면 일단 set 로 변환 -> list 로 변환 -> 그 list 정렬 -> 새로운 linkedListHashMap 에 주입
 		Set<Map.Entry<String, CartItem>> entrySet = cart.getItems().entrySet();
 		List<Map.Entry<String, CartItem>> entryList = new ArrayList<Map.Entry<String,CartItem>>(entrySet);
-		
-		
+		// comparing 으로 간단명료하게 가능함
+		// Collections.sort(entryList, Comparator.comparing(String::length)); // 글자수에 따라 비교하고 정렬
 		Collections.sort(entryList, new Comparator<Map.Entry<String, CartItem>>() {
 			 public int compare(Map.Entry<String,CartItem> entry1, Map.Entry<String,CartItem> entry2) {
 				 return entry1.getValue().compareTo(entry2.getValue());
@@ -161,18 +171,24 @@ public class CartRepositoryImpl implements CartRepository {
 		for(/*LinkedHashMap <String, CartItem> sort*/ Map.Entry<String, CartItem> entry : entryList) {
 			sortedMap.put(entry.getKey(),entry.getValue());
 		}
-		
-		sortedMap.forEach((u,v) -> System.out.println(v));
-		//save the sortedMap to the hashMap inside the list of Carts
 		for(int i = 0; i < carts.size(); i++) {
 			if(carts.get(i).getUserId().equals(userId)) {
+<<<<<<< HEAD
 				carts.get(i);
+=======
+				System.out.println(carts.get(i));
+				carts.get(i).replaceCartItem(sortedMap);
+				return sortedMap;
+>>>>>>> f2375cf47bbd16698a8abb387b06eeea45bf7c3a
 			}
 		}
-		return sortedMap;
+		// test
+		System.out.println("유저아이디로 유저카트 찾지못함");
+		return null;
 	}
 	@Override
-	public void displayCarts() {
+	public List<Cart> getUsersCart() {
+		return carts;
 	}
 	@Override
 	public void commit() {
@@ -188,9 +204,5 @@ public class CartRepositoryImpl implements CartRepository {
         List<Cart> copy = new ArrayList<>(source);
 		return copy;
 	}
-	@Override
-	public List<CartItem> organizeCartList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }

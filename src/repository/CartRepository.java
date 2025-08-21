@@ -20,9 +20,11 @@ public interface CartRepository {
 	
 	HashMap<String, CartItem> organizeUserCart(String userId);
 	
-	List<CartItem> organizeCartList();
+	List<Cart> organizeCartListByTotalPrice();
+	
+	List<Cart> organizeCartListByUserId();
 	// for test
-	void displayCarts();
+	List<Cart> getUsersCart();
 
 	void commit();
 

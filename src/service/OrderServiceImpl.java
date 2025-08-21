@@ -124,16 +124,54 @@ public class OrderServiceImpl implements OrderService{
         //orderRepository.saveOrder(order);
 
         //장바구니 비우기
+<<<<<<< HEAD
 
 		/* cart.clearCart(); */
+=======
+        //cart.clearCart();
+>>>>>>> f2375cf47bbd16698a8abb387b06eeea45bf7c3a
     }
 
     @Override
-    public void CreateAllOrders(String userId, int totalAmount, String address) {
+    public void CreateAllOrders(String userId, int userTotalAmount, String address) {
         //Cart 목록 출력(메인에서 구축예정)
         //특정 상품 선택(제외)
         //제외된 상품 Order 리스트에서 제외
         //주문생성및저장
         //주문한 상품만 장바구니(items)에서 비우기
+        try {
+            // 유저 찾는 메서드
+            User user = Optional.of(userRepository.findUserByUserId(userId)).orElseThrow(() ->
+                    new UserNotfoundException(String.format("useId %s is not found.", userId)));
+            // 카트 찾는 메서드
+            Cart userCart = cartRepository.findCartByUserId(user.getUserId()).get();
+
+            int sum = userCart.getItems().values().stream().mapToInt(CartItem::getTotalPrice).sum();
+            sum -= user.getPoint();
+            if(sum > userTotalAmount){
+                throw new InSufficientMoneyException("Insufficient money");
+            }
+
+            userCart.getItems().values().forEach(cartItem -> {
+                cartItem.subQuantity(cartItem.getQuantity());
+                Product willBeReduce = cartItem.getProduct();
+                if(cartItem.getQuantity() == 0) {
+                    willBeReduce.reduceStock(cartItem.getQuantity());
+                }
+                Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
+                orderRepository.saveOrder(order);
+                productRepository.save(willBeReduce);
+            });
+            cartRepository.saveCart(userCart);
+            userRepository.commit();
+            orderRepository.commit();
+            productRepository.commit();
+            cartRepository.commit();
+        } catch (ShopException e) {
+            userRepository.rollback();
+            productRepository.rollback();
+            cartRepository.rollback();
+            orderRepository.rollback();
+        }
     }
 }

@@ -17,10 +17,6 @@ public class UserServiceTest {
 		repo.resetData();
 		creatUser();
 		updateUser();
-		login();
-		logout();
-		viewLog(2025, 8, 16);
-		
 		
 		
 	}
@@ -35,20 +31,11 @@ public class UserServiceTest {
 	public static void updateUser() {
 		try {
 			service.updateManager(repo.findUserByEmail("susan9973@gmail.com").getUserId());
-		} catch (ClassNotFoundException | ShopException e) {
+		} catch (ShopException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void login() {
-		
-	}
-	public static void logout() {
-		
-	}
-	public static void viewLog(int year, int month, int day) {
-		
-	}
 	
 	
 }
