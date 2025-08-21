@@ -4,25 +4,16 @@ import domain.Cart;
 import exception.ProductNotfoundException;
 import repository.CartRepository;
 import repository.ProductRepository;
+import service.CartService;
+import service.SessionService;
 
 public class CartValidationController {
 	
-	private final CartRepository cartRepository= null;
-    private final ProductRepository productRepository = null;
-    private final String currentUserId = "user1";
+	private final CartService cartService;
+	private SessionService sessionService;
 	
-	private void ClearCart() {
-        System.out.println(" 장바구니 비우기 ");
-        try {
-            cartRepository.clearCartByUserId(currentUserId);
-            
-       } catch (ProductNotfoundException e) {
-            System.out.println("error" + e.getMessage());
-        }
-	}
-	private void ViewCart() {
-	        System.out.println("\n--- ➡️ 장바구니 보기 테스트 ---");
-	        Cart cart = ();
-	        System.out.println(cart);
+	private void clearCart() {
+        System.out.println(" \n장바구니 비우기 ");
+        cartService.clearCart(sessionService.getLoggedInUser().getUserId());
 	}
 }
