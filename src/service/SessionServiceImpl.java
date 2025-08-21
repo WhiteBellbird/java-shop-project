@@ -19,7 +19,7 @@ public class SessionServiceImpl implements SessionService{
     }
 
     @Override
-	public void successlogin(String username, String password) {
+	public void login(String username, String password) {
 		User user = findUserByUsername(username);
 		String encoded = passwordEncoder.encode(password);
 		if(user.getPassword().equals(encoded)) {
@@ -28,7 +28,7 @@ public class SessionServiceImpl implements SessionService{
 	}
 
 	@Override
-	public void successLogout(String username) {
+	public void logout(String username) {
 		User userByUsername = findUserByUsername(username);
 		if(userByUsername != null) {
 			sessionIdList.remove(userByUsername.getUsername());
@@ -45,6 +45,11 @@ public class SessionServiceImpl implements SessionService{
 	@Override
 	public long loginCount() {
 		return sessionIdList.size();
+	}
+
+	@Override
+	public User getLoggedInUser() {
+		return sessionIdList.get(0);
 	}
 
 	private User findUserByUsername(String username) {
