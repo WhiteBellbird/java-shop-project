@@ -20,6 +20,8 @@ public class SessionServiceImpl implements SessionService{
 
     @Override
 	public void login(String username, String password) {
+    	
+    	// Exception 을 던질까 말까 - userName & password 틀리면 *******************************************
 		User user = findUserByUsername(username);
 		String encoded = passwordEncoder.encode(password);
 		if(user.getPassword().equals(encoded)) {

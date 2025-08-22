@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
             throw e;
         }
     }
-
     @Override
     public User updateManager(String userId){
         try {

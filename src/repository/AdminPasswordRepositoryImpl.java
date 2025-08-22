@@ -17,41 +17,39 @@ public class AdminPasswordRepositoryImpl implements AdminPasswordRepository {
 	
 	PasswordEncoder encoder = new PasswordEncoderImpl();
 	private final Path DATA_FILE = Paths.get("adminData", "admin.dat");
-	private String password;
+	private ArrayList<String> password;
 
 	
-	AdminPasswordRepositoryImpl() throws IOException {
+	public AdminPasswordRepositoryImpl() {
 		try {
 			Files.createDirectories(DATA_FILE.getParent());
 		}catch(IOException e) {
 			System.out.println("데이터 파일을 위한 폴더 생성 불가");
 		}
+		password = new ArrayList<String>();
 		load();
 	} 
-	private void load() throws IOException {
-		String read = Files.readString(DATA_FILE);
-		if(!read.isBlank() || !read.isEmpty() ||/*read != null 뺴야하나?*/read != null) {
-			password = encoder.decode(read);
+	private void load(){
+		List<String> read = FileManager.readObject(DATA_FILE);
+		if(!(read.size() == 0) || !read.isEmpty()) {
+			 password.addAll(read);
 		}else{
-			this.password = "password1234"; // test 용 코드
-			byte[] strBytes = encoder.encode(this.password).getBytes();
-			Files.write(DATA_FILE, strBytes);
+			this.password.add("password1234"); // test 용 코드
+			FileManager.writeObject(DATA_FILE, password);
 		}
 	}
 	@Override
-	public String getPassword() {
+	public ArrayList<String> getPassword() {
 		return this.password;
 	}
 	@Override
-	public void setPassword(String currentPassword, String newPassword) throws IOException {
+	public void setPassword(ArrayList<String> currentPassword, ArrayList<String> newPassword) throws IOException {
 		this.password = newPassword;
-		byte[] strByte = encoder.encode(this.password).getBytes();
-		Files.write(DATA_FILE, strByte);
+		FileManager.writeObject(DATA_FILE, this.password);
 	}
 	@Override
 	public void initializePassword() throws IOException {
-		this.password = "password1234";
-		byte[] strByte = encoder.encode(this.password).getBytes();
-		Files.write(DATA_FILE, strByte);
+		this.password.add("password123");
+		FileManager.writeObject(DATA_FILE, this.password);
 	}
 }

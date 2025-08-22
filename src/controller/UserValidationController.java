@@ -18,7 +18,6 @@ public class UserValidationController{
 	public UserValidationController(UserService userservice){
 		this.userService = userservice;
 	}
-	
 	public User createUser(String username, String email, String password, String address, String phone){
 		Pattern pattern = Pattern.compile("[A-Z]");
 		Pattern pattern2 = Pattern.compile("[!@#$%^&*]");
@@ -60,7 +59,7 @@ public class UserValidationController{
 		return userService.CheckPassword(password, password2);
 	}
 	public boolean validateChoice(String choice) throws ShopException{
-		if(choice.charAt(0) != 'y' || choice.charAt(0) != 'Y' || choice.charAt(0) != 'n' || choice.charAt(0) != 'N' || choice.isBlank() || choice.isEmpty()) {
+		if(((choice.charAt(0) != 'y' && choice.charAt(0) != 'Y') && (choice.charAt(0) != 'n' && choice.charAt(0) != 'N')) || choice.isBlank() || choice.isEmpty()) {
     		throw new ShopException("Y/y 또는 N/n 으로 대답해주시기 바랍니다");
     	}
 		return userService.validateChoice(choice);

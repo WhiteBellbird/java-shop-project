@@ -14,7 +14,10 @@ public class UserServiceTest {
 	public static void main(String[] args) {
 		
 		
+		
 		repo.resetData();
+		System.out.println(service.displayUser("KWONLEE"));
+		//service.withdrawUser(null);
 		creatUser();
 		updateUser();
 		
@@ -30,7 +33,7 @@ public class UserServiceTest {
 	}
 	public static void updateUser() {
 		try {
-			service.updateManager(repo.findUserByEmail("susan9973@gmail.com").getUserId());
+			service.updateManager(service.displayUser("KWONLEE").getUserId());
 		} catch (ShopException e) {
 			e.printStackTrace();
 		}
