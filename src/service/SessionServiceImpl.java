@@ -15,7 +15,7 @@ public class SessionServiceImpl implements SessionService{
 							  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        sessionIdList = new HashMap<>();
+        sessionIdList = new HashMap<>(); 
     }
 
     @Override

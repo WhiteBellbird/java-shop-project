@@ -1,16 +1,21 @@
 package iolayer;
 
+import java.io.IOException;
 import java.util.Scanner;
 
+import controller.AdminPasswordValidationController;
 import controller.UserValidationController;
+import domain.User;
 import service.UserService;
 
 public class UserIOLayer {
     private Scanner input;
 	UserValidationController ctrl;
+	AdminPasswordValidationController adminCtrl;
 	
-	public UserIOLayer(UserValidationController userValidationController) {
+	public UserIOLayer(UserValidationController userValidationController, AdminPasswordValidationController adminCtrl) {
 		this.ctrl = userValidationController;
+		this.adminCtrl = adminCtrl;
 	}
     public UserIOLayer(Scanner input) {
         this.input = input;
@@ -51,13 +56,23 @@ public class UserIOLayer {
     	String agree2 = input.nextLine();
     	ctrl.validateChoice(agree2);
     	if(ctrl.validateChoice(agree2) == false) {
-    		System.out.println("꺼지쇼");
+    		System.out.println("안녕히가십시요");
     		System.exit(0);
     	}
     	ctrl.createUser(name, email, password2, address, phone);
     	System.out.println("성공적으로 회원가입이 되었습니다.");
     }
-    public void updateManager() {
+    public void updateManager(User user) throws IOException {
+    	System.out.println("user를 manager로 권한부여합니다");
+    	//System.out.println("현재 UserID: ");
+    	//String id = input.nextLine();
+    	// [feat] 총괄적이게 administrator 이 되려면 저장된 파일 비밀번호와 일치할경우에만 가능
+    	System.out.println("Admin password: ");
+    	String password = input.nextLine();
+    	adminCtrl.checkManagerByPassword(password);
+    	ctrl.updateManager(user);
+    }
+    public void displayAllUser() {
     	
     }
     

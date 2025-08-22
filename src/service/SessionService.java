@@ -13,5 +13,5 @@ public interface SessionService {
 	
 	long loginCount();
 
-	User getLoggedInUser();
+	User getLoggedInUser(); 
 }
