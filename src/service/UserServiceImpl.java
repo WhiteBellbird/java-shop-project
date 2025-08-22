@@ -159,5 +159,25 @@ public class UserServiceImpl implements UserService {
             System.out.println(e.getClass() + "회원 탈퇴중 문제 발생");
         }
     }
+	@Override
+	public boolean CheckPassword(String firstInput, String SecondInput) {
+        if (!firstInput.equals(SecondInput)) {
+            throw new ShopException("패스워드가 일치하지 않습니다");
+        }
+		return firstInput.equals(SecondInput);
+	}
+	public boolean validateChoice(String choice) {
+		try {
+	    	if(choice.charAt(0) == 'y' || choice.charAt(0) == 'Y') {
+	    		return true;
+	    	}else if(choice.charAt(0) == 'n' || choice.charAt(0) == 'N') {
+	    		return false;
+	    	}else {
+	    		throw new ShopException("wrong choice input");
+	    	}
+		}catch(ShopException e){
+			throw new ShopException("wrong choice input");
+		}
+    }
 
 }

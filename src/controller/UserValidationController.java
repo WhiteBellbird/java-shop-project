@@ -51,8 +51,17 @@ public class UserValidationController{
 		return userService.updateUser(user, user2);
 	}
 	public void withdrawl(User user) throws ShopException{
-		userService.withdrawl(user.getUsername(), user.getPassword());;
+		userService.withdrawl(user.getUsername(), user.getPassword());
 	}	
+	public boolean checkPassword(String password, String password2) throws ShopException{
+		return userService.CheckPassword(password, password2);
+	}
+	public boolean validateChoice(String choice) throws ShopException{
+		if(choice.charAt(0) != 'y' || choice.charAt(0) != 'Y' || choice.charAt(0) != 'n' || choice.charAt(0) != 'N' || choice.isBlank() || choice.isEmpty()) {
+    		throw new ShopException("Y/y 또는 N/n 으로 대답해주시기 바랍니다");
+    	}
+		return userService.validateChoice(choice);
+	}
 }
 
 
