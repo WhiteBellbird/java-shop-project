@@ -35,8 +35,8 @@ public class UserValidationController{
 	public User updateManager(User user) throws ShopException {
 		return userService.updateManager(user.getUserId());		
 	}
-	public List<User> displayAllUser(User user) throws ShopException{
-		return userService.displayAllUsers(user.getUsername(), user.getPassword());
+	public User displayUser(User user) throws ShopException{
+		return userService.findUser(user.getUsername(), user.getPassword());
 	}
 	public List<User> withdrawUser(String username) throws ShopException{
 		return userService.withdrawUser(username);
@@ -44,14 +44,17 @@ public class UserValidationController{
 	public User findUser(User user) throws ShopException{
 		return userService.findUser(user.getUsername(), user.getPassword());
 	}
+	public List<User> findAllUsers(User user) throws ShopException{
+		return userService.displayAllUsers(user.getUsername(), user.getPassword());
+	}
 	public User changePassword(String username, String password) throws ShopException{
 		return userService.changePassword(username, password);
 	}
 	public User updateUser(User user, User user2) throws ShopException{
 		return userService.updateUser(user, user2);
 	}
-	public void withdrawl(User user) throws ShopException{
-		userService.withdrawl(user.getUsername(), user.getPassword());
+	public void withdrawl(String username, String password) throws ShopException{
+		userService.withdrawl(username, password);
 	}	
 	public boolean checkPassword(String password, String password2) throws ShopException{
 		return userService.CheckPassword(password, password2);

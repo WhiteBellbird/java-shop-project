@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService {
     // 서비스는 리포지토리에서 조회한걸 그대로 리턴해주고, 출력은 IO Layer 에서 해줬으면 해.
 
 
+    //관리자용
     @Override
     public User displayUser(String username) {
         User user = repository.findUserByUsername(username);
@@ -92,7 +93,9 @@ public class UserServiceImpl implements UserService {
             throw e;
         }
     }
-
+    
+    
+    //고객/유저용
     @Override
     public User findUser(String username, String password) {
         if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
@@ -110,14 +113,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changePassword(String username, String password) {
+    public User changePassword(String username, String changedPassword) {
         try {
-            if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
+            if (repository.findUserByUsername(username) == null) {
                 throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
             }
             User user = repository.findUserByUsername(username);
             repository.delete(user);
-            user.updatePassword(password);
+            user.updatePassword(changedPassword);
             User saved = repository.saveUser(user);
             repository.commit();
             return saved;

@@ -72,16 +72,78 @@ public class UserIOLayer {
     	adminCtrl.checkManagerByPassword(password);
     	ctrl.updateManager(user);
     }
-    public void displayAllUser() {
-    	
+    public void withdrawUser() throws IOException {
+    	System.out.println("퇴출 고객 지정중");
+    	System.out.println("Admin password: ");
+    	String password = input.nextLine();
+    	adminCtrl.checkManagerByPassword(password);
+    	System.out.println("퇴출 고객 이름: ");
+    	String username = input.nextLine();
+    	ctrl.withdrawUser(username);
+    	System.out.println("성공적으로 퇴출완료");
     }
     
+    public void findUser(User user) {
+    	System.out.println("유저의 정보를 출력합니다: ");
+    	ctrl.findUser(user);
+    }
+    public void displayUser(User adminUser) throws IOException {
+    	System.out.println("유저 조회를 시작합니다.");
+    	System.out.println("Admin password: ");
+    	String password = input.nextLine();
+    	adminCtrl.checkManagerByPassword(password);
+    	ctrl.displayUser(adminUser);
+    }
+    public void displayAllUser(User adminUser) throws IOException {
+    	System.out.println("모든 유저를 확인합니다.");
+    	System.out.println("Admin password: ");
+    	String password = input.nextLine();
+    	adminCtrl.checkManagerByPassword(password);
+    	ctrl.findAllUsers(adminUser);
+    }
+    public void changePassword(User user) {
+    	System.out.println("패스워드를 변경합니다.");
+    	System.out.println("현재 패스워드를 입력하시오");
+    	String password = input.nextLine();
+    	ctrl.checkPassword(user.getPassword(), password);
+    	
+    	System.out.println("변경할 비밀번호를 입력하시오");
+    	String password2 = input.nextLine();
+    	ctrl.changePassword(user.getUsername(), password2);
+    	System.out.println("변경되었습니다.");
+    }
     
-    
-    
-    
-    
-    
+    public void updateUser(User user) {
+    	System.out.println("유저를 상세정보를 변경합니다.");
+    	System.out.println("변경할 이메일을 입력하세요: ");
+    	String email = readLine();
+    	System.out.println("변경할 현재 거주하고 계신 주소를 입력해주세요: ");
+    	String address = readLine();
+    	System.out.println("변경할 전화번호를 입력해주세요: ");
+    	String phone = readLine(); // xxx-xxxx-xxxx
+    	
+    	System.out.println("-------------------------------");
+    	System.out.println("변경할 유저이름을 입력하세요\t\t|");
+    	String name = input.nextLine();
+    	System.out.println("변경할 비밀번호를 입력하세요\t\\t|");
+    	String password = input.nextLine();
+    	System.out.println("비밀번호를 다시 입력하세요\t\t|");
+    	String password2 = input.nextLine();
+    	ctrl.checkPassword(password, password2);
+    	
+    	User changedUser = ctrl.createUser(name, email, password2, address, phone);
+    	ctrl.updateUser(user, changedUser);
+    	System.out.println("변경되었습니다.");
+    }
+    public void withdrawl(User user) {
+    	System.out.println("회원탈퇴 시작합니다");
+    	System.out.println("유저네임: ");
+    	String username = input.nextLine();
+    	System.out.println("패스워드: ");
+    	String password = input.nextLine();
+    	ctrl.withdrawl(username, password);
+    	System.out.println("성공적으로 회원탈퇴 완료");
+    }
     
     
 }
