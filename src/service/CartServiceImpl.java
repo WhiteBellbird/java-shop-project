@@ -27,7 +27,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void createCart(String userId) {
+    public Boolean createCart(String userId) {
         // 커밋과 롤백 예시
         try {
             User user = userRepository.findUserByUserId(userId);
@@ -35,15 +35,16 @@ public class CartServiceImpl implements CartService {
             Cart saved = cartRepository.saveCart(cart);
             System.out.println("saved = " + saved);
             cartRepository.commit();
+            return true;
         } catch (ShopException e) {
             userRepository.rollback();
             cartRepository.rollback();
-            System.out.println("error Msg is : " + e.getMessage());
+            return false;
         }
     }
 
     @Override
-    public void addProduct(String userId, String productId, int quantity) {
+    public Boolean addProduct(String userId, String productId, int quantity) {
         try {
             Product product = productRepository.findById(productId).orElseThrow(() ->
                     new ProductNotfoundException("Product not found By Id : " + productId));
@@ -53,10 +54,11 @@ public class CartServiceImpl implements CartService {
             cartRepository.saveCart(cart);
             cartRepository.commit();
             productRepository.commit();
+            return true;
         } catch (ShopException e) {
             cartRepository.rollback();
             productRepository.rollback();
-            System.out.println("error Msg is : " + e.getMessage());
+            return false;
         }
     }
 
@@ -117,7 +119,7 @@ public class CartServiceImpl implements CartService {
         }
     }
      @Override
-     public void updateProductQuantity(String userId, String productId, int newQuantity) {
+     public Boolean updateProductQuantity(String userId, String productId, int newQuantity) {
          try {
 
              cartRepository.findCartByUserId(userId).orElseThrow(() ->
@@ -125,14 +127,15 @@ public class CartServiceImpl implements CartService {
 
              cartRepository.updateProductQuantity(userId, productId, newQuantity);
              cartRepository.commit();
+             return true;
          } catch (ShopException e) {
              cartRepository.rollback();
-             System.out.println("error Msg is : " + e.getMessage());
+             return false;
          }
      }
 
      @Override
-     public void clearCart(String userId) {
+     public Boolean clearCart(String userId) {
          try {
 //             cartRepository.clearCartByUserId(userId);
              Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
@@ -140,39 +143,43 @@ public class CartServiceImpl implements CartService {
              cart.clearCart();
              Cart saved = cartRepository.saveCart(cart);
              cartRepository.commit();
+             return true;
          } catch (ShopException e) {
              cartRepository.rollback();
-             System.out.println("error Msg is : " + e.getMessage());
+             return false;
          }
      }
 	@Override
-	public void organizeUsersCartsByTotalPrice() {
+	public Boolean organizeUsersCartsByTotalPrice() {
 		try {
 			cartRepository.organizeCartListByTotalPrice();
-			cartRepository.commit();
+            cartRepository.commit();
+            return true;
 		}catch(ShopException e) {
-			cartRepository.rollback();
-			System.out.println("error msg is : " + e.getMessage());
+            cartRepository.rollback();
+            return false;
 		}
 	}
 	@Override
-	public void organizeUsersCartByUserId() {
+	public Boolean organizeUsersCartByUserId() {
 		try {
 			cartRepository.organizeCartListByUserId();
 			cartRepository.commit();
+            return true;
 		}catch(ShopException e) {
-			cartRepository.rollback();
-			System.out.println("error msg is : " + e.getMessage());
+            cartRepository.rollback();
+            return false;
 		}
 	}
 	@Override
-	public void organizeUsersCarts(String userId) {
+	public Boolean organizeUsersCarts(String userId) {
 		try {
 			cartRepository.organizeUserCart(userId);
 			cartRepository.commit();
+            return true;
 		}catch(ShopException e) {
-			cartRepository.rollback();
-			System.out.println("error msg is : " + e.getMessage());
+            cartRepository.rollback();
+            return false;
 		}
 	}
 }

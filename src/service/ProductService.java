@@ -11,12 +11,12 @@ public interface ProductService {
 	
 	Product getProductById(String productId) throws ProductNotfoundException;
 	
-	void addProduct(Product product);
+	Boolean addProduct(Product product);
 	
-	void updateProduct(Product product) throws ProductNotfoundException;
+	Boolean updateProduct(Product product) throws ProductNotfoundException;
 	
-	void deleteProduct(String productId) throws ProductNotfoundException;
+	Boolean deleteProduct(String productId) throws ProductNotfoundException;
 
 
-	void reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException;
+	Boolean reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException;
 }

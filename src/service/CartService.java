@@ -5,13 +5,13 @@ import exception.ProductNotfoundException;
 
 public interface CartService {
 
-	void createCart(String userId);
+	Boolean createCart(String userId);
 
-    void addProduct(String userId, String productId, int quantity);
+    Boolean addProduct(String userId, String productId, int quantity);
     
-    void updateProductQuantity(String userId, String productId, int newQuantity);
+    Boolean updateProductQuantity(String userId, String productId, int newQuantity);
     
-    void clearCart(String userId);
+    Boolean clearCart(String userId);
 
     String removeProduct(String userId,String productId) throws ProductNotfoundException;
 	
@@ -22,9 +22,9 @@ public interface CartService {
 	Integer totalProductsPrice(String userId);
 
 	
-	void organizeUsersCartsByTotalPrice();
+	Boolean organizeUsersCartsByTotalPrice();
 	
-	void organizeUsersCartByUserId();
+	Boolean organizeUsersCartByUserId();
 	
-	void organizeUsersCarts(String userId);
+	Boolean organizeUsersCarts(String userId);
 }

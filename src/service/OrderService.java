@@ -10,11 +10,11 @@ public interface OrderService {
 
     Order createOrder(String userId, String productName, int amount, int quantity, String address);
 
-    void CreateSomeOrders(String userId);
+    Boolean CreateSomeOrders(String userId);
 
-    void CreateAllOrders(String userId,int totalAmount,String address);
+    Boolean CreateAllOrders(String userId,int totalAmount,String address);
 
     List<Order> DisplayOrderList(String userId);
 
-    void CancelOrder(String orderId);
+    Boolean CancelOrder(String orderId);
 }
