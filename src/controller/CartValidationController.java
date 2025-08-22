@@ -4,16 +4,18 @@ import domain.Cart;
 import domain.CartItem;
 import exception.ShopException;
 import service.CartService;
+import service.SessionService;
+
 import java.util.List;
 
-public class CartController {
+public class CartValidationController {
 	
-	private CartService cartService
+	private CartService cartService;
 	
 	private SessionService sessionService;
 
 	
-	public CartController(CartService cartService) {
+	public CartValidationController(CartService cartService) {
 		this.cartService = cartService;
 	}
 

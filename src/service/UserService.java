@@ -14,15 +14,12 @@ public interface UserService {
 
 	User createUser(String username, String email, String password, String address, String phone);
 	
-<<<<<<< HEAD
-	public boolean CheckPassword(String firstInput, String SecondInput);
+	boolean CheckPassword(String firstInput, String SecondInput);
 	
 	boolean validateChoice(String choice);
 	
-	public User updateManager(String userId);
-=======
 	User updateManager(String userId);
->>>>>>> 8833fa85db58a26c0fee3d2edf3d625d4a2a23b5
+
 	
 	User findUser(String username, String password);
 	
