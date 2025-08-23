@@ -10,17 +10,18 @@ import service.SessionService;
 
 public class UserIOLayer {
 	private Scanner scanner;
-	private MainLayer mainLayer;
-	private UserController userController;
+    private UserController userController;
     private SessionService sessionService;
+	private OrderIOLayer orderIOLayer;
 	
-	public UserIOLayer(Scanner scanner, MainLayer mainLayer,
-                       UserController userController,
-					   SessionService sessionService) {
+	public UserIOLayer(Scanner scanner,
+					   UserController userController,
+                       SessionService sessionService,
+					   OrderIOLayer orderIOLayer) {
         this.scanner = scanner;
-        this.mainLayer = mainLayer;
         this.userController = userController;
         this.sessionService = sessionService;
+		this.orderIOLayer = orderIOLayer;
     }
 
 	public void myPage() {
@@ -35,7 +36,35 @@ public class UserIOLayer {
 			System.out.println("│  5. 회원 탈퇴                      │");
 			System.out.println("│  6. 돌아가기                       │");
 			System.out.println("└────────────────────────────────────┘");
-
+			int choice = scanner.nextInt();
+			switch (choice) {
+				case 1:
+					// 내 정보 조회 로직
+					this.displayLoggedUser();
+					break;
+				case 2:
+					// 비밀번호 변경 로직
+					this.changePassword();
+					break;
+				case 3:
+					// 개인정보 수정 로직
+					this.updateUser();
+					break;
+				case 4:
+					// 주문 내역 조회 로직
+					orderIOLayer.showOrderMenu();
+					break;
+				case 5:
+					// 회원 탈퇴 로직
+					this.withdrawUserByAdmin();
+					break;
+				case 6:
+					// 돌아가기
+					System.out.println("이전 메뉴로 돌아갑니다...");
+					break;
+				default:
+					System.out.println("올바른 메뉴를 선택해주세요.");
+			}
 
 		}
 	}
@@ -86,7 +115,7 @@ public class UserIOLayer {
 			IOHelper.printEndLine();
 		}
     }
-    private void withdrawUser()  {
+    private void withdrawUserByAdmin()  {
 		IOHelper.printFirstLine();
     	System.out.print("탈퇴시킬 고객네임: ");
     	String username = scanner.nextLine();
@@ -158,7 +187,9 @@ public class UserIOLayer {
 		IOHelper.printFirstLine();
     	System.out.println("회원탈퇴 시작합니다");
 		try {
-			userController.withdrawal(sessionService.getLoggedInUser());
+			System.out.print("회원 탈퇴를 위해 비밀번호를 다시 입력해주세요: ");
+			String password = scanner.next();
+			userController.withdrawal(sessionService.getLoggedInUser(), password);
 			sessionService.logout();
 			System.out.println("성공적으로 회원탈퇴 완료");
 		} catch (ShopException e){

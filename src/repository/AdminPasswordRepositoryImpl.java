@@ -28,7 +28,8 @@ public class AdminPasswordRepositoryImpl implements AdminPasswordRepository {
 		}
 		password = new ArrayList<String>();
 		load();
-	} 
+	}
+
 	private void load(){
 		List<String> read = FileManager.readObject(DATA_FILE);
 		if(!(read.size() == 0) || !read.isEmpty()) {
@@ -38,6 +39,7 @@ public class AdminPasswordRepositoryImpl implements AdminPasswordRepository {
 			FileManager.writeObject(DATA_FILE, password);
 		}
 	}
+
 	@Override
 	public ArrayList<String> getPassword() {
 		return this.password;

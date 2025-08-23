@@ -10,7 +10,7 @@ public class UserValidationTest {
 	
 	public static void main(String[] args) {
 		UserRepository userRepository = new UserRepositoryImpl();
-		UserService userService = new UserServiceImpl(userRepository);
+		UserService userService = new UserServiceImpl(userRepository,null);
 		UserController ctrl = new UserController(userService);
 		
 		

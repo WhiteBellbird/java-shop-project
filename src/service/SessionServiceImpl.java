@@ -16,17 +16,16 @@ public class SessionServiceImpl implements SessionService{
 							  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        sessionIdList = new HashMap<>(); 
+        sessionIdList = new HashMap<>();
     }
 
     @Override
 	public void login(String username, String password) {
     	
-    	// Exception 을 던질까 말까 - userName & password 틀리면 *******************************************
 		User user = Optional.of(findUserByUsername(username)).orElseThrow(() -> new UserNotfoundException(String.format("username " +
 				"%s not found", username)));
-		String encoded = passwordEncoder.encode(password);
-		if (!user.getPassword().equals(encoded)) {
+		String decoded = passwordEncoder.decode(user.getPassword());
+		if (!password.equals(decoded)) {
 			throw new UserAuthenticationException(String.format("password does not match"));
 		}
 		sessionIdList.put(user.getUsername(), user);
@@ -51,7 +50,7 @@ public class SessionServiceImpl implements SessionService{
 
 	@Override
 	public User getLoggedInUser() {
-		return sessionIdList.get(0);
+		return sessionIdList.values().stream().findFirst().get();
 	}
 
 	@Override

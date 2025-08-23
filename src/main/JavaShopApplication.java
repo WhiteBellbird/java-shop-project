@@ -36,7 +36,7 @@ public class JavaShopApplication {
 
     private static void run() {
 //        do {
-//            // MainIOController 호출하면 됌
+//            // MainIOLayer 호출하면 됌
 //            System.out.println(
 //                    "╔════════════════════════════════════════════╗\r\n"
 //                            + "║     🛍️  Java Shopping Mall                 ║\r\n"

@@ -21,7 +21,7 @@ public interface UserService {
 	
 	User updateUser(User user, String email, String address, String phone);
 	
-	Boolean withdrawal(User user);
+	Boolean withdrawal(User user,String password);
 	
 	
 	

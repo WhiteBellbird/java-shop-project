@@ -116,10 +116,11 @@ public class UserController {
 		return userService.updateUser(user, email, address, phone);
 	}
 
-	public void withdrawal(User user) throws ShopException {
+	public void withdrawal(User user,String password) throws ShopException {
 		if (user == null) {
 			throw new InvalidatedInputException("User cannot be null.");
 		}
-		userService.withdrawal(user);
+
+		userService.withdrawal(user,password);
 	}
 }

@@ -149,8 +149,9 @@ public class UserServiceImpl implements UserService {
 //            }
 //            User user = repository.findUserByUsername(username);
 //            repository.delete(user);
-            String encodedCurrentPwd = passwordEncoder.encode(currentPwd);
-            if (!user.getPassword().equals(encodedCurrentPwd)) {
+//            String encodedCurrentPwd = passwordEncoder.encode(currentPwd);
+            String decoded = passwordEncoder.decode(user.getPassword());
+            if (!decoded.trim().equals(currentPwd)) {
                 throw new UserAuthenticationException(String.format("%s is not matched current Password",
                         user.getUsername()));
             }
@@ -190,12 +191,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean withdrawal(User user) {
+    public Boolean withdrawal(User user,String password) {
         try {
-//            if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
-//                throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
-//            }
-//            User user = repository.findUserByUsername(username);
+            String decoded = passwordEncoder.decode(user.getPassword());
+            if (!decoded.trim().equals(password)) {
+                throw new UserAuthenticationException(String.format("%s password is not matched.", user.getUsername()));
+            }
             repository.delete(user);
             System.out.printf("\n[DEBUG] %s is deleted\n", user);
             repository.commit();
@@ -230,11 +231,17 @@ public class UserServiceImpl implements UserService {
 //    }
 
     private void validateDuplicatedUsernameAndEmail(String email, String username) {
-        Optional.of(repository.findUserByUsername(username)).ifPresent((user) -> {
-            throw new UserDuplicatedException(String.format("%s is existed.", username));
-        });
-        Optional.of(repository.findUserByEmail(email)).ifPresent((user) -> {
-            throw new UserDuplicatedException(String.format("%s is existed.", email));
-        });
+        User userByUsername = repository.findUserByUsername(username);
+        if (userByUsername == null) {
+            System.out.println("[ERROR] " + username + " is not found.");
+        }
+//        Optional.of(repository.findUserByUsername(username)).orElseThrow(()->
+//                new UserDuplicatedException(String.format("username %s not found", username)));
+//        Optional.of(repository.findUserByUsername(username)).ifPresent((user) -> {
+//            throw new UserDuplicatedException(String.format("%s is existed.", username));
+//        });
+//        Optional.of(repository.findUserByEmail(email)).ifPresent((user) -> {
+//            throw new UserDuplicatedException(String.format("%s is existed.", email));
+//        });
     }
 }

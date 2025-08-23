@@ -104,10 +104,12 @@ public class MainLayer {
                     // 상품 둘러보기
                     break;
                 case 4:
-                    // 프로그램 종료
+                    // 주문하기
+                    orderIOLayer.showOrderMenu();
                     break;
                 case 5:
-                    // 상품 검색
+                    // 주문 내역
+                    orderIOLayer.displayOrderList();
                     break;
                 case 6:
                     userIOLayer.myPage();
@@ -132,9 +134,10 @@ public class MainLayer {
     private void login() {
         IOHelper.printFirstLine();
         System.out.print("유저이름을 입력하세요:");
-        String userName = scanner.nextLine();
+        String userName = scanner.next();
+        System.out.println();
         System.out.print("비밀번호를 입력하세요:");
-        String password = scanner.nextLine();
+        String password = scanner.next();
         try {
             sessionService.login(userName, password);
             System.out.println("성공적으로 로그인 되었습니다.");

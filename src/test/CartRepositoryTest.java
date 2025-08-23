@@ -29,21 +29,21 @@ public class CartRepositoryTest {
 		Cart cart2 = new Cart(user2.getUserId());
 		
 
-		cart3.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null, LocalDateTime.now()), 5);
-		cart3.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null, LocalDateTime.now()), 6);
-		cart3.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null, LocalDateTime.now()), 3);
-		cart3.addProduct(new Product("002", "banana", "fruit" , 500, 365, null, LocalDateTime.now()), 10);
+		cart3.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null, 0,LocalDateTime.now()), 5);
+		cart3.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null, 0,LocalDateTime.now()), 6);
+		cart3.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null, 0, LocalDateTime.now()), 3);
+		cart3.addProduct(new Product("002", "banana", "fruit" , 500, 365, null, 0, LocalDateTime.now()), 4);
 		
 		
-		cart.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null, LocalDateTime.now()), 5);
-		cart.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null, LocalDateTime.now()), 3);
-		cart.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null, LocalDateTime.now()), 3);
-		cart.addProduct(new Product("002", "banana", "fruit" , 500, 365, null, LocalDateTime.now()), 10);
+		cart.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null, 0, LocalDateTime.now()),5);
+		cart.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null, 0, LocalDateTime.now()),2);
+		cart.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null, 0,LocalDateTime.now()),6 );
+		cart.addProduct(new Product("002", "banana", "fruit" , 500, 365, null, 0,LocalDateTime.now()),7);
 		
-		cart2.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null, LocalDateTime.now()), 5);
-		cart2.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null, LocalDateTime.now()), 1);
-		cart2.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null, LocalDateTime.now()), 3);
-		cart2.addProduct(new Product("002", "banana", "fruit" , 500, 365, null, LocalDateTime.now()), 10);
+		cart2.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null,0, LocalDateTime.now()),2);
+		cart2.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null,0, LocalDateTime.now()),7);
+		cart2.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null,0, LocalDateTime.now()),2);
+		cart2.addProduct(new Product("002", "banana", "fruit" , 500, 365, null,0, LocalDateTime.now()),6);
 		
 		
 		cartRepo.saveCart(cart3);
