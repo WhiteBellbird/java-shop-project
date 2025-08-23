@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
             throw e;
         }
     }
-
     @Override
     public User updateManager(String userId){
         try {
@@ -52,7 +51,7 @@ public class UserServiceImpl implements UserService {
             // 유저를 관리자로 승격
             findUser.giveManagerAuthentication();
             // 리포지토리에서 유저를 업데이트
-//            User updated = repository.authorizeUser(findUser);
+            //User updated = repository.authorizeUser(findUser);
             User saved = repository.saveUser(findUser);
             // 결과 값 출력할 때 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
             repository.commit();
@@ -71,6 +70,7 @@ public class UserServiceImpl implements UserService {
     // 서비스는 리포지토리에서 조회한걸 그대로 리턴해주고, 출력은 IO Layer 에서 해줬으면 해.
 
 
+    //관리자용
     @Override
     public User displayUser(String username) {
         User user = repository.findUserByUsername(username);
@@ -92,7 +92,9 @@ public class UserServiceImpl implements UserService {
             throw e;
         }
     }
-
+    
+    
+    //고객/유저용
     @Override
     public User findUser(String username, String password) {
         if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
@@ -110,14 +112,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changePassword(String username, String password) {
+    public User changePassword(String username, String changedPassword) {
         try {
-            if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
+            if (repository.findUserByUsername(username) == null) {
                 throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
             }
             User user = repository.findUserByUsername(username);
             repository.delete(user);
-            user.updatePassword(password);
+            user.updatePassword(changedPassword);
             User saved = repository.saveUser(user);
             repository.commit();
             return saved;
@@ -160,6 +162,26 @@ public class UserServiceImpl implements UserService {
             System.out.println(e.getClass() + "회원 탈퇴중 문제 발생");
             return Boolean.FALSE;
         }
+    }
+	@Override
+	public boolean CheckPassword(String firstInput, String SecondInput) {
+        if (!firstInput.equals(SecondInput)) {
+            throw new ShopException("패스워드가 일치하지 않습니다");
+        }
+		return firstInput.equals(SecondInput);
+	}
+	public boolean validateChoice(String choice) {
+		try {
+	    	if(choice.charAt(0) == 'y' || choice.charAt(0) == 'Y') {
+	    		return true;
+	    	}else if(choice.charAt(0) == 'n' || choice.charAt(0) == 'N') {
+	    		return false;
+	    	}else {
+	    		throw new ShopException("wrong choice input");
+	    	}
+		}catch(ShopException e){
+			throw new ShopException("wrong choice input");
+		}
     }
 
 }

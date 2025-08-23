@@ -14,7 +14,12 @@ public interface UserService {
 
 	User createUser(String username, String email, String password, String address, String phone);
 	
+	boolean CheckPassword(String firstInput, String SecondInput);
+	
+	boolean validateChoice(String choice);
+	
 	User updateManager(String userId);
+
 	
 	User findUser(String username, String password);
 	

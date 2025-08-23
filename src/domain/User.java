@@ -165,8 +165,6 @@ public class User implements Serializable{
 	}
 	//아이디가 같으면 동등하게 취급 hash-code 비교는 불필요
 	public boolean equals(User obj) {
-		return (this.getUserId().equals(obj.getUserId()) && this.getUsername().equals(obj.getUsername()) 
-				&& this.getEmail().equals(obj.getEmail()) && this.getRank().equals(obj.getRank())
-				&& this.getUsername().equals(obj.getUsername()));
+		return (this.getUserId().equals(obj.getUserId()));
 	}
 }
