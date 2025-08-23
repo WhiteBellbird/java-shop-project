@@ -29,7 +29,6 @@ public class UserValidationController{
 		}
 		return userService.createUser(username, email, password, address, phone);
 	}
-	
 	// session service 에서 유저 가져온다
 	public User updateManager(User user) throws ShopException {
 		return userService.updateManager(user.getUserId());		
@@ -40,8 +39,8 @@ public class UserValidationController{
 	public List<User> withdrawUser(String username) throws ShopException{
 		return userService.withdrawUser(username);
 	}
-	public User findUser(User user) throws ShopException{
-		return userService.findUser(user.getUsername(), user.getPassword());
+	public User findUser(String username, String password) throws ShopException{
+		return userService.findUser(username, password);
 	}
 	public List<User> findAllUsers(User user) throws ShopException{
 		return userService.displayAllUsers(user.getUsername(), user.getPassword());

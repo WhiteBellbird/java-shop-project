@@ -81,9 +81,9 @@ public class UserIOLayer {
     	System.out.println("성공적으로 퇴출완료");
     }
     
-    public void findUser(User user) {
+    public void findUser(String username, String password) {
     	System.out.println("유저의 정보를 출력합니다: ");
-    	ctrl.findUser(user);
+    	System.out.println(ctrl.findUser(username, password));
     }
     public void displayUser(User adminUser) throws IOException {
     	System.out.println("유저 조회를 시작합니다.");

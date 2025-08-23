@@ -31,7 +31,7 @@ public class UserIOLayerTest {
 
 		uil.createUser();
 		uil.updateManager(user);
-		uil.findUser(user);
+		uil.findUser(user.getUsername(), user.getPassword());
 		
 		
 		uil.changePassword(user);
