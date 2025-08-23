@@ -10,10 +10,9 @@ import java.util.List;
 
 public class CartValidationController {
 	
-	private CartService cartService;
-	
-	private SessionService sessionService;
 
+	private  CartService cartService;
+	private SessionService sessionService;
 	
 	public CartValidationController(CartService cartService) {
 		this.cartService = cartService;
