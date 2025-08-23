@@ -89,5 +89,10 @@ public class OrderRepositoryImpl implements OrderRepository{
 	public Order getOrderByOrderId(String orderId) {
 		return orders.stream().filter(u -> u.getOrderId().equals(orderId)).findFirst().orElse(null);
 	}
-	
+
+	@Override
+	public List<Order> getOrderByUserId(String userId) {
+		return orders.stream().filter(o -> o.getOrderId().equals(userId)).toList();
+	}
+
 }

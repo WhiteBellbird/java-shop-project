@@ -83,4 +83,16 @@ public class Order {
     public LocalDateTime getOrderDate() {
         return orderDate;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId='" + orderId + '\'' +
+                ", user=" + user +
+                ", cartItem=" + cartItem +
+                ", address='" + address + '\'' +
+                ", status=" + status +
+                ", orderDate=" + orderDate +
+                '}';
+    }
 }

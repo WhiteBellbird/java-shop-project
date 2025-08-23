@@ -16,4 +16,5 @@ public interface SessionService {
 	User getLoggedInUser();
 
 	void updateSessionUser(User user);
+
 }

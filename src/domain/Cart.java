@@ -35,7 +35,8 @@ public class Cart implements Serializable {
     }
 
     //product 추가할 상품 객체 AND quantity 추가할 수량
-    public void addProduct(Product product, int quantity) throws CustomIllegalArgumentException {
+    public CartItem addProduct(Product product, int quantity) throws CustomIllegalArgumentException {
+        CartItem existingItem = null;
         if (product == null || quantity <= 0) {
             throw new CustomIllegalArgumentException("상품 또는 수량이 유효하지 않습니다.");
         }
@@ -46,7 +47,7 @@ public class Cart implements Serializable {
         //상품이 카트 아이템에 존재하는지 확인하고 추가하는거
         String productId = product.getProductId();
         if (items.containsKey(productId)) {
-            CartItem existingItem = items.get(productId);
+            existingItem = items.get(productId);
 //            int newTotalQuantity = existingItem.getQuantity() + quantity;
             existingItem.addQuantity(quantity);
             // 재고 초과 여부 재확인
@@ -59,11 +60,13 @@ public class Cart implements Serializable {
             if (items.size() >= MAX_PRODUCT) {
                 throw new IllegalStateException("장바구니에 담을 수 있는 상품 종류는 최대 " + MAX_PRODUCT + "개입니다.");
             }
-            items.put(productId, new CartItem(product, quantity));
+            existingItem = new CartItem(product, quantity);
+            items.put(productId, existingItem);
             Log log = new Log();
             log.added();
             //history.put(productId, log);
         }
+        return existingItem;
     }
 
     /**
@@ -72,7 +75,7 @@ public class Cart implements Serializable {
      */
     public void removeProduct(String productId) throws ProductNotfoundException {
         if (productId == null || !items.containsKey(productId)) {
-            throw new ProductNotfoundException("Product not found by Id: " + productId);
+            throw new ProductNotfoundException("CartItem is not in cart : " + productId);
         }
         items.remove(productId);
         Log log = new Log();

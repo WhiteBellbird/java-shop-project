@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import domain.Product;
 import persistence.FileManager;
@@ -65,6 +66,11 @@ public class ProductRepositoryImpl implements ProductRepository {
 	@Override
 	public Optional<Product> findByName(String productName) {
 		return products.stream().filter(product -> product.getName().equals(productName)).findFirst();
+	}
+
+	@Override
+	public List<Product> findByCategory(String categoryName) {
+		return products.stream().filter(p -> p.getCategory().equals(categoryName)).collect(Collectors.toList());
 	}
 
 	@Override

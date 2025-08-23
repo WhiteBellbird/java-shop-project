@@ -2,18 +2,8 @@ package test;
 
 import java.io.IOException;
 
-import controller.AdminPasswordValidationController;
-import controller.UserValidationController;
-import domain.User;
-import iolayer.UserIOLayer;
-import repository.AdminPasswordRepository;
-import repository.AdminPasswordRepositoryImpl;
 import repository.UserRepository;
 import repository.UserRepositoryImpl;
-import service.AdminPasswordService;
-import service.AdminPasswordServiceImpl;
-import service.UserService;
-import service.UserServiceImpl;
 
 public class UserIOLayerTest {
 	public static void main(String[] args) throws IOException {

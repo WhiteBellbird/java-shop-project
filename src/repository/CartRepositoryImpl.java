@@ -135,6 +135,7 @@ public class CartRepositoryImpl implements CartRepository {
 		Collections.sort(carts, (cart1,cart2) -> cart1.getUserId().compareTo(cart2.getUserId()));
 		return carts;
 	}
+
 	@Override
 	public LinkedHashMap<String, CartItem> organizeUserCart(String userId) {
 		Cart cart = carts.stream().filter(u -> u.getUserId().equals(userId)).findFirst().orElse(null);

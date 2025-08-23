@@ -1,7 +1,6 @@
 package iolayer;
 
-import controller.OrderValidationController;
-import domain.Order;
+import controller.OrderController;
 import exception.ShopException;
 import service.OrderService;
 
@@ -11,11 +10,11 @@ public class OrderIOLayer {
 
 
     private Scanner scanner;
-    private OrderValidationController orderValidationController;
+    private OrderController orderController;
     private OrderService orderService;
-    public OrderIOLayer(Scanner scanner, OrderValidationController orderValidationController, OrderService orderService) {
+    public OrderIOLayer(Scanner scanner, OrderController orderController, OrderService orderService) {
         this.scanner = scanner;
-        this.orderValidationController = orderValidationController;
+        this.orderController = orderController;
         this.orderService = orderService;
     }
 

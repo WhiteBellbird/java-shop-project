@@ -18,6 +18,8 @@ public interface ProductRepository {
 
     Optional<Product> findByName(String productName);
 
+    List<Product> findByCategory(String categoryName);
+
 	// 상품 ID로 상품 삭제
     void delete(Product product);
     

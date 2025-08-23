@@ -11,7 +11,7 @@ public class UserValidationTest {
 	public static void main(String[] args) {
 		UserRepository userRepository = new UserRepositoryImpl();
 		UserService userService = new UserServiceImpl(userRepository);
-		UserValidationController ctrl = new UserValidationController(userService);
+		UserController ctrl = new UserController(userService);
 		
 		
 		User user1 = userService.createUser("susanLee", "susan9973@gmail.com", "Asdf1234!", null, null);

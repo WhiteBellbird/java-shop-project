@@ -8,37 +8,41 @@ import repository.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private OrderRepository orderRepository;
     private CartRepository cartRepository;
     private ProductRepository productRepository;
     private UserRepository userRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CartRepository cartRepository, 
-    		ProductRepository productRepository, UserRepository userRepository) {
-		this.orderRepository = orderRepository;
-		this.cartRepository = cartRepository;
-		this.productRepository = productRepository;
-		this.userRepository = userRepository;
-	}
+    public OrderServiceImpl(OrderRepository orderRepository, CartRepository cartRepository,
+                            ProductRepository productRepository, UserRepository userRepository) {
+        this.orderRepository = orderRepository;
+        this.cartRepository = cartRepository;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+    }
+
     @Override
-    public Boolean CancelOrder(String orderId) {
-    	try {
+    public Order cancelOrder(String orderId) {
+        try {
             Order order = Optional.of(orderRepository.getOrderByOrderId(orderId)).orElseThrow(() ->
                     new OrderNotFoundException("Order Not Found"));
             order.cancelOrder();
+            Order savedOrder = orderRepository.saveOrder(order);
             orderRepository.commit();
-            return true;
-    	}catch(ShopException e) {
+            System.out.println("[DEBUG] CancelOrder success : " + savedOrder);
+            return savedOrder;
+        } catch (ShopException e) {
             orderRepository.rollback();
-            return false;
-    	}
+            System.out.println("[ERROR] CancelOrder error : " + e.getMessage());
+            throw e;
+        }
     }
 
     @Override
     public List<Order> DisplayOrderList(String userId) {
-        return orderRepository.getOrder();
+        return orderRepository.getOrderByUserId(userId);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class OrderServiceImpl implements OrderService{
             // 거스름돈
             int changeMoney = 0;
             // 지불해야 할 금액보다 크면 정상처리 아니면 반려
-            if(willPaymentPriceByCustomer < amount) {
+            if (willPaymentPriceByCustomer < amount) {
                 changeMoney = amount - willPaymentPriceByCustomer;
             } else {
                 throw new InSufficientMoneyException("Insufficient money");
@@ -90,12 +94,16 @@ public class OrderServiceImpl implements OrderService{
             orderRepository.commit();
             productRepository.commit();
             cartRepository.commit();
+            System.out.println("[DEBUG] CreateOrder success : " + user);
+            System.out.println("[DEBUG] CreateOrder success : " + saved);
+            System.out.println("[DEBUG] CreateOrder success : " + order);
             return saved;
-         } catch (ShopException e) {
+        } catch (ShopException e) {
             userRepository.rollback();
             productRepository.rollback();
             cartRepository.rollback();
             orderRepository.rollback();
+            System.out.println("[ERROR] CreateOrder error : " + e.getMessage());
             throw e;
         }
     }
@@ -106,15 +114,14 @@ public class OrderServiceImpl implements OrderService{
         //List<T> carts = cartRepository.findCartByUserId(userId);
 
 
-
         //고객 존재 확인 (ID 유효한지 검사
-        if(userRepository.findUserByUserId(userId) == null){
+        if (userRepository.findUserByUserId(userId) == null) {
             throw new UserNotfoundException("확인되지 않는 유저입니다 : " + userId);
         }
 
         //Cart에 물건 있는지 확인 //주문생성및저장
 
-    	if(cartRepository.findCartByUserId(userId).isEmpty()){
+        if (cartRepository.findCartByUserId(userId).isEmpty()) {
             throw new ShopException("장바구니가 비어있습니다.");
         }
 
@@ -127,19 +134,20 @@ public class OrderServiceImpl implements OrderService{
 
         //장바구니 비우기
 
-		/* cart.clearCart(); */
+        /* cart.clearCart(); */
         //cart.clearCart();
         return null;
     }
 
     @Override
-    public Boolean CreateAllOrders(String userId, int userTotalAmount, String address) {
+    public List<Order> CreateAllOrders(String userId, int userTotalAmount, String address) {
         //Cart 목록 출력(메인에서 구축예정)
         //특정 상품 선택(제외)
         //제외된 상품 Order 리스트에서 제외
         //주문생성및저장
         //주문한 상품만 장바구니(items)에서 비우기
         try {
+            List<Order> orders = new ArrayList<>();
             // 유저 찾는 메서드
             User user = Optional.of(userRepository.findUserByUserId(userId)).orElseThrow(() ->
                     new UserNotfoundException(String.format("useId %s is not found.", userId)));
@@ -147,33 +155,36 @@ public class OrderServiceImpl implements OrderService{
             Cart userCart = cartRepository.findCartByUserId(user.getUserId()).get();
 
             int sum = userCart.getItems().values().stream().mapToInt(CartItem::getTotalPrice).sum();
-            sum -= user.getPoint();
-            if(sum > userTotalAmount){
+            sum -= (int) Math.round(user.getPoint());
+            if (sum > userTotalAmount) {
                 throw new InSufficientMoneyException("Insufficient money");
             }
 
             userCart.getItems().values().forEach(cartItem -> {
                 cartItem.subQuantity(cartItem.getQuantity());
                 Product willBeReduce = cartItem.getProduct();
-                if(cartItem.getQuantity() == 0) {
+                if (cartItem.getQuantity() == 0) {
                     willBeReduce.reduceStock(cartItem.getQuantity());
                 }
                 Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
                 orderRepository.saveOrder(order);
                 productRepository.save(willBeReduce);
+                orders.add(order);
             });
             cartRepository.saveCart(userCart);
             userRepository.commit();
             orderRepository.commit();
             productRepository.commit();
             cartRepository.commit();
-            return Boolean.TRUE;
+            System.out.println("[DEBUG] CreateAllOrders success : " + orders.size());
+            return orders;
         } catch (ShopException e) {
             userRepository.rollback();
             productRepository.rollback();
             cartRepository.rollback();
             orderRepository.rollback();
-            return Boolean.FALSE;
+            System.out.println("[ERROR] CreateAllOrders error : " + e.getMessage());
+            throw e;
         }
     }
 }

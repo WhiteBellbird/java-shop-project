@@ -1,27 +1,27 @@
 package service;
 
-import domain.Product;
+import domain.Cart;
+import domain.CartItem;
 import exception.ProductNotfoundException;
 
 public interface CartService {
 
-	Boolean createCart(String userId);
+	Cart createCart(String userId);
 
-    Boolean addProduct(String userId, String productId, int quantity);
+    CartItem addProductByCart(String userId, String productId, int quantity);
     
-    Boolean updateProductQuantity(String userId, String productId, int newQuantity);
+//    Boolean updateProductQuantity(String userId, String productId, int newQuantity);
     
-    Boolean clearCart(String userId);
+    Cart clearCart(String userId);
 
-    String removeProduct(String userId,String productId) throws ProductNotfoundException;
+    String removeProductByCart(String userId, String productId) throws ProductNotfoundException;
 	
-	Integer addProductQuantity(String userId,String productId, Integer quantity);
+	CartItem addProductQuantityByCart(String userId, String productId, Integer quantity);
 	
-	Integer subProductQuantity(String userId,String productId, Integer quantity);
+	CartItem subProductQuantityByCart(String userId, String productId, Integer quantity);
 	
-	Integer totalProductsPrice(String userId);
+	Integer getCartItemsTotalProductPrice(String userId);
 
-	
 	Boolean organizeUsersCartsByTotalPrice();
 	
 	Boolean organizeUsersCartByUserId();

@@ -3,22 +3,12 @@ package main;
 import java.io.IOException;
 import java.util.Scanner;
 
-import controller.AdminPasswordValidationController;
-import controller.UserValidationController;
+import controller.UserController;
 import domain.User;
 import helper.PasswordEncoder;
-import helper.PasswordEncoderImpl;
 import iolayer.UserIOLayer;
-import repository.AdminPasswordRepository;
-import repository.AdminPasswordRepositoryImpl;
-import repository.UserRepository;
-import repository.UserRepositoryImpl;
-import service.AdminPasswordService;
-import service.AdminPasswordServiceImpl;
 import service.SessionService;
-import service.SessionServiceImpl;
 import service.UserService;
-import service.UserServiceImpl;
 
 public class JavaShopApplication {
     private static Scanner input;
@@ -27,7 +17,7 @@ public class JavaShopApplication {
     private static UserService userService;
 //    private static AdminPasswordRepository ar;
 //    private static AdminPasswordService as;
-    private static UserValidationController uc;
+    private static UserController uc;
 //    private static AdminPasswordValidationController ac;
     private static PasswordEncoder pe;
 
@@ -45,37 +35,37 @@ public class JavaShopApplication {
     }
 
     private static void run() {
-        do {
-            // MainIOController 호출하면 됌
-            System.out.println(
-                    "╔════════════════════════════════════════════╗\r\n"
-                            + "║     🛍️  Java Shopping Mall                 ║\r\n"
-                            + "╚════════════════════════════════════════════╝\r\n"
-                            + "\r\n"
-                            + "1. 회원가입\r\n"
-                            + "2. 로그인\r\n"
-                            + "3. 상품 둘러보기\r\n"
-                            + "4. 프로그램 종료\r\n"
-                            + "\r\n"
-                            + "메뉴를 선택하세요: _");
-            int choice = input.nextInt();
-
-            switch (choice) {
-                case 1:
-                    createUser();
-                    break;
-                case 2:
-                    login();
-                    User user = ss.getLoggedInUser();
-                    mainMenu(user);
-                    break;
-                case 3:
-                    viewProducts();
-                    break;
-                case 4:
-                    System.exit(0);
-            }
-        } while (true);
+//        do {
+//            // MainIOController 호출하면 됌
+//            System.out.println(
+//                    "╔════════════════════════════════════════════╗\r\n"
+//                            + "║     🛍️  Java Shopping Mall                 ║\r\n"
+//                            + "╚════════════════════════════════════════════╝\r\n"
+//                            + "\r\n"
+//                            + "1. 회원가입\r\n"
+//                            + "2. 로그인\r\n"
+//                            + "3. 상품 둘러보기\r\n"
+//                            + "4. 프로그램 종료\r\n"
+//                            + "\r\n"
+//                            + "메뉴를 선택하세요: _");
+//            int choice = input.nextInt();
+//
+//            switch (choice) {
+//                case 1:
+//                    createUser();
+//                    break;
+//                case 2:
+//                    login();
+//                    User user = ss.getLoggedInUser();
+//                    mainMenu(user);
+//                    break;
+//                case 3:
+//                    viewProducts();
+//                    break;
+//                case 4:
+//                    System.exit(0);
+//            }
+//        } while (true);
     }
 
     private static void mainMenu(User checkUser) {

@@ -21,6 +21,11 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
+	public List<Product> getProductsByCategory(String categoryName) {
+		return repository.findByCategory(categoryName);
+	}
+
+	@Override
 	public Product getProductByProductName(String productName) {
 		return repository.findByName(productName).orElseThrow(() ->
 				new ProductNotfoundException(productName + "에 해당하는 상품이 없습니다."));
@@ -44,16 +49,40 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Boolean updateProduct(Product product) {
+	public Product addProductStock(String productName, int stock) {
 		try {
-			// 무엇이 업데이트 될지, 파라미터로 바꾸시고 프로덕트를 업데이트 하시고, 리포지토리에 저장해주세요.
+			Product product = repository.findByName(productName).orElseThrow(() -> new ProductNotfoundException(
+					String.format("%s is not found", productName)
+			));
+			product.addStock(stock);
+			Product saved = repository.save(product);
+			System.out.println("[DEBUG] add product stock : " + product);
 			repository.commit();
-			return true;
+			return saved;
 		} catch (ShopException e) {
 			repository.rollback();
 			throw e;
 		}
 	}
+
+	@Override
+	public Product subtractProductStock(String productName, int stock) {
+		try {
+			Product product = repository.findByName(productName).orElseThrow(() -> new ProductNotfoundException(
+					String.format("%s is not found", productName)
+			));
+			product.reduceStock(stock);
+			Product saved = repository.save(product);
+
+			repository.commit();
+			System.out.println("[DEBUG] subtracting stock : " + saved);
+			return saved;
+		} catch (ShopException e){
+			repository.rollback();
+			throw e;
+		}
+	}
+
 
 	@Override
 	public Boolean deleteProduct(String productName) throws ProductNotfoundException {
@@ -79,19 +108,5 @@ public class ProductServiceImpl implements ProductService{
 //		repository.delete(product.getProductId());
 	}
 
-	@Override
-	public Product reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException {
-		try {
-			Product product = repository.findById(productId).get();
-			product.reduceStock(quantity);
-			Product saved = repository.save(product);
-			repository.commit();
-			System.out.println("[DEBUG] reduced stock : " + saved);
-			return saved;
-		} catch (ProductNotfoundException e) {
-			repository.rollback();
-			throw e;
-		}
-	}
 
 }
