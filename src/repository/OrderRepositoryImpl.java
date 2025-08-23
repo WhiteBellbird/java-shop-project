@@ -46,6 +46,12 @@ public class OrderRepositoryImpl implements OrderRepository{
 		FileManager.writeObject(DATA_FILE, orders);
 		tempOrders = deepCopy(orders);
 	}
+
+	@Override
+	public List<Order> getOrderByUserId(String userId) {
+		return Collections.singletonList(orders.stream().filter(u -> u.getUser().equals(userId)).findFirst().orElse(null));
+	}
+
 	// rollBack: tmpUsers 상태로 되돌린 후 파일에 덮어쓰기
 	@Override
 	public void rollback() {

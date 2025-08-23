@@ -10,11 +10,14 @@ public interface OrderService {
 
     Order createOrder(String userId, String productName, int amount, int quantity, String address);
 
-    Boolean CreateSomeOrders(String userId);
 
-    Boolean CreateAllOrders(String userId,int totalAmount,String address);
 
-    List<Order> DisplayOrderList(String userId);
+    void createAllOrders(String userId, int userTotalAmount, String address);
 
-    Boolean CancelOrder(String orderId);
+    List<Order> displayOrderList(String userId);
+
+    void cancelOrder(String orderId);
+
+    @Deprecated
+    void createSomeOrders(String userId);
 }

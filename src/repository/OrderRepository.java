@@ -21,4 +21,6 @@ public interface OrderRepository {
     public void rollback();
     
     public void commit();
+
+    List<Order> getOrderByUserId(String userId);
 }
