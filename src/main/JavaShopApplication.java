@@ -66,11 +66,7 @@ public class JavaShopApplication{
 				case 2:
 					login();
 					User user = ss.getLoggedInUser();
-					if(!user.isAdmin()) {
-						mainMenu();	
-					}else{
-						mainMenuAdmin();
-					}
+					mainMenu(user);	
 					break;
 				case 3:
 					viewProducts();
@@ -80,12 +76,13 @@ public class JavaShopApplication{
 			}
 		}while(true);
 	}
-	
-	private static void mainMenuAdmin() {
-		System.out.println(
+
+	private static void mainMenu(User checkUser) {
+		
+		System.out.printf(
 				"╔════════════════════════════════════════════╗\r\n"
 				+ "║     🛍️  Java Shopping Mall                 ║\r\n"
-				+ "║     [관리자 모드] 환영합니다!                  ║\r\n"
+				+ "║     환영합니다, [%s]님!                  ║\r\n"
 				+ "╚════════════════════════════════════════════╝\r\n"
 				+ "\r\n"
 				+ "1. 상품 둘러보기\r\n"
@@ -95,53 +92,81 @@ public class JavaShopApplication{
 				+ "5. 주문 내역\r\n"
 				+ "6. 마이페이지\r\n"
 				+ "7. 로그아웃\r\n"
-				+ "8. [관리] 상품 관리\r\n"
-				+ "9. [관리] 사용자 관리\r\n"
-				+ "\r\n"
-				+ "메뉴를 선택하세요: _");
+				, checkUser.isAdmin() ? "관리자" : checkUser.getUsername());
+		// 관리자일 경우에 이쪽 경롤로 간다
+		if(checkUser.isAdmin()) {
+			System.out.println(
+					"8. [관리] 상품 관리\r\n"
+					+ "9. [관리] 사용자 관리\r\n"
+					+ "\r\n"
+					+ "메뉴를 선택하세요: _");
+			int choice = input.nextInt();
+			switch(choice) {
+			case 1:
+				viewProductlogin();
+				break;
+			case 2:
+				serachProduct();
+				break;
+			case 3:
+				manageCart();
+				break;
+			case 4:
+				order();
+				break;
+			case 5:
+				orderHistory();
+				break;
+			case 6:
+				myProfile();
+				break;
+			case 7:
+				logout();
+				break;
+			case 8:
+				manageProducts();
+				break;
+			case 9:
+				manageUsers();
+				break;
+			}
+			// 고객일 경우에 이쪽 경로로 간다
+		}else {
+			int choice = input.nextInt();
+			switch(choice) {
+			case 1:
+				viewProductlogin();
+				break;
+			case 2:
+				serachProduct();
+				break;
+			case 3:
+				manageCart();
+				break;
+			case 4:
+				order();
+				break;
+			case 5:
+				orderHistory();
+				break;
+			case 6:
+				myProfile();
+				break;
+			case 7:
+				logout();
+				break;
+			}		
+		}
 	}
 
-	private static void mainMenu() {
-		System.out.println(
-				"╔════════════════════════════════════════════╗\r\n"
-				+ "║     🛍️  Java Shopping Mall                 ║\r\n"
-				+ "║     환영합니다, [사용자명]님!                  ║\r\n"
-				+ "╚════════════════════════════════════════════╝\r\n"
-				+ "\r\n"
-				+ "1. 상품 둘러보기\r\n"
-				+ "2. 상품 검색\r\n"
-				+ "3. 장바구니 관리\r\n"
-				+ "4. 주문하기\r\n"
-				+ "5. 주문 내역\r\n"
-				+ "6. 마이페이지\r\n"
-				+ "7. 로그아웃\r\n"
-				+ "\r\n"
-				+ "메뉴를 선택하세요: _");
-		int choice = input.nextInt();
+	private static void manageUsers() {
+		// TODO Auto-generated method stub
 		
-		switch(choice) {
-		case 1:
-			viewProductlogin();
-			break;
-		case 2:
-			serachProduct();
-			break;
-		case 3:
-			manageCart();
-			break;
-		case 4:
-			order();
-			break;
-		case 5:
-			orderHistory();
-			break;
-		case 6:
-			myProfile();
-			break;
-		case 7:
-			logout();
-			break;
-		}
+	}
+
+	private static void manageProducts() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private static void logout() {
@@ -150,8 +175,17 @@ public class JavaShopApplication{
 	}
 
 	private static void myProfile() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(
+				"┌────────────────────────────────────┐\r\n"
+				+ "│         👤 마이페이지               │\r\n"
+				+ "├────────────────────────────────────┤\r\n"
+				+ "│  1. 내 정보 조회                   │\r\n"
+				+ "│  2. 비밀번호 변경                  │\r\n"
+				+ "│  3. 개인정보 수정                  │\r\n"
+				+ "│  4. 주문 내역 조회                 │\r\n"
+				+ "│  5. 회원 탈퇴                      │\r\n"
+				+ "│  6. 돌아가기                       │\r\n"
+				+ "└────────────────────────────────────┘");
 	}
 
 	private static void orderHistory() {
@@ -165,8 +199,18 @@ public class JavaShopApplication{
 	}
 
 	private static void manageCart() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(
+				"┌────────────────────────────────────┐\r\n"
+				+ "│         🛒 장바구니 관리            │\r\n"
+				+ "├────────────────────────────────────┤\r\n"
+				+ "│  1. 장바구니 조회                   │\r\n"
+				+ "│  2. 상품 추가                      │\r\n"
+				+ "│  3. 수량 변경                      │\r\n"
+				+ "│  4. 상품 삭제                      │\r\n"
+				+ "│  5. 장바구니 비우기                 │\r\n"
+				+ "│  6. 돌아가기                       │\r\n"
+				+ "└────────────────────────────────────┘\r\n"
+				+ "");
 	}
 
 	private static void serachProduct() {
@@ -175,8 +219,19 @@ public class JavaShopApplication{
 	}
 
 	private static void viewProductlogin() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(
+				"┌────────────────────────────────────┐\r\n"
+				+ "│         🛍️ 상품 둘러보기            │\r\n"
+				+ "├────────────────────────────────────┤\r\n"
+				+ "│  1. 전체 상품 보기                   │\r\n"
+				+ "│  2. 카테고리별 보기                  │\r\n"
+				+ "│  3. 가격대별 보기                    │\r\n"
+				+ "│  4. 베스트셀러                      │\r\n"
+				+ "│  5. 신상품                          │\r\n"
+				+ "│  6. 상품 상세보기                    │\r\n"
+				+ "│  7. 돌아가기                        │\r\n"
+				+ "└────────────────────────────────────┘\r\n"
+				+ "");
 	}
 
 	private static void createUser() {
