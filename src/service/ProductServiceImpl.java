@@ -21,51 +21,54 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Product getProductById(String productId) throws ProductNotfoundException {
-		return repository.findById(productId).orElseThrow(() ->
-				new ProductNotfoundException(productId + "에 해당하는 상품이 없습니다."));
+	public Product getProductByProductName(String productName) {
+		return repository.findByName(productName).orElseThrow(() ->
+				new ProductNotfoundException(productName + "에 해당하는 상품이 없습니다."));
 	}
 
 	// 상품이 추가될 파라미터로 바꾸시고, 객체 만드신다음에 저장하세요.
 	@Override
-	public Boolean addProduct(Product product) {
+	public Product createProduct(String name, String category, int price, int stock, String description) {
 		try {
 			// 아래부터 객체를 생성하고 저장해주세요.
 
-
+			Product product = Product.create(name, category, price, stock, description);
+			Product saved = repository.save(product);
+			System.out.println("[DEBUG] created product : " + product);
 			repository.commit();
-			return true;
+			return saved;
 		} catch (ShopException e) {
 			repository.rollback();
-			return false;
+			throw e;
 		}
 	}
 
 	@Override
-	public Boolean updateProduct(Product product) throws ProductNotfoundException {
+	public Boolean updateProduct(Product product) {
 		try {
 			// 무엇이 업데이트 될지, 파라미터로 바꾸시고 프로덕트를 업데이트 하시고, 리포지토리에 저장해주세요.
 			repository.commit();
 			return true;
 		} catch (ShopException e) {
 			repository.rollback();
-			return false;
+			throw e;
 		}
 	}
 
 	@Override
-	public Boolean deleteProduct(String productId) throws ProductNotfoundException {
+	public Boolean deleteProduct(String productName) throws ProductNotfoundException {
 		try {
-			Product willDelete = repository.findById(productId).orElseThrow(
-					() -> new ProductNotfoundException(String.format("product not found by Id : %s",
-							productId))
+			Product willDelete = repository.findByName(productName).orElseThrow(
+					() -> new ProductNotfoundException(String.format("product not found by name : %s",
+							productName))
 			);
 			repository.delete(willDelete);
 			repository.commit();
+			System.out.println("[DEBUG] deleted product : " + willDelete);
 			return true;
 		} catch (ShopException e) {
 			repository.rollback();
-			return false;
+			throw e;
 		}
 
 		//삭제를 위한 상품이 존재하는지 확인 후 삭제
@@ -77,16 +80,17 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Boolean reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException {
+	public Product reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException {
 		try {
 			Product product = repository.findById(productId).get();
 			product.reduceStock(quantity);
-			repository.save(product);
+			Product saved = repository.save(product);
 			repository.commit();
-			return true;
+			System.out.println("[DEBUG] reduced stock : " + saved);
+			return saved;
 		} catch (ProductNotfoundException e) {
 			repository.rollback();
-			return false;
+			throw e;
 		}
 	}
 

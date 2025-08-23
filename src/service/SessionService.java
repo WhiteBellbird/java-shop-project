@@ -13,5 +13,7 @@ public interface SessionService {
 	
 	long loginCount();
 
-	User getLoggedInUser(); 
+	User getLoggedInUser();
+
+	void updateSessionUser(User user);
 }

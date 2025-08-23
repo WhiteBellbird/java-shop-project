@@ -2,6 +2,7 @@ package service;
 import java.util.*;
 
 import domain.User;
+import exception.UserAuthenticationException;
 import exception.UserNotfoundException;
 import helper.PasswordEncoder;
 import repository.*;
@@ -22,11 +23,13 @@ public class SessionServiceImpl implements SessionService{
 	public void login(String username, String password) {
     	
     	// Exception 을 던질까 말까 - userName & password 틀리면 *******************************************
-		User user = findUserByUsername(username);
+		User user = Optional.of(findUserByUsername(username)).orElseThrow(() -> new UserNotfoundException(String.format("username " +
+				"%s not found", username)));
 		String encoded = passwordEncoder.encode(password);
-		if(user.getPassword().equals(encoded)) {
-			sessionIdList.put(user.getUsername(), user);
+		if (!user.getPassword().equals(encoded)) {
+			throw new UserAuthenticationException(String.format("password does not match"));
 		}
+		sessionIdList.put(user.getUsername(), user);
 	}
 
 	@Override
@@ -49,6 +52,11 @@ public class SessionServiceImpl implements SessionService{
 	@Override
 	public User getLoggedInUser() {
 		return sessionIdList.get(0);
+	}
+
+	@Override
+	public void updateSessionUser(User user) {
+		sessionIdList.put(user.getUsername(), user);
 	}
 
 	private User findUserByUsername(String username) {

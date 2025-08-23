@@ -3,20 +3,19 @@ package service;
 import java.util.List;
 
 import domain.Product;
-import exception.ProductNotfoundException;
 
 public interface ProductService {
 
 	List<Product> getAllProducts();
 	
-	Product getProductById(String productId) throws ProductNotfoundException;
+	Product getProductByProductName(String productName);
 	
-	Boolean addProduct(Product product);
+	Product createProduct(String name, String category, int price, int stock, String description);
 	
-	Boolean updateProduct(Product product) throws ProductNotfoundException;
+	Boolean updateProduct(Product product);
 	
-	Boolean deleteProduct(String productId) throws ProductNotfoundException;
+	Boolean deleteProduct(String productName);
 
 
-	Boolean reduceStockByProductId(String productId, int quantity) throws ProductNotfoundException;
+	Product reduceStockByProductId(String productName, int quantity);
 }

@@ -2,17 +2,18 @@ package domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Product implements Serializable{
 	
 
-		String productId;	//상품ID
-		String name;	//상품
-		String category;	//카테고리
-		int price;	//가격
-		int stock;	//재고
-		String description;		//상품설명
-		LocalDateTime regisrationDate;	//등록일시
+		private String productId;	//상품ID
+		private String name;	//상품
+		private String category;	//카테고리
+		private int price;	//가격
+		private int stock;	//재고
+		private String description;		//상품설명
+		private LocalDateTime regisrationDate;	//등록일시
 		
 		public Product(String productId, String name, String category, int price, int stock, String description,
 				LocalDateTime regisrationDate) {
@@ -25,6 +26,11 @@ public class Product implements Serializable{
 			this.description = description;
 			this.regisrationDate = regisrationDate;
 		}
+
+	public static Product create(String name, String category, int price, int stock, String description) {
+		String productId = UUID.randomUUID().toString();
+		return new Product(productId, name, category, price, stock, description, LocalDateTime.now());
+	}
 
 		public String getProductId() {
 			return productId;
@@ -77,14 +83,26 @@ public class Product implements Serializable{
 		    }
 		}
 
-		@Override
-		public String toString() {
-		    return String.format("[%s] %s (%s) - %,d원 / 재고: %d개", 
-		        productId, name, category, price, stock);
-		}
-		
-		
-		
-		
+//		@Override
+//		public String toString() {
+//		    return String.format("[%s] %s (%s) - %,d원 / 재고: %d개",
+//		        productId, name, category, price, stock);
+//		}
+//
+//
+
+
+	@Override
+	public String toString() {
+		return "Product{" +
+				"productId='" + productId + '\'' +
+				", name='" + name + '\'' +
+				", category='" + category + '\'' +
+				", price=" + price +
+				", stock=" + stock +
+				", description='" + description + '\'' +
+				", regisrationDate=" + regisrationDate +
+				'}';
+	}
 }
 		
