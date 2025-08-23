@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import domain.Product;
@@ -71,6 +69,18 @@ public class ProductRepositoryImpl implements ProductRepository {
 	@Override
 	public List<Product> findByCategory(String categoryName) {
 		return products.stream().filter(p -> p.getCategory().equals(categoryName)).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Product> findByPrice() {
+		Comparator<Product> priceComparator = Comparator.comparing(Product::getPrice);
+		return products.stream().sorted(priceComparator).collect(Collectors.toList());
+	}
+
+	@Override
+	public Optional<Product> findByLastestProduct() {
+		Comparator<Product> lastest = Comparator.comparing(Product::getRegistrationDate).reversed();
+		return products.stream().sorted(lastest).findFirst();
 	}
 
 	@Override

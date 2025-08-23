@@ -2,6 +2,7 @@ package iolayer;
 
 import controller.ProductController;
 import domain.Product;
+import exception.ShopException;
 import helper.IOHelper;
 
 import java.util.List;
@@ -36,20 +37,19 @@ public class ProductIOLayer {
                     this.findAllProducts();
                     break;
                 case 2:
-                    this.showCategoryMain();
-                    // 로그인
+                    this.showCategory();
                     break;
                 case 3:
-                    // 상품 둘러보기
+                    this.showPrice();
                     break;
                 case 4:
-                    // 프로그램 종료
+                    this.showBestSeller();
                     break;
                 case 5:
-                    // 상품 검색
+                    this.lastestProduct();
                     break;
                 case 6:
-                    // 장바구니 관리
+                    this.showProductDetails();
                     break;
                 case 7:
                     return;
@@ -59,12 +59,73 @@ public class ProductIOLayer {
         }
     }
 
-    public void showCategoryMain() {
+    private void showProductDetails() {
+        IOHelper.printFirstLine();
+        System.out.print("상품명을 입력하세요: ");
+        String productName = scanner.nextLine();
+        try {
+            Product product = productController.getProductByProductName(productName);
+            System.out.printf("%s 제품의 상세정보\n", product.getName());
+            System.out.println(product);
+        } catch (ShopException e) {
+            System.out.println("오류가 발생했습니다: " + e.getMessage());
+        } finally {
+            IOHelper.printEndLine();
+        }
+    }
+
+    private void lastestProduct() {
+        IOHelper.printFirstLine();
+        System.out.println("신상품은 아래입니다.");
+        try {
+            Product product = productController.getProductByRegistrationDate();
+            System.out.println(product);
+        } catch (ShopException e) {
+            System.out.println("오류가 발생했습니다: " + e.getMessage());
+        } finally {
+            IOHelper.printEndLine();
+
+        }
 
     }
 
+    private void showPrice() {
+        IOHelper.printFirstLine();
+        System.out.println("가격별로 상품을 나열합니다.");
+        List<Product> products = productController.getProductsByPrice();
+        for (int i = 0; i < products.size(); i++) {
+            System.out.printf("%d. ", i + 1);
+            System.out.println(products.get(i));
+        }
+        IOHelper.printEndLine();
+    }
 
-    public void findAllProducts() {
+    private void showBestSeller() {
+        IOHelper.printFirstLine();
+        System.out.println("베스트 셀러를 나열합니다.");
+        List<Product> seller = productController.getProductsByBestSeller();
+        for (int i = 0; i < seller.size(); i++) {
+            System.out.printf("%d. ", i + 1);
+            System.out.println(seller.get(i));
+        }
+        IOHelper.printEndLine();
+    }
+
+    private void showCategory() {
+        IOHelper.printFirstLine();
+        System.out.print("카테고리 명을 입력하세요: ");
+        String categoryName = scanner.nextLine();
+        List<Product> products = productController.getProductsByCategory(categoryName);
+        for (int i = 0; i < products.size(); i++) {
+            System.out.printf("%d. ", i + 1);
+            System.out.println(products.get(i));
+        }
+        IOHelper.printEndLine();
+    }
+
+
+
+    private void findAllProducts() {
         IOHelper.printFirstLine();
         List<Product> products = productController.getProducts();
         System.out.println("제품 목록을 출력합니다.");

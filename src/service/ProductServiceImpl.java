@@ -1,6 +1,7 @@
 package service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import domain.Product;
 import exception.ProductNotfoundException;
@@ -23,6 +24,22 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public List<Product> getProductsByCategory(String categoryName) {
 		return repository.findByCategory(categoryName);
+	}
+
+	@Override
+	public List<Product> getProductsByPrice() {
+		return repository.findByPrice();
+	}
+
+	@Override
+	public List<Product> getProductsByBestSeller() {
+		return repository.findAll().stream().filter(p -> p.isBestSeller()).collect(Collectors.toList());
+	}
+
+	@Override
+	public Product findProductByRegistrationDate() {
+		return repository.findByLastestProduct().orElseThrow(()->new ProductNotfoundException("" +
+				"This shop has any Product."));
 	}
 
 	@Override

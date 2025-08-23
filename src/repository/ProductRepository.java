@@ -20,6 +20,10 @@ public interface ProductRepository {
 
     List<Product> findByCategory(String categoryName);
 
+    List<Product> findByPrice();
+
+    Optional<Product> findByLastestProduct();
+
 	// 상품 ID로 상품 삭제
     void delete(Product product);
     

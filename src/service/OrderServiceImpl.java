@@ -77,10 +77,12 @@ public class OrderServiceImpl implements OrderService {
             cartItem.subQuantity(quantity);
             // 프로덕트에 재고 줄였어
             product.reduceStock(cartItem.getQuantity());
+            product.addSellCount(quantity);
             // 그 수량이 0이면 카트에서 사라져야지.
             if (cartItem.getQuantity() == 0) {
                 userCart.removeProduct(product.getProductId());
             }
+
             // 주문 생성
             Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
             // 카트 수정된거 저장
@@ -161,11 +163,13 @@ public class OrderServiceImpl implements OrderService {
             }
 
             userCart.getItems().values().forEach(cartItem -> {
-                cartItem.subQuantity(cartItem.getQuantity());
+                int quantity = cartItem.getQuantity();
+                cartItem.subQuantity(quantity);
                 Product willBeReduce = cartItem.getProduct();
-                if (cartItem.getQuantity() == 0) {
-                    willBeReduce.reduceStock(cartItem.getQuantity());
+                if (quantity == 0) {
+                    willBeReduce.reduceStock(quantity);
                 }
+                willBeReduce.addSellCount(quantity);
                 Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
                 orderRepository.saveOrder(order);
                 productRepository.save(willBeReduce);

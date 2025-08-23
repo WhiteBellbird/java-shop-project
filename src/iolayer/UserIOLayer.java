@@ -24,16 +24,20 @@ public class UserIOLayer {
     }
 
 	public void myPage() {
-		System.out.println("┌────────────────────────────────────┐");
-		System.out.println("│         👤 마이페이지               │");
-		System.out.println("├────────────────────────────────────┤");
-		System.out.println("│  1. 내 정보 조회                   │");
-		System.out.println("│  2. 비밀번호 변경                  │");
-		System.out.println("│  3. 개인정보 수정                  │");
-		System.out.println("│  4. 주문 내역 조회                 │");
-		System.out.println("│  5. 회원 탈퇴                      │");
-		System.out.println("│  6. 돌아가기                       │");
-		System.out.println("└────────────────────────────────────┘");
+		while (true) {
+			System.out.println("┌────────────────────────────────────┐");
+			System.out.println("│         👤 마이페이지               │");
+			System.out.println("├────────────────────────────────────┤");
+			System.out.println("│  1. 내 정보 조회                   │");
+			System.out.println("│  2. 비밀번호 변경                  │");
+			System.out.println("│  3. 개인정보 수정                  │");
+			System.out.println("│  4. 주문 내역 조회                 │");
+			System.out.println("│  5. 회원 탈퇴                      │");
+			System.out.println("│  6. 돌아가기                       │");
+			System.out.println("└────────────────────────────────────┘");
+
+
+		}
 	}
 
     public void createUser() {
@@ -66,11 +70,10 @@ public class UserIOLayer {
 			System.out.println("오류가 발생했습니다: " + e.getMessage());
 		} finally {
 			IOHelper.printEndLine();
-			mainLayer.main();
 		}
     }
 
-    public void updateManager() {
+    private void updateManager() {
 		IOHelper.printFirstLine();
     	System.out.println("user를 manager로 권한부여합니다");
 		try {
@@ -80,11 +83,10 @@ public class UserIOLayer {
 		} catch (ShopException e) {
 			System.out.println("오류가 발생했습니다: " + e.getMessage());
 		} finally {
-			mainLayer.mainMenu();
 			IOHelper.printEndLine();
 		}
     }
-    public void withdrawUser()  {
+    private void withdrawUser()  {
 		IOHelper.printFirstLine();
     	System.out.print("탈퇴시킬 고객네임: ");
     	String username = scanner.nextLine();
@@ -95,27 +97,24 @@ public class UserIOLayer {
 			System.out.println("오류가 발생했습니다: " + e.getMessage());
 		} finally {
 			IOHelper.printEndLine();
-			mainLayer.mainMenu();
 		}
     }
-    
-    public void findUser() {
-    }
-    public void displayLoggedUser() {
+
+    private void displayLoggedUser() {
 		IOHelper.printFirstLine();
 		System.out.println("로그인된 현재 유저 조회를 시작합니다.");
 		System.out.println(sessionService.getLoggedInUser());
 		IOHelper.printEndLine();
-		mainLayer.mainMenu();
     }
-    public void displayAllUser(User adminUser) {
+
+    public void displayAllUser() {
 		IOHelper.printFirstLine();
 		System.out.println("모든 유저를 조회합니다.");
-    	userController.findAllUsers(adminUser);
+    	userController.findAllUsers(sessionService.getLoggedInUser());
 		IOHelper.printEndLine();
-		mainLayer.mainMenu();
     }
-    public void changePassword(User user) {
+
+    private void changePassword() {
 		IOHelper.printFirstLine();
     	System.out.println("패스워드를 변경합니다.");
     	System.out.println("현재 패스워드를 입력하시오");
@@ -123,7 +122,7 @@ public class UserIOLayer {
     	System.out.println("변경할 비밀번호를 입력하시오");
     	String newPwd = scanner.nextLine();
 		try {
-			User updatedUser = userController.changePassword(user, currentPwd, newPwd);
+			User updatedUser = userController.changePassword(sessionService.getLoggedInUser(), currentPwd, newPwd);
 			System.out.println("유저 정보 : " + updatedUser);
 			System.out.println("변경되었습니다. 다시 로그인해주시기 바랍니다.");
 			sessionService.logout();
@@ -131,11 +130,10 @@ public class UserIOLayer {
 			System.out.println("오류가 발생했습니다: " + e.getMessage());
 		} finally {
 			IOHelper.printEndLine();
-			mainLayer.main();
 		}
     }
     //상세정보 변경
-    public void updateUser(User user) {
+    public void updateUser() {
 		IOHelper.printFirstLine();
     	System.out.println("유저를 상세정보를 변경합니다.");
     	System.out.println("변경할 이메일을 입력하세요: ");
@@ -145,8 +143,8 @@ public class UserIOLayer {
     	System.out.println("변경할 전화번호를 입력해주세요: ");
     	String phone = scanner.nextLine(); // xxx-xxxx-xxxx
 		try {
-			User updatedUser = userController.updateUser(user, email, address, phone);
-			sessionService.updateSessionUser(user);
+			User updatedUser = userController.updateUser(sessionService.getLoggedInUser(), email, address, phone);
+			sessionService.updateSessionUser(updatedUser);
 			System.out.println("업데이트 된 유저 정보 : " + updatedUser);
 			System.out.println("변경되었습니다.");
 			sessionService.updateSessionUser(updatedUser);
@@ -154,7 +152,6 @@ public class UserIOLayer {
 			System.out.println("오류가 발생했습니다: " + e.getMessage());
 		} finally {
 			IOHelper.printEndLine();
-			mainLayer.mainMenu();
 		}
     }
     public void withdrawal() {
@@ -168,9 +165,11 @@ public class UserIOLayer {
 			System.out.println("오류가 발생했습니다: " + e.getMessage());
 		} finally {
 			IOHelper.printEndLine();
-			mainLayer.main();
 		}
     }
     
-    
+    class ManagerLayer {
+
+
+	}
 }

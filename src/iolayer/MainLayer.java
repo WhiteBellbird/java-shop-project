@@ -1,6 +1,7 @@
 package iolayer;
 
 import domain.User;
+import exception.ShopException;
 import helper.IOHelper;
 import service.SessionService;
 
@@ -17,6 +18,7 @@ public class MainLayer {
     private ProductIOLayer productIOLayer;
     private SessionService sessionService;
     private UserIOLayer userIOLayer;
+    private OrderIOLayer orderIOLayer;
 
     public MainLayer(Scanner scanner, OrderIOLayer orderIOLayer,
                      ProductIOLayer productIOLayer,
@@ -25,6 +27,7 @@ public class MainLayer {
         this.productIOLayer = productIOLayer;
         this.sessionService = sessionService;
         this.userIOLayer = userIOLayer;
+        this.orderIOLayer = orderIOLayer;
     }
 
     public void main() {
@@ -48,6 +51,7 @@ public class MainLayer {
                     break;
                 case 2:
                     login();
+                    this.mainMenu();
                     break;
                 case 3:
                     productIOLayer.showProductsMain();
@@ -85,7 +89,8 @@ public class MainLayer {
             int choice = scanner.nextInt();
             if (choice == 8 || choice == 9) {
                 if (!loggedInUser.isAdmin()) {
-                    System.out.println("없는 선택지입니다. 다시 선택해주세요.");
+                    System.out.println("올바른 메뉴를 선택해주세요.");
+                    continue;
                 }
             }
             switch (choice) {
@@ -105,6 +110,7 @@ public class MainLayer {
                     // 상품 검색
                     break;
                 case 6:
+                    userIOLayer.myPage();
                     // 장바구니 관리
                     break;
                 case 7:
@@ -129,9 +135,14 @@ public class MainLayer {
         String userName = scanner.nextLine();
         System.out.print("비밀번호를 입력하세요:");
         String password = scanner.nextLine();
-        sessionService.login(userName, password);
-        IOHelper.printEndLine();
-        this.mainMenu();
+        try {
+            sessionService.login(userName, password);
+            System.out.println("성공적으로 로그인 되었습니다.");
+        } catch (ShopException e) {
+            System.out.println("오류가 발생했습니다: " + e.getMessage());
+        } finally {
+            IOHelper.printEndLine();
+        }
     }
 
     private void logout() {
@@ -139,4 +150,5 @@ public class MainLayer {
         sessionService.logout();
         IOHelper.printEndLine();
     }
+
 }

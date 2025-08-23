@@ -18,6 +18,18 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    public List<Product> getProductsByPrice() {
+        return productService.getProductsByPrice();
+    }
+
+    public List<Product> getProductsByBestSeller() {
+        return productService.getProductsByBestSeller();
+    }
+
+    public Product getProductByRegistrationDate() {
+        return productService.findProductByRegistrationDate();
+    }
+
     public List<Product> getProductsByCategory(String categoryName) {
         if (categoryName == null || categoryName.trim().isEmpty()) {
             throw new InvalidatedInputException("Category name cannot be empty.");
