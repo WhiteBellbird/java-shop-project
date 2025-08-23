@@ -91,7 +91,9 @@ public class UserIOLayer {
     	ArrayList<String> password = new ArrayList<String>();
     	password.add(input.nextLine());
     	adminCtrl.checkManagerByPassword(password);
-    	ctrl.displayUser(adminUser);
+    	System.out.println("조회하고싶은 USERNAME을 입력하세요: ");
+    	String username = input.nextLine();
+    	ctrl.displayUser(username);
     }
     public void displayAllUser(User adminUser) throws IOException {
     	System.out.println("모든 유저를 확인합니다.");

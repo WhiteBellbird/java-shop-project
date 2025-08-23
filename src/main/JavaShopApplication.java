@@ -161,12 +161,79 @@ public class JavaShopApplication{
 
 	private static void manageUsers() {
 		// TODO Auto-generated method stub
-		
+		System.out.println(
+				"┌────────────────────────────────────┐\r\n"
+				+ "│      👥 [관리자] 사용자 관리       │\r\n"
+				+ "├────────────────────────────────────┤\r\n"
+				+ "│  1. 전체 회원 조회                 │\r\n"
+				+ "│  2. 회원 검색                      │\r\n"
+				+ "│  3. 회원 상세 정보                 │\r\n"
+				+ "│  4. 회원 강제 탈퇴                 │\r\n"
+				+ "│  5. 돌아가기                       │\r\n"
+				+ "└────────────────────────────────────┘\r\n"
+				+ "");
+		int choice = input.nextInt();
+		switch(choice) {
+		case 1:
+			try {
+				uil.displayAllUser(ss.getLoggedInUser());
+			}catch (IOException e) {
+				System.out.println("로그인한 유저를 찾을수 없거나 존재하지않습니다 다시한번 확인해주세요");
+			}
+			break;
+		case 2:
+			try {
+				uil.displayUser(ss.getLoggedInUser());
+			} catch (IOException e) {
+				System.out.println("로그인한 유저를 찾을수 없거나 존재하지않습니다 다시한번 확인해주세요");
+			}
+			break;
+		case 3:
+			try {
+				uil.displayUser(ss.getLoggedInUser());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 4:
+			try {
+				uil.withdrawUser();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case 5:
+			break;
+		}
 	}
 
 	private static void manageProducts() {
-		// TODO Auto-generated method stub
-		
+		System.out.println(
+				"┌────────────────────────────────────┐\r\n"
+				+ "│      📦 [관리자] 상품 관리         │\r\n"
+				+ "├────────────────────────────────────┤\r\n"
+				+ "│  1. 상품 등록                      │\r\n"
+				+ "│  2. 상품 수정                      │\r\n"
+				+ "│  3. 상품 삭제                      │\r\n"
+				+ "│  4. 재고 관리                      │\r\n"
+				+ "│  5. 상품 목록 조회                 │\r\n"
+				+ "│  6. 돌아가기                       │\r\n"
+				+ "└────────────────────────────────────┘");
+		int choice = input.nextInt();
+		switch(choice) {
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
 	}
 
 	private static void logout() {
@@ -186,6 +253,26 @@ public class JavaShopApplication{
 				+ "│  5. 회원 탈퇴                      │\r\n"
 				+ "│  6. 돌아가기                       │\r\n"
 				+ "└────────────────────────────────────┘");
+		int choice = input.nextInt();
+		switch(choice) {
+		case 1:
+			uil.findUser(ss.getLoggedInUser());
+			break;
+		case 2:
+			uil.changePassword(ss.getLoggedInUser());
+			break;
+		case 3:
+			uil.updateUser(ss.getLoggedInUser());
+			break;
+		case 4:
+			// 주문 내역 조회 
+			break;
+		case 5:
+			uil.withdrawl(ss.getLoggedInUser());
+			break;
+		case 6:
+			break;
+		}
 	}
 
 	private static void orderHistory() {

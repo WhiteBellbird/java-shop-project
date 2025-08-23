@@ -34,8 +34,8 @@ public class UserValidationController{
 	public User updateManager(User user) throws ShopException {
 		return userService.updateManager(user.getUserId());		
 	}
-	public User displayUser(User user) throws ShopException{
-		return userService.findUser(user.getUsername(), user.getPassword());
+	public User displayUser(String username) throws ShopException{
+		return userService.displayUser(username);
 	}
 	public List<User> withdrawUser(String username) throws ShopException{
 		return userService.withdrawUser(username);
