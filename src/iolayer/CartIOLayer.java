@@ -24,7 +24,6 @@ public class CartIOLayer {
     }
 
     public void cartMenu() {
-        System.out.println("--- 장바구니 관리 ---");
         while (true) {
             displayMenu();
             String choice = scanner.next();
@@ -64,7 +63,7 @@ public class CartIOLayer {
     }
 
     private void displayMenu() {
-        System.out.println("\n┌─────────────────────────────────────┐");
+        System.out.println("\n┌──────────────────────────────────────┐");
         System.out.println("│         🛒 장바구니 관리                │");
         System.out.println("├──────────────────────────────────────┤");
         System.out.println("│  0. 장바구니 생성                       │");

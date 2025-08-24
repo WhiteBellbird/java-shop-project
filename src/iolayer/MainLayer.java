@@ -78,9 +78,9 @@ public class MainLayer {
             String name = loggedInUser.isAdmin() ? loggedInUser.getUsername() + " 관리자" : loggedInUser.getUsername();
 
             System.out.println("╔════════════════════════════════════════════╗");
-            System.out.println("║         Java Shopping Mall                 ║");
-            System.out.println("║       환영합니다, [" + name + "]님              ║");
+            System.out.println("║ Java Shopping Mall                         ║");
             System.out.println("╚════════════════════════════════════════════╝");
+            System.out.println("환영합니다, [" + name + "]님");
             System.out.println();
             System.out.println("1. 상품 둘러보기");
             System.out.println("2. 장바구니 관리");
@@ -171,4 +171,5 @@ public class MainLayer {
         sessionService.logout();
         IOHelper.printEndLine();
     }
+
 }

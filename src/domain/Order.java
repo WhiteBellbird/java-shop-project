@@ -87,12 +87,16 @@ public class Order implements Serializable {
     // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
-        return "주문 ID: " + orderId+
-                ", 사용자: " + user.getUsername() + 
-                ", 상품: " + cartItem.getProduct().getName() + "\n" +
-                ", 수량: " + cartItem.getQuantity() +
-                ", 주소: " + address +
-                ", 상태: " + status + 
-                ", 주문 날짜: " + orderDate + "\n";   
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n================== [주문 정보] ==================\n");
+        sb.append(String.format("주문 ID       : %s\n", orderId));
+        sb.append(String.format("사용자        : %s\n", user.getUsername()));
+        sb.append(String.format("상품          : %s\n", cartItem.getProduct().getName()));
+        sb.append(String.format("수량          : %d\n", cartItem.getQuantity()));
+        sb.append(String.format("주소          : %s\n", address));
+        sb.append(String.format("상태          : %s\n", status));
+        sb.append(String.format("주문 날짜     : %s\n", orderDate));
+        sb.append("=================================================\n");
+        return sb.toString();
     }
 }

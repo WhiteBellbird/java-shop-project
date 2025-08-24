@@ -25,10 +25,14 @@ public class OrderIOLayer {
 
     public void showOrderMenu() {
         while (true) {
-            System.out.println("\n=== 주문하기 ===");
-            System.out.println("1. 단일 상품 주문");
-            System.out.println("2. 장바구니 전체 주문");
-            System.out.println("0. 이전 메뉴로 돌아가기");
+            System.out.println("\n┌─────────────────────────────────────┐");
+            System.out.println("│         🛒 주문하기                   │");
+            System.out.println("├─────────────────────────────────────┤");
+            System.out.println("│  1. 단일 상품 주문                     │");
+            System.out.println("│  2. 장바구니 전체 주문                  │");
+            System.out.println("│  0. 이전 메뉴로 돌아가기                 │");
+            System.out.println("└─────────────────────────────────────┘");
+
             System.out.print("선택: _");
             String choice = scanner.nextLine();
 
@@ -50,10 +54,14 @@ public class OrderIOLayer {
 
     public void displayOrderList() {
         while (true) {
-            System.out.println("\n=== 주문내역 ===");
-            System.out.println("1. 주문 내역 조회");
-            System.out.println("2. 주문 취소");
-            System.out.println("0. 이전 메뉴로 돌아가기");
+            System.out.println("\n┌─────────────────────────────────────┐");
+            System.out.println("│         📜 주문내역                   │");
+            System.out.println("├─────────────────────────────────────┤");
+            System.out.println("│  1. 주문 내역 조회                     │");
+            System.out.println("│  2. 주문 취소                         │");
+            System.out.println("│  0. 이전 메뉴로 돌아가기                 │");
+            System.out.println("└─────────────────────────────────────┘");
+
             System.out.print("선택: ");
             String choice = scanner.nextLine();
 

@@ -24,11 +24,11 @@ public class UserIOLayer {
     public void myPage() {
         while (true) {
             System.out.println("┌────────────────────────────────────┐");
-            System.out.println("│         👤 마이 페이지              │");
+            System.out.println("│         👤 마이 페이지                │");
             System.out.println("├────────────────────────────────────┤");
-            System.out.println("│1. 내 정보 조회                      │");
-            System.out.println("│2. 비밀번호 변경                      │");
-            System.out.println("│3. 개인정보 수정                      │");
+            System.out.println("│1. 내 정보 조회                        │");
+            System.out.println("│2. 비밀번호 변경                       │");
+            System.out.println("│3. 개인정보 수정                       │");
             System.out.println("│4. 회원 탈퇴                          │");
             System.out.println("│5. 돌아가기                           │");
             System.out.println("└────────────────────────────────────┘");

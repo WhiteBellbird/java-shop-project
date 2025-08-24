@@ -107,17 +107,20 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
-        return "상품 ID: " + productId +
-                ", 상품명: " + name +
-                ", 카테고리: " + category + "\n" +
-                ", 가격: " + price +
-                ", 재고: " + stock +
-                ", 판매 수: " + sellCount + "\n" +
-                ", 상품 설명: " + description +
-                ", 등록 일시: " + registrationDate + "\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n================== [상품 정보] ==================\n");
+        sb.append(String.format("상품 ID      : %s\n", productId));
+        sb.append(String.format("상품명       : %s\n", name));
+        sb.append(String.format("카테고리     : %s\n", category));
+        sb.append(String.format("가격         : %,d 원\n", price));
+        sb.append(String.format("재고         : %d 개\n", stock));
+        sb.append(String.format("판매 수      : %d\n", sellCount));
+        sb.append(String.format("상품 설명    : %s\n", description));
+        sb.append(String.format("등록 일시    : %s\n", registrationDate));
+        sb.append("=================================================\n");
+        return sb.toString();
     }
 }
 		

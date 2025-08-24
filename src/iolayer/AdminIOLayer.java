@@ -28,11 +28,14 @@ public class AdminIOLayer {
 
     public void adminManageProductMenu() {
         while (true) {
-            System.out.println("\n--- 회원 검색 ---");
-            System.out.println("1. 회원 전체 조회");
-            System.out.println("2. 회원 강제 탈퇴");
-            System.out.println("3. 권한 부여");
-            System.out.println("0. 돌아가기");
+            System.out.println("\n┌─────────────────────────────────────┐");
+            System.out.println("│         👤 회원 검색                  │");
+            System.out.println("├─────────────────────────────────────┤");
+            System.out.println("│  1. 회원 전체 조회                     │");
+            System.out.println("│  2. 회원 강제 탈퇴                     │");
+            System.out.println("│  3. 권한 부여                         │");
+            System.out.println("│  0. 돌아가기                          │");
+            System.out.println("└─────────────────────────────────────┘");
             System.out.print("메뉴를 선택하세요: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // 개행 제거
@@ -57,12 +60,15 @@ public class AdminIOLayer {
 
     public void adminManagementUserMenu() {
         while (true) {
-            System.out.println("\n--- 상품 관리 메뉴 ---");
-            System.out.println("1. 신규 상품 등록");
-            System.out.println("2. 상품 정보 수정");
-            System.out.println("3. 상품 삭제");
-            System.out.println("4. 재고 관리 (입고 처리)");
-            System.out.println("0. 뒤로 가기");
+            System.out.println("\n┌─────────────────────────────────────┐");
+            System.out.println("│         🛍 상품 관리                  │");
+            System.out.println("├─────────────────────────────────────┤");
+            System.out.println("│  1. 신규 상품 등록                     │");
+            System.out.println("│  2. 상품 정보 수정                     │");
+            System.out.println("│  3. 상품 삭제                         │");
+            System.out.println("│  4. 재고 관리 (입고 처리)               │");
+            System.out.println("│  0. 뒤로 가기                         │");
+            System.out.println("└─────────────────────────────────────┘");
             System.out.print("메뉴를 선택하세요: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // 개행 제거
@@ -108,10 +114,13 @@ public class AdminIOLayer {
 
     private void managementStockMenu() {
         while (true) {
-            System.out.println("\n--- 재고 관리 메뉴 ---");
-            System.out.println("1. 재고 입고");
-            System.out.println("2. 재고 출고");
-            System.out.println("0. 뒤로 가기");
+            System.out.println("\n┌─────────────────────────────────────┐");
+            System.out.println("│         📦 재고 관리                  │");
+            System.out.println("├─────────────────────────────────────┤");
+            System.out.println("│  1. 재고 입고                          │");
+            System.out.println("│  2. 재고 출고                          │");
+            System.out.println("│  0. 뒤로 가기                          │");
+            System.out.println("└─────────────────────────────────────┘");
             System.out.print("메뉴를 선택하세요: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // 개행 제거

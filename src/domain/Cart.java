@@ -146,16 +146,20 @@ public class Cart implements Serializable {
 
 
 
-    // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("사용자 ID: ").append(userId).append("\n");
+        sb.append("\n================== [장바구니] ==================\n");
+        sb.append(String.format("사용자 ID     : %s\n", userId));
         sb.append("장바구니 항목:\n");
         for (CartItem item : items.values()) {
-            sb.append(item.toString()).append("\n");
+            String[] lines = item.toString().split("\n");
+            for (String line : lines) {
+                sb.append("  ").append(line).append("\n");
+            }
         }
-        sb.append("총 가격: ").append(getTotalPrice()).append("원\n");
+        sb.append(String.format("총 가격       : %,d 원\n", getTotalPrice()));
+        sb.append("===============================================\n");
         return sb.toString();
     }
 

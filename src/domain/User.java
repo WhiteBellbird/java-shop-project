@@ -171,18 +171,22 @@ public class User implements Serializable{
 		return (this.getUserId().equals(obj.getUserId()));
 	}
 	// make toString using korean and show all info and using \n per 3 fields
-	@Override
-	public String toString() {
-		return "아이디: " + userId +
-				", 이름: " + username +
-				", 이메일: " + email + "\n" +
-				", 비밀번호: " + password +
-				", 등급: " + rank +
-				", 주소: " + address + "\n" +
-				", 포인트: " + point +
-				", 쿠폰: " + coupon +
-				", 전화번호: " + phone + "\n" +
-				", 관리자여부: " + (isAdmin ? "예" : "아니오") +
-				", 가입일: " + createdDate + "\n";	
-			}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n================== [사용자 정보] ==================\n");
+        sb.append(String.format("아이디       : %s\n", userId));
+        sb.append(String.format("이름         : %s\n", username));
+        sb.append(String.format("이메일       : %s\n", email));
+        sb.append(String.format("비밀번호     : %s\n", password));
+        sb.append(String.format("등급         : %s\n", rank));
+        sb.append(String.format("주소         : %s\n", address));
+        sb.append(String.format("포인트       : %.2f\n", point));
+        sb.append(String.format("쿠폰         : %s\n", coupon == null ? "없음" : coupon));
+        sb.append(String.format("전화번호     : %s\n", phone));
+        sb.append(String.format("관리자 여부  : %s\n", isAdmin ? "예" : "아니오"));
+        sb.append(String.format("가입일       : %s\n", createdDate));
+        sb.append("==================================================\n");
+        return sb.toString();
+    }
 }

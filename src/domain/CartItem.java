@@ -51,12 +51,15 @@ public class CartItem implements Serializable {
 		return 0;
 	}
     
-    // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
-        return "상품: " + product.getName() + "\n" +
-                ", 가격: " + product.getPrice() + "원\n" +
-                ", 수량: " + quantity + "\n" +
-                ", 총 가격: " + getTotalPrice() + "원\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n================== [장바구니 상품] ==================\n");
+        sb.append(String.format("상품          : %s\n", product.getName()));
+        sb.append(String.format("가격          : %,d 원\n", product.getPrice()));
+        sb.append(String.format("수량          : %d\n", quantity));
+        sb.append(String.format("총 가격       : %,d 원\n", getTotalPrice()));
+        sb.append("=====================================================\n");
+        return sb.toString();
     }
 }
