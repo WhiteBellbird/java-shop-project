@@ -24,29 +24,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order cancelOrder(String orderId) {
-        try {
-            Order order = Optional.of(orderRepository.getOrderByOrderId(orderId)).orElseThrow(() ->
-                    new OrderNotFoundException("Order Not Found"));
-            order.cancelOrder();
-            Order savedOrder = orderRepository.saveOrder(order);
-            orderRepository.commit();
-            System.out.println("[DEBUG] CancelOrder success : " + savedOrder);
-            return savedOrder;
-        } catch (ShopException e) {
-            orderRepository.rollback();
-            System.out.println("[ERROR] CancelOrder error : " + e.getMessage());
-            throw e;
-        }
-    }
-
-    @Override
-    public List<Order> DisplayOrderList(String userId) {
-        return orderRepository.getOrderByUserId(userId);
-    }
-
-    @Override
-    public Order createOrder(String userId, String productName, int amount, int quantity, String address) {
+    public Order createOrder(String userId, String productName, int payment, int quantity /*정말 필요한 변수인가 의문*/, String address) {
         try {
             // 유저 찾는 메서드
             User user = Optional.of(userRepository.findUserByUserId(userId)).orElseThrow(() ->
@@ -57,15 +35,22 @@ public class OrderServiceImpl implements OrderService {
             ));
             // 카트 찾는 메서드
             Cart userCart = cartRepository.findCartByUserId(user.getUserId()).get();
-            // 카트 안에서 카트 아이템 조회
+            // 카트아이템은 저장한 곳이 없음 카트를 통해서 카트아이템 조회해야함********************************************
             CartItem cartItem = userCart.getItems().get(product.getProductId());
+            // 카트 안에서 카트 아이템 조회
+            //CartItem cartItem = userCart.getItems().get(product.getProductId());
             // 카트 아이템에서 수량에 따라 지불할 최종 금액 정산
-            int willPaymentPriceByCustomer = cartItem.getPaymentPrice(quantity);
+            if(quantity != cartItem.getQuantity()) {
+            	System.out.println("본래 구매할 상품량과 지금 선택하신 구매량과 다릅니다. - 입력하신 구매량으로 주문합니다.");
+            }else {
+            	System.out.println("본래 주문하려시던 구매량과 일치합니다 주문 실행합니다...");
+            }
+            int willPaymentPriceByCustomer = cartItem.getPaymentPrice(cartItem.getQuantity());
             // 거스름돈
             int changeMoney = 0;
             // 지불해야 할 금액보다 크면 정상처리 아니면 반려
-            if (willPaymentPriceByCustomer < amount) {
-                changeMoney = amount - willPaymentPriceByCustomer;
+            if (willPaymentPriceByCustomer < payment) {
+                changeMoney = payment - willPaymentPriceByCustomer;
             } else {
                 throw new InSufficientMoneyException("Insufficient money");
             }
@@ -82,7 +67,6 @@ public class OrderServiceImpl implements OrderService {
             if (cartItem.getQuantity() == 0) {
                 userCart.removeProduct(product.getProductId());
             }
-
             // 주문 생성
             Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
             // 카트 수정된거 저장
@@ -109,7 +93,27 @@ public class OrderServiceImpl implements OrderService {
             throw e;
         }
     }
+    @Override
+    public Order cancelOrder(String orderId) {
+        try {
+            Order order = Optional.of(orderRepository.getOrderByOrderId(orderId)).orElseThrow(() ->
+                    new OrderNotFoundException("Order Not Found"));
+            order.cancelOrder();
+            Order savedOrder = orderRepository.saveOrder(order);
+            orderRepository.commit();
+            System.out.println("[DEBUG] CancelOrder success : " + savedOrder);
+            return savedOrder;
+        } catch (ShopException e) {
+            orderRepository.rollback();
+            System.out.println("[ERROR] CancelOrder error : " + e.getMessage());
+            throw e;
+        }
+    }
 
+    @Override
+    public List<Order> DisplayOrderList(String userId) {
+        return orderRepository.getOrderByUserId(userId);
+    }
     @Deprecated
     @Override
     public Boolean CreateSomeOrders(String userId) {
@@ -155,8 +159,10 @@ public class OrderServiceImpl implements OrderService {
                     new UserNotfoundException(String.format("useId %s is not found.", userId)));
             // 카트 찾는 메서드
             Cart userCart = cartRepository.findCartByUserId(user.getUserId()).get();
-
+            
+            // userCart.getTotalPricae() 도 가능한가 궁금 *****
             int sum = userCart.getItems().values().stream().mapToInt(CartItem::getTotalPrice).sum();
+            
             sum -= (int) Math.round(user.getPoint());
             if (sum > userTotalAmount) {
                 throw new InSufficientMoneyException("Insufficient money");
