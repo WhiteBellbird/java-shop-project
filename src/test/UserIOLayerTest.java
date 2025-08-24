@@ -29,17 +29,32 @@ public class UserIOLayerTest {
 				sessionService, null,null);
 	public static void main(String[] args) throws IOException {
 
+        User user = null;
+//        userService.createUser();
+        userService.updateManager(user);
+        userService.findUser(user.getUsername(), user.getPassword());
+
+
+        userService.changePassword(user);
+        userService.updateUser(user);
+		
+		//탈퇴 기능 문제 -- 확인 바람***********************************************************
+        userService.withdrawal(user);
+		
+		
+		
 		createUser();
-		login();
+		//login();
 	}
 
 	private static void createUser() {
 		User user = userService.createUser("username", "hi@gmail.com", "password",
 				"address", "101-1111-1111");
 	}
-
+	/*
 	private static void login() {
 		mainLayer.main();
+>>>>>>> origin/lsek/dev
 	}
-	
+	*/
 }

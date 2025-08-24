@@ -102,6 +102,7 @@ public class UserIOLayer {
 		}
     }
 
+
 //    private void updateManager() {
 //		IOHelper.printFirstLine();
 //    	System.out.println("user를 manager로 권한부여합니다");
@@ -129,12 +130,55 @@ public class UserIOLayer {
 //		}
 //    }
 
+//    private void updateManager() {
+//		IOHelper.printFirstLine();
+//    	System.out.println("user를 manager로 권한부여합니다");
+//		try {
+//			User user = userController.updateManager(sessionService.getLoggedInUser());
+//			System.out.println("성공적으로 매니저로 승격되었습니다.");
+//			sessionService.updateSessionUser(user);
+//		} catch (ShopException e) {
+//			System.out.println("오류가 발생했습니다: " + e.getMessage());
+//		} finally {
+//			IOHelper.printEndLine();
+//		}
+//    }
+//    private void withdrawUserByAdmin()  {
+//		IOHelper.printFirstLine();
+//    	System.out.print("탈퇴시킬 고객네임: ");
+//    	String username = scanner.nextLine();
+//		try {
+//			userController.withdrawUserByAdmin(sessionService.getLoggedInUser(), username);
+//			System.out.println("성공적으로 퇴출완료");
+//		} catch (Exception e) {
+//			System.out.println("오류가 발생했습니다: " + e.getMessage());
+//		} finally {
+//			IOHelper.printEndLine();
+//		}
+//    }
+//    
+//    public void findUser(String username, String password) {
+//    	System.out.println("유저의 정보를 출력합니다: ");
+//    	System.out.println(ctrl.findUser(username, password));
+//    }
+//    public void displayUser(User adminUser) throws IOException {
+//        System.out.println("유저 조회를 시작합니다.");
+//        System.out.println("Admin password: ");
+//        ArrayList<String> password = new ArrayList<String>();
+//        password.add(input.nextLine());
+//        adminCtrl.checkManagerByPassword(password);
+//        System.out.println("조회하고싶은 USERNAME을 입력하세요: ");
+//        String username = input.nextLine();
+//        ctrl.displayUser(username);
+//    }
+
     private void displayLoggedUser() {
 		IOHelper.printFirstLine();
 		System.out.println("로그인된 현재 유저 조회를 시작합니다.");
 		System.out.println(sessionService.getLoggedInUser());
 		IOHelper.printEndLine();
     }
+
 //
 //    public void displayAllUser() {
 //		IOHelper.printFirstLine();
