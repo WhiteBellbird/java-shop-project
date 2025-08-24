@@ -1,7 +1,4 @@
 package test;
-
-
-
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -52,7 +49,37 @@ createProduct("P3","마우스", "전자기기", 1500000, 10, "마우스에요", 
 
 displayAllProducts();
 
+createTestProduct();
 
+}
+
+
+
+private static void createTestProduct() {
+	try {
+	Product product1 = new Product("P1", "노트북", "전자기기", 200000, 5, "고성능 노트북", LocalDateTime.now());
+	service.addProduct(product1);
+	System.out.println("상품 생성 성공: "+ product1.getName());
+	
+	Product product2 = new Product("P2", "휴대폰", "전자기기", 150000, 10, "스마트폰", LocalDateTime.now());
+	service.addProduct(product2);
+	System.out.println("상품 생성 성공: "+ product2.getName());
+	
+	Product product3 = new Product("P3", "티셔츠", "의류", 10000, 10, "반팔 티셔츠", LocalDateTime.now());
+	service.addProduct(product3);
+	System.out.println("상품 생성 성공: "+ product3.getName());
+	
+	Product product4 = new Product("P4", "바지", "의류", 15000, 10, "청바지", LocalDateTime.now());
+	service.addProduct(product4);
+	System.out.println("상품 생성 성공: "+ product4.getName());
+	
+	Product product5 = new Product("P5", "바나나", "과일", 15000, 10, "열대 과일", LocalDateTime.now());
+	service.addProduct(product5);
+	System.out.println("상품 생성 성공: "+  product5.getName());
+	}catch (ShopException e) {
+		System.out.println("상품 생성 실패: "+ e.getMessage());
+	}
+	
 }
 
 
