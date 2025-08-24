@@ -9,25 +9,15 @@ import domain.User;
 import exception.*;
 import helper.PasswordEncoder;
 import repository.UserRepository;
-import helper.*;
-
 
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
-<<<<<<< HEAD
-    public PasswordEncoder pe = new PasswordEncoderImpl();
-    
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
-        
-=======
     private PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
->>>>>>> origin/lsek/dev
     }
 
     @Override
@@ -37,15 +27,10 @@ public class UserServiceImpl implements UserService {
             //validateCreateUser(username, email, password); // 입력한 입력값들이 실제로 타당한 값인지? 빈값이 없다든가
             // UUID.randomUUID()는 랜덤한 String 문자열을 생성하는 static 메서드입니다.
             // 유저 객체를 생성
-<<<<<<< HEAD
-        	String encrypted = pe.encode(password);
-            User newUser = new User(UUID.randomUUID().toString(), username, email, encrypted, "SILVER", address, 0, null, phone, false, LocalDateTime.now(), null, null);
-=======
             validateDuplicatedUsernameAndEmail(username, email);
             String encoded = passwordEncoder.encode(password);
             User newUser = new User(UUID.randomUUID().toString(), username, email, encoded,
                     "SILVER", address, 0, null, phone, false, LocalDateTime.now(), null, null);
->>>>>>> origin/lsek/dev
             // 유저 객체를 생성하고 파일에서 생성된 유저 값을 불러옴
             User saved = repository.saveUser(newUser);
             // 아 참고로, 결과 값을 출력할 때, 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
@@ -134,21 +119,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Deprecated
     public User findUser(String username, String password) {
-<<<<<<< HEAD
-        if(repository.findUserByUsername(username) == null) {
-        	throw new ShopException("유저네임이 존재하지 않습니다.");
-        }
-        if(repository.findUserByUsername(username).getPassword() == null) {
-        	throw new ShopException("패스워드가 저장되지않았습니다.");
-        }
-        if (!repository.findUserByUsername(username).getPassword().equals(password)) {
-            throw new ShopException("패스워드가 틀렸습니다.");
-=======
 
         if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
 
             throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
->>>>>>> origin/lsek/dev
         }
         return repository.findUserByUsername(username);
     }
@@ -233,29 +207,6 @@ public class UserServiceImpl implements UserService {
             return Boolean.FALSE;
         }
     }
-<<<<<<< HEAD
-	@Override
-	public boolean CheckPassword(String firstInput, String SecondInput) {
-        if (!firstInput.equals(SecondInput)) {
-            throw new ShopException("패스워드가 일치하지 않습니다");
-        }
-		return true;
-	}
-	public boolean validateChoice(String choice) {
-		try {
-	    	if(choice.charAt(0) == 'y' || choice.charAt(0) == 'Y') {
-	    		return true;
-	    	}else if(choice.charAt(0) == 'n' || choice.charAt(0) == 'N') {
-	    		return false;
-	    	}else {
-	    		throw new ShopException("wrong choice input");
-	    	}
-		}catch(ShopException e){
-			throw new ShopException("wrong choice input");
-		}
-    }
-=======
->>>>>>> origin/lsek/dev
 
 //    @Override
 //    public boolean CheckPassword(String firstInput, String SecondInput) {

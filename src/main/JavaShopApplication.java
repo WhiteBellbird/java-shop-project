@@ -6,18 +6,14 @@ import java.util.Scanner;
 import controller.UserController;
 import domain.User;
 import helper.PasswordEncoder;
-<<<<<<< HEAD
 import helper.PasswordEncoderImpl;
 import iolayer.MainIOLayer;
 import iolayer.OrderIOLayer;
 import iolayer.ProductIOLayer;
-=======
->>>>>>> origin/lsek/dev
 import iolayer.UserIOLayer;
 import service.SessionService;
 import service.UserService;
 
-<<<<<<< HEAD
 public class JavaShopApplication{
 	
 	private AdminPasswordRepository adminPasswordRepository = new AdminPasswordRepositoryImpl();
@@ -38,7 +34,7 @@ public class JavaShopApplication{
 	public static void main(String[] args) {
 		
 	}
-=======
+
 public class JavaShopApplication {
     private static Scanner input;
 
@@ -269,7 +265,4 @@ public class JavaShopApplication {
     private static void viewProducts() {
 
     }
-
-
->>>>>>> origin/lsek/dev
 }

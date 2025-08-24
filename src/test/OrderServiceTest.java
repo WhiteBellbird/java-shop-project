@@ -38,7 +38,7 @@ public class OrderServiceTest {
 	    Product product4 = productService.createProduct("samsung", "electronic", 1000, 1000, null);
 	    Product product5 = productService.createProduct("lg", "electronic", 1000, 1000, null);
 	    
-	    
+	 
 	    User user = userService.createUser("TEST2", "TEST2@gmail.com", "Asdf1234!", null, "010-3456-4567");
 	    
 	    
@@ -46,8 +46,7 @@ public class OrderServiceTest {
 	    cartService.addProductByCart(user.getUserId(), product2.getProductId(), 2);
 	    cartService.addProductByCart(user.getUserId(), product3.getProductId(), 2);
 	    
-	    //orderRepository.saveOrder(new Order("001", userRepository.findUserByUsername("KWONLEE"), cartRepository.findCartByUserId("001").get().getItems().get("")));
-	    
+	    orderService.createOrder(user.getUserId(), product.getProductId(), 20000, 2, "홍은동");
 	    
 	}
 }

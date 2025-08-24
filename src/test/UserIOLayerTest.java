@@ -29,7 +29,6 @@ public class UserIOLayerTest {
 				sessionService, null);
 	public static void main(String[] args) throws IOException {
 
-<<<<<<< HEAD
 		uil.createUser();
 		uil.updateManager(user);
 		uil.findUser(user.getUsername(), user.getPassword());
@@ -43,7 +42,6 @@ public class UserIOLayerTest {
 		
 		
 		
-=======
 		createUser();
 		//login();
 	}
