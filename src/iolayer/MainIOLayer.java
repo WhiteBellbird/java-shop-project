@@ -42,7 +42,7 @@ public class MainIOLayer {
         this.userIOLayer = userIOLayer;
         this.orderIOLayer = orderIOLayer;
         this.userValidationController = controller;
-    }
+    } 
 	
 	private void main() {
 		do {

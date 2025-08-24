@@ -39,8 +39,7 @@ public class JavaShopApplication{
     
     public JavaShopApplication() {
 		
-	}
-	
+    }
 	public static void main(String[] args) {
 		
 	}
