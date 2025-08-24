@@ -87,8 +87,8 @@ public class Cart implements Serializable {
             throw new ProductNotfoundException("CartItem is not in cart : " + productId);
         }
         items.remove(productId);
-        Log log = new Log();
-        log.removed();
+//        Log log = new Log();
+//        log.removed();
         //history.put(productId, log);
     }
     public LinkedHashMap<String, CartItem> replaceCartItem(LinkedHashMap<String, CartItem> changedCartItem) {
