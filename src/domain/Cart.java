@@ -98,6 +98,9 @@ public class Cart implements Serializable {
     }
     public void addProductQuantity(String productId, int newQuantity) {
         CartItem item = items.get(productId);
+        if (item.getQuantity() + newQuantity > item.getProduct().getStock()) {
+            throw new CustomIllegalArgumentException("재고를 초과할 수 없습니다. 현재 재고: " + item.getProduct().getStock() + "개");
+        }
         item.addQuantity(newQuantity);
 //        if (productId != null && items.containsKey(productId) && newQuantity > 0) {
 //            CartItem item = items.get(productId);
@@ -141,31 +144,20 @@ public class Cart implements Serializable {
         return userId;
     }
 
-    
+
+
+    // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
-        if (items.isEmpty()) {
-            return "--- 장바구니 목록 ---\n장바구니가 비어있습니다.\n--------------------\n총 가격: 0원\n";
-        }
-        // 장바구니가 비어있지 않으면 , StringBuilder로 목록만들기 stringBuilder는 덧붙이기 기능
-        StringBuilder sb = new StringBuilder("USERID: " + this.getUserId() + "\n--- 장바구니 목록 ---\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("사용자 ID: ").append(userId).append("\n");
+        sb.append("장바구니 항목:\n");
         for (CartItem item : items.values()) {
-            String itemInfo = String.format("%s - 수량: %d개, 가격: %,d원\n",
-                    item.getProduct().getName(),
-                    item.getQuantity(),
-                    item.getProduct().getPrice() * item.getQuantity());
-            sb.append(itemInfo);
+            sb.append(item.toString()).append("\n");
         }
-        // 총 가격 정보를 추가하기
-        sb.append("--------------------\n");
-        sb.append(String.format("총 가격: %,d원\n", getTotalPrice()));
-        sb.append(String.format("USERID: %s 의 카트정보 끝 \n\n", this.getUserId()));
+        sb.append("총 가격: ").append(getTotalPrice()).append("원\n");
         return sb.toString();
     }
-    
-    
-    
-    
-    
+
     
 }

@@ -29,4 +29,6 @@ public interface CartRepository {
 	void commit();
 
 	void rollback();
+
+    void clearAll();
 }

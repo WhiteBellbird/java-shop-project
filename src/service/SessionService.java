@@ -17,4 +17,5 @@ public interface SessionService {
 
 	void updateSessionUser(User user);
 
+    Boolean isLoggedIn();
 }

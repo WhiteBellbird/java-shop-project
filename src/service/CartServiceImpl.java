@@ -29,7 +29,6 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart createCart(String userId) {
-        // 커밋과 롤백 예시
         try {
             User user = userRepository.findUserByUserId(userId);
             Cart cart = Cart.createCart(user.getUserId());

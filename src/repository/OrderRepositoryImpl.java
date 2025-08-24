@@ -41,7 +41,15 @@ public class OrderRepositoryImpl implements OrderRepository{
 	}
     @Override
     public Order saveOrder(Order order) {
-    	orders.add(order);
+        for (int i = 0; i < orders.size(); i++) {
+            if (orders.get(i).getOrderId().equals(order.getOrderId())) {
+                orders.set(i, order); // 기존 객체 교체
+                return order;
+            }
+        }
+
+        // 기존 객체 없으면 새로 추가
+        orders.add(order);
         return order;
     }
 	@Override
@@ -81,7 +89,15 @@ public class OrderRepositoryImpl implements OrderRepository{
 		FileManager.writeObject(DATA_FILE, orders);
 		tempOrders = deepCopy(orders);
 	}
-	// rollBack: tmpUsers 상태로 되돌린 후 파일에 덮어쓰기
+
+    @Override
+    public void clearAll() {
+        tempOrders.clear();
+        orders.clear();
+        FileManager.writeObject(DATA_FILE, orders);
+    }
+
+    // rollBack: tmpUsers 상태로 되돌린 후 파일에 덮어쓰기
 	@Override
 	public void rollback() {
 		orders = deepCopy(tempOrders);

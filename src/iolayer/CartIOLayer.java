@@ -17,25 +17,28 @@ public class CartIOLayer {
     private SessionService sessionService;
 
     public CartIOLayer(CartController cartController,
-                       SessionService sessionService) {
+                       SessionService sessionService, Scanner scanner) {
         this.cartController = cartController;
         this.sessionService = sessionService;
-        this.scanner = new Scanner(System.in);
+        this.scanner = scanner;
     }
 
-    public void cartMenu(User user) {
+    public void cartMenu() {
         System.out.println("--- 장바구니 관리 ---");
         while (true) {
             displayMenu();
-            String choice = scanner.nextLine();
-
+            String choice = scanner.next();
+            scanner.nextLine();
             try {
                 switch (choice) {
+                    case "0":
+                        createCart();
+                        break;
                     case "1":
                         addProduct();
                         break;
                     case "2":
-                        updateProductQuantity();
+                        manageCartItemQuantityMenu();
                         break;
                     case "3":
                         removeProduct();
@@ -61,24 +64,78 @@ public class CartIOLayer {
     }
 
     private void displayMenu() {
-        System.out.println("\n┌────────────────────────────────────┐");
-        System.out.println("│         🛒 장바구니 관리            │");
-        System.out.println("├────────────────────────────────────┤");
-        System.out.println("│  1. 상품 추가                      │");
-        System.out.println("│  2. 수량 변경                      │");
-        System.out.println("│  3. 상품 삭제                      │");
-        System.out.println("│  4. 장바구니 비우기                 │");
-        System.out.println("│  5. 총 가격 확인                    │");
-        System.out.println("│  6. 돌아가기                       │");
-        System.out.println("└────────────────────────────────────┘");
-        System.out.print("선택: ");
+        System.out.println("\n┌─────────────────────────────────────┐");
+        System.out.println("│         🛒 장바구니 관리                │");
+        System.out.println("├──────────────────────────────────────┤");
+        System.out.println("│  0. 장바구니 생성                       │");
+        System.out.println("│  1. 상품 추가                          │");
+        System.out.println("│  2. 수량 변경                          │");
+        System.out.println("│  3. 상품 삭제                          │");
+        System.out.println("│  4. 장바구니 비우기                      │");
+        System.out.println("│  5. 총 가격 확인                        │");
+        System.out.println("│  6. 돌아가기                           │");
+        System.out.println("└──────────────────────────────────────┘");
+        System.out.print("선택: _");
     }
 
-    private void updateProductQuantity() {
+    private void manageCartItemQuantityMenu() {
+        System.out.println("\n--- 장바구니 상품 수량 관리 ---");
+        while (true) {
+            System.out.println("1. 상품 수량 감소");
+            System.out.println("2. 상품 수량 추가");
+            System.out.println("3. 돌아가기");
+            System.out.print("선택: _");
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1":
+                    subtractProductQuantity();
+                    break;
+                case "2":
+                    addProductQuantity();
+                    break;
+                case "3":
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
+            }
+        }
+    }
+
+    private void createCart() {
+        IOHelper.printFirstLine();
+        try {
+            Cart cart = cartController.createCart(sessionService.getLoggedInUser());
+            System.out.println("장바구니가 성공적으로 생성되었습니다.");
+        } catch (ShopException e) {
+            System.out.println("오류가 발생했습니다: " + e.getMessage());
+        } finally {
+            IOHelper.printEndLine();
+        }
+    }
+
+    private void subtractProductQuantity() {
         IOHelper.printFirstLine();
         System.out.print("수량을 변경할 상품 이름: ");
         String productName = scanner.nextLine();
-        System.out.print("새로운 수량: ");
+        System.out.print("감소할 수량 수량: ");
+        int newQuantity = Integer.parseInt(scanner.nextLine());
+
+        try {
+            CartItem cartItem = cartController.subProductQuantityByCart(sessionService.getLoggedInUser(), productName, newQuantity);
+            System.out.println("상품의 수량이 " + cartItem.getQuantity() + "개로 변경되었습니다.");
+        } catch (ShopException e) {
+            System.out.println("오류가 발생했습니다: " + e.getMessage());
+        } finally {
+            IOHelper.printEndLine();
+        }
+    }
+
+    private void addProductQuantity() {
+        IOHelper.printFirstLine();
+
+        System.out.print("수량을 변경할 상품 이름: ");
+        String productName = scanner.nextLine();
+        System.out.print("추가할 수량 수량: ");
         int newQuantity = Integer.parseInt(scanner.nextLine());
 
         try {

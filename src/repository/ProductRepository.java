@@ -32,4 +32,6 @@ public interface ProductRepository {
     void commit();
 
     void rollback();
+
+    void clearAll();
 }

@@ -23,4 +23,6 @@ public interface OrderRepository {
     void rollback();
     
     void commit();
+
+    void clearAll();
 }

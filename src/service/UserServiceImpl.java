@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateManager(User user) {
+    public User updateManager(User user, String username) {
         try {
 //            User findUser = repository.findUserByUserId(userId);
             // 유저를 찾을 수 없다면 예외처리
@@ -53,14 +53,19 @@ public class UserServiceImpl implements UserService {
 //                throw new UserNotfoundException(String.format("%s 아이디의 유저를 찾을 수 없습니다.", userId));
 //            }
             // 유저를 관리자로 승격
-            if (user.isAdmin()) {
-                System.out.printf("\n[ERROR] %s is already admin\n", user.getUsername());
-                throw new UserDuplicatedException(String.format("%s is already admin", user.getUsername()));
+            if (!user.isAdmin()) {
+                System.out.printf("\n[ERROR] %s is not authenticated.\n", user);
+                throw new UserAuthenticationException(String.format("%s is not authenticated.", user.getUsername()));
             }
-            user.giveManagerAuthentication();
+
+            User findUser = repository.findUserByUsername(username);
+            if (findUser == null) {
+                throw new UserNotfoundException(String.format("%s 아이디의 유저를 찾을 수 없습니다.", username));
+            }
+            findUser.giveManagerAuthentication();
             // 리포지토리에서 유저를 업데이트
             //User updated = repository.authorizeUser(findUser);
-            User saved = repository.saveUser(user);
+            User saved = repository.saveUser(findUser);
             // 결과 값 출력할 때 비밀번호 같은 민감한 데이터를 출력하지 않도록 합시다.
             repository.commit();
             System.out.printf("\n[DEBUG] Manager updated: %s\n", saved);
@@ -96,20 +101,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> withdrawUserByAdmin(User user, String willDeleteUsername) {
         try {
-//            if (repository.findUserByUsername(username) == null) {
-//                throw new ShopException("유저가 존재하지 않습니다/ 찾을 수 없습니다");
-//            }
             if (!user.isAdmin()) {
                 System.out.printf("\n[ERROR] %s is not authenticated.\n", user);
                 throw new UserAuthenticationException(String.format("%s is not authenticated.", user.getUsername()));
             }
-//            repository.delete(repository.findUserByUsername(username));
-            Optional.of(repository.findUserByUsername(user.getUsername())).ifPresent(repository::delete);
+            User username = repository.findUserByUsername(user.getUsername());
+            if (username == null) {
+                throw new UserNotfoundException(String.format("%s is not found.", willDeleteUsername));
+            }
+            repository.delete(username);
+            System.out.printf("\n[DEBUG] %s is deleted by admin %s\n", username, user.getUsername());
             repository.commit();
             return repository.getUsersList();
         } catch (ShopException e) {
             repository.rollback();
-//            System.out.println(e.getClass() + ": 퇴출과정중 에러 발생");
             throw e;
         }
     }
@@ -119,7 +124,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Deprecated
     public User findUser(String username, String password) {
-
         if (repository.findUserByUsername(username) == null || repository.findUserByUsername(username).getPassword() != password) {
 
             throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
@@ -129,10 +133,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> displayAllUsersByAdmin(User user) {
-//        if (repository.findUserByUsername(adminUsername) == null || repository.findUserByUsername(adminUsername).getPassword() != adminPassword) {
-//            throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
-//        }
-//        return repository.getUsersList();
         if (!user.isAdmin()) {
             System.out.printf("\n[ERROR] %s is not authenticated.\n", user);
             throw new UserAuthenticationException(String.format("%s is not authorized to access this resource.",
@@ -144,12 +144,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User changePassword(User user, String currentPwd, String newPwd) {
         try {
-//            if (repository.findUserByUsername(username) == null) {
-//                throw new ShopException("옳바르지 않은 유저네임이거나 패스워드가 틀렸습니다.");
-//            }
-//            User user = repository.findUserByUsername(username);
-//            repository.delete(user);
-//            String encodedCurrentPwd = passwordEncoder.encode(currentPwd);
             String decoded = passwordEncoder.decode(user.getPassword());
             if (!decoded.trim().equals(currentPwd)) {
                 throw new UserAuthenticationException(String.format("%s is not matched current Password",
@@ -174,18 +168,11 @@ public class UserServiceImpl implements UserService {
         try {
             user.updateUser(email, address, phone);
             User savedUser = repository.saveUser(user);
-//            if (repository.findUserByUserId(previousUser.getUserId()) == null) {
-//                throw new ShopException("옳바르지 않은 유저이거나 찾을수 없습니다.");
-//            }
-//            repository.replaceUser(previousUser, changedUser);
-
-
             repository.commit();
             System.out.printf("\n[DEBUG] %s is saved\n", savedUser);
             return savedUser;
         } catch (ShopException e) {
             repository.rollback();
-//            System.out.println(e.getClass() + "고객정보 변경중 문제 발생");
             throw e;
         }
     }
@@ -203,45 +190,17 @@ public class UserServiceImpl implements UserService {
             return Boolean.TRUE;
         } catch (ShopException e) {
             repository.rollback();
-//            System.out.println(e.getMessage() + "회원 탈퇴중 문제 발생");
             return Boolean.FALSE;
         }
     }
-
-//    @Override
-//    public boolean CheckPassword(String firstInput, String SecondInput) {
-//        if (!firstInput.equals(SecondInput)) {
-//            throw new ShopException("패스워드가 일치하지 않습니다");
-//        }
-//        return firstInput.equals(SecondInput);
-//    }
-
-//    public boolean validateChoice(String choice) {
-//        try {
-//            if (choice.charAt(0) == 'y' || choice.charAt(0) == 'Y') {
-//                return true;
-//            } else if (choice.charAt(0) == 'n' || choice.charAt(0) == 'N') {
-//                return false;
-//            } else {
-//                throw new ShopException("wrong choice input");
-//            }
-//        } catch (ShopException e) {
-//            throw new ShopException("wrong choice input");
-//        }
-//    }
-
-    private void validateDuplicatedUsernameAndEmail(String email, String username) {
+    private void validateDuplicatedUsernameAndEmail(String username, String email) {
         User userByUsername = repository.findUserByUsername(username);
-        if (userByUsername == null) {
-            System.out.println("[ERROR] " + username + " is not found.");
+        if (userByUsername != null) {
+            throw new UserDuplicatedException(String.format("username %s is already registered.", username));
         }
-//        Optional.of(repository.findUserByUsername(username)).orElseThrow(()->
-//                new UserDuplicatedException(String.format("username %s not found", username)));
-//        Optional.of(repository.findUserByUsername(username)).ifPresent((user) -> {
-//            throw new UserDuplicatedException(String.format("%s is existed.", username));
-//        });
-//        Optional.of(repository.findUserByEmail(email)).ifPresent((user) -> {
-//            throw new UserDuplicatedException(String.format("%s is existed.", email));
-//        });
+        User userByEmail = repository.findUserByEmail(email);
+        if (userByEmail != null) {
+            throw new UserDuplicatedException(String.format("email %s is already registered.", email));
+        }
     }
 }

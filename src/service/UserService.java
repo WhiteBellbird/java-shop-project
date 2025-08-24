@@ -12,7 +12,7 @@ public interface UserService {
 	
 //	boolean validateChoice(String choice);
 	
-	User updateManager(User user);
+	User updateManager(User user,String username);
 
 	
 	User findUser(String username, String password);

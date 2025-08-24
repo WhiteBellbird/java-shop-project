@@ -12,6 +12,7 @@ public class ProductIOLayer {
 
     private Scanner scanner;
     private ProductController productController;
+
     public ProductIOLayer(Scanner scanner, ProductController productController) {
         this.scanner = scanner;
         this.productController = productController;
@@ -22,34 +23,43 @@ public class ProductIOLayer {
             System.out.println("┌────────────────────────────────────┐");
             System.out.println("│         🛍️ 상품 둘러보기            │");
             System.out.println("├────────────────────────────────────┤");
-            System.out.println("│  1. 전체 상품 보기                   │");
-            System.out.println("│  2. 카테고리별 보기                  │");
-            System.out.println("│  3. 가격대별 보기                    │");
-            System.out.println("│  4. 베스트셀러                      │");
+            System.out.println("│  1. 전체 상품 보기                    │");
+            System.out.println("│  2. 카테고리 보기                     │");
+            System.out.println("│  3. 가격대별 보기                     │");
+            System.out.println("│  4. 베스트셀러                       │");
             System.out.println("│  5. 신상품                          │");
-            System.out.println("│  6. 상품 상세보기                    │");
-            System.out.println("│  7. 돌아가기                        │");
+            System.out.println("│  6. 상품 상세보기                     │");
+            System.out.println("│  7. 돌아가기                         │");
             System.out.println("└────────────────────────────────────┘");
-            System.out.println();
-            int choice = scanner.nextInt();
+            System.out.print("메뉴를 선택하세요: _");
+
+            String input = scanner.nextLine();
+            int choice;
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("❌ 숫자를 입력해야 합니다.");
+                continue;
+            }
+
             switch (choice) {
                 case 1:
-                    this.findAllProducts();
+                    findAllProducts();
                     break;
                 case 2:
-                    this.showCategory();
+                    showCategory();
                     break;
                 case 3:
-                    this.showPrice();
+                    showPrice();
                     break;
                 case 4:
-                    this.showBestSeller();
+                    showBestSeller();
                     break;
                 case 5:
-                    this.lastestProduct();
+                    lastestProduct();
                     break;
                 case 6:
-                    this.showProductDetails();
+                    showProductDetails();
                     break;
                 case 7:
                     return;
@@ -84,9 +94,7 @@ public class ProductIOLayer {
             System.out.println("오류가 발생했습니다: " + e.getMessage());
         } finally {
             IOHelper.printEndLine();
-
         }
-
     }
 
     private void showPrice() {
@@ -122,8 +130,6 @@ public class ProductIOLayer {
         }
         IOHelper.printEndLine();
     }
-
-
 
     private void findAllProducts() {
         IOHelper.printFirstLine();

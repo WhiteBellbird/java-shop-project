@@ -58,10 +58,17 @@ public class SessionServiceImpl implements SessionService{
        sessionIdList.put(user.getUsername(), user);
     }
 
+    @Override
+    public Boolean isLoggedIn() {
+         return !sessionIdList.isEmpty();
+    }
+
     private User findUserByUsername(String username) {
-       Optional<User> userByUsername = Optional.of(userRepository
-             .findUserByUsername(username));
-       return userByUsername
-             .orElseThrow(() -> new UserNotfoundException(String.format("username %s not found", username)));
+        User userByUsername = userRepository
+                .findUserByUsername(username);
+        if (userByUsername == null) {
+              throw new UserNotfoundException(String.format("username %s not found", username));
+        }
+        return userByUsername;
     }
 }

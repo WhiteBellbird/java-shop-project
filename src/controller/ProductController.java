@@ -73,6 +73,26 @@ public class ProductController {
         return productService.addProductStock(productName, stock);
     }
 
+    public Product updateProduct(String originProductName, String newProductName,
+                                      String category, int price, String description) throws ShopException {
+        if(originProductName == null || originProductName.trim().isEmpty()) {
+            throw new InvalidatedInputException("Product name cannot be empty.");
+        }
+        if(newProductName == null || newProductName.trim().isEmpty()) {
+            throw new InvalidatedInputException("Product name cannot be empty.");
+        }
+        if(category == null || category.trim().isEmpty()) {
+            throw new InvalidatedInputException("Category name cannot be empty.");
+        }
+        if(price <= 0) {
+            throw new InvalidatedInputException("Product price must be greater than 0.");
+        }
+        if(description == null || description.trim().isEmpty()) {
+            throw new InvalidatedInputException("Product description cannot be empty.");
+        }
+        return productService.updateProduct(originProductName, newProductName, category, price, description);
+    }
+
     public Product subtractProductStock(String productName, int stock) throws ShopException {
         if (productName == null || productName.trim().isEmpty()) {
             throw new InvalidatedInputException("Product name cannot be empty.");

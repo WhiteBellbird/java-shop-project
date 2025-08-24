@@ -48,11 +48,19 @@ public class CartRepositoryImpl implements CartRepository {
 			tmpCarts = new ArrayList<>();
 		}
 	}
-	@Override
-	public Cart saveCart(Cart cart) {
-		carts.add(cart);
-		return cart;
-	}
+    @Override
+    public Cart saveCart(Cart cart) {
+        for (int i = 0; i < carts.size(); i++) {
+            if (carts.get(i).getUserId().equals(cart.getUserId())) {
+                carts.set(i, cart); // 기존 객체 교체
+                return cart;
+            }
+        }
+
+        // 기존 객체 없으면 새로 추가
+        carts.add(cart);
+        return cart;
+    }
 	@Override
 	public Cart updateCart(Cart cart) {
 		for (int i = 0; i < carts.size(); i++) {
@@ -199,7 +207,15 @@ public class CartRepositoryImpl implements CartRepository {
 		carts = deepCopy(tmpCarts); // 깊은 복사로 이전 상태 복원
 		FileManager.writeObject(DATA_FILE, carts);
 	}
-	private List<Cart> deepCopy(List<Cart> source) {
+
+    @Override
+    public void clearAll() {
+        carts.clear();
+        tmpCarts.clear();
+        FileManager.writeObject(DATA_FILE,carts);
+    }
+
+    private List<Cart> deepCopy(List<Cart> source) {
         List<Cart> copy = new ArrayList<>(source);
 		return copy;
 	}

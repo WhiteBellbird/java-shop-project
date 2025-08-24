@@ -2,11 +2,12 @@ package domain;
 
 import exception.OrderAlreadyProcessingException;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Order {
+public class Order implements Serializable {
     private String orderId;
     private User user;
     private CartItem cartItem;
@@ -45,9 +46,8 @@ public class Order {
     }
 
     public void cancelOrder() {
-        LocalDateTime orderDate = LocalDateTime.now().minusHours(12);
-        if (orderDate.isBefore(this.orderDate)) {
-            throw new OrderAlreadyProcessingException("Order has been cancelled");
+        if (LocalDateTime.now().isAfter(this.orderDate.plusHours(12))) {
+            throw new OrderAlreadyProcessingException("주문은 12시간 이후에는 취소할 수 없습니다.");
         }
         this.status = OrderStatus.CANCELLED;
     }
@@ -84,15 +84,15 @@ public class Order {
         return orderDate;
     }
 
+    // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
-        return "Order{" +
-                "orderId='" + orderId + '\'' +
-                ", user=" + user +
-                ", cartItem=" + cartItem +
-                ", address='" + address + '\'' +
-                ", status=" + status +
-                ", orderDate=" + orderDate +
-                '}';
+        return "주문 ID: " + orderId+
+                ", 사용자: " + user.getUsername() + 
+                ", 상품: " + cartItem.getProduct().getName() + "\n" +
+                ", 수량: " + cartItem.getQuantity() +
+                ", 주소: " + address +
+                ", 상태: " + status + 
+                ", 주문 날짜: " + orderDate + "\n";   
     }
 }

@@ -8,8 +8,6 @@ import domain.User;
 import helper.PasswordEncoder;
 import helper.PasswordEncoderImpl;
 import iolayer.MainLayer;
-import iolayer.OrderIOLayer;
-import iolayer.ProductIOLayer;
 import iolayer.UserIOLayer;
 import repository.UserRepository;
 import repository.UserRepositoryImpl;
@@ -24,22 +22,22 @@ public class UserIOLayerTest {
 		static PasswordEncoder passwordEncoder = new PasswordEncoderImpl();
 		static UserService userService = new UserServiceImpl(userRepository,passwordEncoder);
 		static SessionService sessionService = new SessionServiceImpl(userRepository, passwordEncoder);
-		static UserIOLayer userIOLayer = new UserIOLayer(input,new UserController(userService),sessionService,null);
+		static UserIOLayer userIOLayer = new UserIOLayer(input,new UserController(userService),sessionService);
 		static MainLayer mainLayer = new MainLayer(new Scanner(System.in), null, null,
-				sessionService, null,null);
+				sessionService, null,null,null);
 	public static void main(String[] args) throws IOException {
 
         User user = null;
 //        userService.createUser();
-        userService.updateManager(user);
+        userService.updateManager(user,user.getUsername());
         userService.findUser(user.getUsername(), user.getPassword());
 
 
-        userService.changePassword(user);
-        userService.updateUser(user);
-		
-		//탈퇴 기능 문제 -- 확인 바람***********************************************************
-        userService.withdrawal(user);
+//        userService.changePassword(user);
+//        userService.updateUser(user);
+//
+//		//탈퇴 기능 문제 -- 확인 바람***********************************************************
+//        userService.withdrawal(user);
 		
 		
 		

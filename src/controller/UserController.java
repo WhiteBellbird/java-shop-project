@@ -48,11 +48,11 @@ public class UserController {
 	}
 
 	// session service 에서 유저 가져온다
-	public User updateManager(User user) throws ShopException {
+	public User updateManager(User user,String username) throws ShopException {
 		if (user == null) {
 			throw new InvalidatedInputException("User cannot be null.");
 		}
-		return userService.updateManager(user);
+		return userService.updateManager(user,username);
 	}
 
 	@Deprecated

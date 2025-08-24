@@ -44,10 +44,6 @@ public class CartItem implements Serializable {
     	this.quantity -= newValue;
     }
     
-    @Override
-    public String toString() {
-        return String.format("%s - 수량: %d개", product.getName(), quantity);
-    }
 
 	public int compareTo(CartItem value) {
 		if(this.getProduct().getName().charAt(0) < value.getProduct().getName().charAt(0)) return -1;
@@ -55,4 +51,12 @@ public class CartItem implements Serializable {
 		return 0;
 	}
     
+    // make toString using korean and show all info and using \n per 3 fields
+    @Override
+    public String toString() {
+        return "상품: " + product.getName() + "\n" +
+                ", 가격: " + product.getPrice() + "원\n" +
+                ", 수량: " + quantity + "\n" +
+                ", 총 가격: " + getTotalPrice() + "원\n";
+    }
 }

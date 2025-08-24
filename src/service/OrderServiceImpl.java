@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
             // 거스름돈
             int changeMoney = 0;
             // 지불해야 할 금액보다 크면 정상처리 아니면 반려
-            if (willPaymentPriceByCustomer < payment) {
+            if (willPaymentPriceByCustomer <= payment) {
                 changeMoney = payment - willPaymentPriceByCustomer;
             } else {
                 throw new InSufficientMoneyException("Insufficient money");
@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
             // 카트아이템에서 수량 줄였어.
             cartItem.subQuantity(quantity);
             // 프로덕트에 재고 줄였어
-            product.reduceStock(cartItem.getQuantity());
+            product.reduceStock(quantity);
             product.addSellCount(quantity);
             // 그 수량이 0이면 카트에서 사라져야지.
             if (cartItem.getQuantity() == 0) {
@@ -105,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
             return savedOrder;
         } catch (ShopException e) {
             orderRepository.rollback();
+            System.out.println("[ERROR] CancelOrder Error className : " + e.getClass().getSimpleName());
             System.out.println("[ERROR] CancelOrder error : " + e.getMessage());
             throw e;
         }

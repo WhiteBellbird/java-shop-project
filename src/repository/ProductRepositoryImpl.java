@@ -100,7 +100,14 @@ public class ProductRepositoryImpl implements ProductRepository {
 		FileManager.writeObject(DATA_FILE, products);
 	}
 
-	private List<Product> deepCopy(List<Product> source) {
+    @Override
+    public void clearAll() {
+        products.clear();
+        tmpProducts.clear();
+        FileManager.writeObject(DATA_FILE, products);
+    }
+
+    private List<Product> deepCopy(List<Product> source) {
 		return new ArrayList<>(source);
 	}
 }

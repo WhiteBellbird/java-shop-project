@@ -100,8 +100,24 @@ public class ProductServiceImpl implements ProductService{
 		}
 	}
 
+    @Override
+    public Product updateProduct(String originProductName, String newProductName, String category, int price, String description) {
+        try {
+            Product product = repository.findByName(originProductName).orElseThrow(() -> new ProductNotfoundException(
+                    String.format("%s is not found", originProductName)
+            ));
+            product.updateProduct(newProductName, category, price, description);
+            Product saved = repository.save(product);
+            repository.commit();
+            return saved;
+        } catch (ShopException e) {
+            repository.rollback();
+            throw e;
+        }
+    }
 
-	@Override
+
+    @Override
 	public Boolean deleteProduct(String productName) throws ProductNotfoundException {
 		try {
 			Product willDelete = repository.findByName(productName).orElseThrow(

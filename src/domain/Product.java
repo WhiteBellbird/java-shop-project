@@ -1,5 +1,7 @@
 package domain;
 
+import exception.CustomIllegalArgumentException;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -82,7 +84,7 @@ public class Product implements Serializable {
             this.stock -= quantity;
         } else {
             // 재고 부족 예외 처리
-            throw new IllegalArgumentException("재고가 부족합니다.");
+            throw new CustomIllegalArgumentException("재고가 부족합니다.");
         }
     }
 
@@ -95,17 +97,27 @@ public class Product implements Serializable {
     }
 
 
+    public void updateProduct(String newProductName,
+                              String category,
+                              int price,
+                              String description) {
+        this.name = newProductName;
+        this.category = category;
+        this.price = price;
+        this.description = description;
+    }
+
+    // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
-        return "Product{" +
-                "productId='" + productId + '\'' +
-                ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", description='" + description + '\'' +
-                ", regisrationDate=" + registrationDate +
-                '}';
+        return "상품 ID: " + productId +
+                ", 상품명: " + name +
+                ", 카테고리: " + category + "\n" +
+                ", 가격: " + price +
+                ", 재고: " + stock +
+                ", 판매 수: " + sellCount + "\n" +
+                ", 상품 설명: " + description +
+                ", 등록 일시: " + registrationDate + "\n";
     }
 }
 		

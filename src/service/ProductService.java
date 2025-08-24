@@ -22,7 +22,10 @@ public interface ProductService {
 
 	Product addProductStock(String productName, int stock);
 
-	Product subtractProductStock(String productName, int stock);
+    Product subtractProductStock(String productName, int stock);
+
+    Product updateProduct(String originProductName, String newProductName,
+                          String category , int price, String description);
 	
 	Boolean deleteProduct(String productName);
 }

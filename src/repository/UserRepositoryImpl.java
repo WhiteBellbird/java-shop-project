@@ -80,18 +80,22 @@ public class UserRepositoryImpl implements UserRepository {
 		users = deepCopy(tmpUsers);
 		FileManager.writeObject(DATA_FILE, users);
 	}
-	@Override
-	public User saveUser(User user) {
-		users.add(user);
-		return user;
-	}
+    @Override
+    public User saveUser(User user) {
+        // 기존 userId와 동일한 객체 찾기
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(user.getUserId())) {
+                users.set(i, user); // 기존 객체 교체
+                return user;
+            }
+        }
+        // 기존 객체 없으면 새로 추가
+        users.add(user);
+        return user;
+    }
 	@Override
 	public User findUserByEmail(String email) {
-		return users.stream()
-				.filter(u -> u.getEmail() != null)
-				.filter(u -> u.getEmail().trim().equalsIgnoreCase(email.trim()))
-				.findFirst()
-				.orElse(null);
+		return users.stream().filter(user ->  user.getEmail().equals(email)).findFirst().orElse(null);
 	}
 	@Override
 	public User findUserByUserId(String userId) {
@@ -134,7 +138,14 @@ public class UserRepositoryImpl implements UserRepository {
 		users.remove(user);
 	}
 
-	@Override
+    @Override
+    public void clearAll() {
+        users.clear();
+        tmpUsers.clear();
+        FileManager.writeObject(DATA_FILE, users);
+    }
+
+    @Override
 	public List<User> getUsersList() {
 		return users;
 	}
