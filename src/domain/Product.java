@@ -21,7 +21,6 @@ public class Product implements Serializable {
 
     public Product(String productId, String name, String category, int price, int stock, String description,
                    int sellCount, LocalDateTime registrationDate) {
-        //super();
         this.productId = productId;
         this.name = name;
         this.category = category;
@@ -60,12 +59,6 @@ public class Product implements Serializable {
     public int getStock() {
         return stock;
     }
-
-
-    public String getDescription() {
-        return description;
-    }
-
 
     public LocalDateTime getRegistrationDate() {
         return registrationDate;

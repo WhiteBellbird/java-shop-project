@@ -7,7 +7,7 @@ import controller.UserController;
 import domain.User;
 import helper.PasswordEncoder;
 import helper.PasswordEncoderImpl;
-import iolayer.MainLayer;
+import iolayer.MainIOLayer;
 import iolayer.UserIOLayer;
 import repository.UserRepository;
 import repository.UserRepositoryImpl;
@@ -23,7 +23,7 @@ public class UserIOLayerTest {
 		static UserService userService = new UserServiceImpl(userRepository,passwordEncoder);
 		static SessionService sessionService = new SessionServiceImpl(userRepository, passwordEncoder);
 		static UserIOLayer userIOLayer = new UserIOLayer(input,new UserController(userService),sessionService);
-		static MainLayer mainLayer = new MainLayer(new Scanner(System.in), null, null,
+		static MainIOLayer mainIOLayer = new MainIOLayer(new Scanner(System.in), null, null,
 				sessionService, null,null,null);
 	public static void main(String[] args) throws IOException {
 

@@ -73,13 +73,6 @@ public class UserController {
 		return userService.withdrawUserByAdmin(user, username);
 	}
 
-	public User findUser(User user) throws ShopException {
-		if (user == null || user.getUsername() == null || user.getPassword() == null) {
-			throw new InvalidatedInputException("User credentials cannot be empty.");
-		}
-		return userService.findUser(user.getUsername(), user.getPassword());
-	}
-
 	public List<User> findAllUsers(User user) throws ShopException {
 		if (user == null) {
 			throw new InvalidatedInputException("Admin user cannot be null.");

@@ -65,7 +65,7 @@ public class User implements Serializable{
 	public void accumulatePoint(double point) throws InvalidatedInputException{
 		if(point > 0) {
 			this.point += point;
-		}else {
+		} else {
 			throw new InvalidatedInputException("적절하지않은 포인트입력값입니다. 다시 확인하시고 입력해주십시오");
 		}
 	}

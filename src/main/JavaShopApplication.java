@@ -6,14 +6,11 @@ import controller.ProductController;
 import domain.Product;
 import iolayer.AdminIOLayer;
 import iolayer.CartIOLayer;
-import iolayer.MainLayer;
+import iolayer.MainIOLayer;
 import iolayer.ProductIOLayer;
 import iolayer.UserIOLayer;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.UUID;
 
 import controller.UserController;
 import domain.User;
@@ -60,14 +57,14 @@ public class JavaShopApplication {
     private static CartService cartService;
     private static CartController cartController;
     private static OrderService orderService;
-    private static MainLayer mainLayer;
+    private static MainIOLayer mainIOLayer;
     private static OrderController orderController;
 
     public static void main(String[] args) {
         // please move this to field
         dependencyInjection();
         initializeProducts(productController);
-        mainLayer.main();
+        mainIOLayer.main();
     }
 
     private static void dependencyInjection() {
@@ -92,13 +89,13 @@ public class JavaShopApplication {
         userIOLayer = new UserIOLayer(scanner, userController, sessionService);
         adminIOLayer = new AdminIOLayer(scanner, userController, sessionService, productController);
         cartIOLayer = new CartIOLayer(cartController, sessionService, scanner);
-        mainLayer = new MainLayer(scanner, orderIOLayer, productIOLayer,
+        mainIOLayer = new MainIOLayer(scanner, orderIOLayer, productIOLayer,
                 sessionService, userIOLayer, adminIOLayer, cartIOLayer);
         deleteAllDatas();
         initialUser(userController);
         initializeProducts(productController);
         addCart(cartController);
-        mainLayer.main();
+        mainIOLayer.main();
     }
 
     private static void initializeProducts(ProductController productController) {

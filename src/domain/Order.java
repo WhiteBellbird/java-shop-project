@@ -84,7 +84,6 @@ public class Order implements Serializable {
         return orderDate;
     }
 
-    // make toString using korean and show all info and using \n per 3 fields
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
