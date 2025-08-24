@@ -31,8 +31,8 @@ public class ProductRepositoryTest {
 		products.forEach(System.out::println);
 	}
 	private static void createProducts() {
-		repo.save(new Product("P1","모니터","전자기기", 200000, 5, "모니터에요",LocalDateTime.now()));
-		repo.save(new Product("P2","키보드","전자기기", 150000, 5, "키보드에요",LocalDateTime.now()));
-		repo.save(new Product("P3","마우스","전자기기", 50000, 5, "마우스에요",LocalDateTime.now()));
+		repo.save(new Product("P1","모니터","전자기기", 200000, 5, "모니터에요",0,LocalDateTime.now()));
+		repo.save(new Product("P2","키보드","전자기기", 150000, 5, "키보드에요",0,LocalDateTime.now()));
+		repo.save(new Product("P3","마우스","전자기기", 50000, 5, "마우스에요",0,LocalDateTime.now()));
 	}
 }

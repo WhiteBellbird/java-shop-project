@@ -1,9 +1,7 @@
 package service;
 
 import domain.Order;
-import domain.Product;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface OrderService {
@@ -12,9 +10,9 @@ public interface OrderService {
 
     Boolean CreateSomeOrders(String userId);
 
-    Boolean CreateAllOrders(String userId,int totalAmount,String address);
+    List<Order> CreateAllOrders(String userId,int totalAmount,String address);
 
     List<Order> DisplayOrderList(String userId);
 
-    Boolean CancelOrder(String orderId);
+    Order cancelOrder(String orderId);
 }

@@ -8,17 +8,19 @@ import java.util.Map;
 
 public interface OrderRepository {
 
-    public Order saveOrder(Order order);
+    Order saveOrder(Order order);
 
-    public Order replaceOrder(Order previousOrder, Order changedOrder);
+    Order replaceOrder(Order previousOrder, Order changedOrder);
 
-    public Order updateOrder(Order order);
+    Order updateOrder(Order order);
     
-    public List<Order> getOrder();
+    List<Order> getOrder();
     
-    public Order getOrderByOrderId(String orderId);
+    Order getOrderByOrderId(String orderId);
+
+    List<Order> getOrderByUserId(String userId);
+
+    void rollback();
     
-    public void rollback();
-    
-    public void commit();
+    void commit();
 }

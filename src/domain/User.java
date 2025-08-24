@@ -76,6 +76,12 @@ public class User implements Serializable{
 			throw new InvalidatedInputException("적절하지않은 포인트입력값입니다. 다시 확인하시고 입력해주십시오");
 		}
 	}
+
+	public void updateUser(String email, String address, String phone) {
+		this.email = email;
+		this.address = address;
+		this.phone = phone;
+	}
 	//쿠폰을 가지고 있나의 여부에서 쿠폰 적용할지 안할지(관리자가 따로 고객에게 쿠폰지급) 
 	//아니면
 	//고객이 주문시에 쿠폰아이디입력시 주문한 총가격에서 자동적용? -고객이 가지고있는 쿠폰은 REPOSITORY 파일에 저장된 쿠폰아이디와 일치여부 확인후 적용 
@@ -161,7 +167,7 @@ public class User implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "userId: " + userId+ "계정이름: "+username+" | 등급: "+rank+" | 이메일: "+ email+" | 주소: "+address+" | 전화번호: "+phone + " | 관리자 여부: " + isAdmin();	
+		return "userId: " + userId+ " | 계정이름: "+username+ "| 패스워드: " + password + " | 등급: "+rank+" | 이메일: "+ email+" | 주소: "+address+" | 전화번호: "+phone + " | 관리자 여부: " + isAdmin();
 	}
 	//아이디가 같으면 동등하게 취급 hash-code 비교는 불필요
 	public boolean equals(User obj) {

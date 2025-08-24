@@ -37,10 +37,10 @@ public class SortingTest {
 		
 		Cart cart = new Cart(user.getUserId());
 		
-		cart.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null, LocalDateTime.now()), 3);
-		cart.addProduct(new Product("002", "banana", "fruit" , 500, 365, null, LocalDateTime.now()), 10);
-		cart.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null, LocalDateTime.now()), 5);
-		cart.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null, LocalDateTime.now()), 3);
+//		cart.addProduct(new Product("001", "apple", "fruit" , 1000, 265, null, LocalDateTime.now()), 3);
+//		cart.addProduct(new Product("002", "banana", "fruit" , 500, 365, null, LocalDateTime.now()), 10);
+//		cart.addProduct(new Product("003", "plum", "fruit" , 3000, 245, null, LocalDateTime.now()), 5);
+//		cart.addProduct(new Product("004", "kiwi", "fruit" , 5000, 25, null, LocalDateTime.now()), 3);
 		cartRepo.saveCart(cart);
 		
 		

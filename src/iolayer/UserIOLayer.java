@@ -1,85 +1,134 @@
 package iolayer;
 
-import java.io.IOException;
 import java.util.Scanner;
 
-import controller.AdminPasswordValidationController;
-import controller.UserValidationController;
+import controller.UserController;
 import domain.User;
-import java.util.*;
-import service.UserService;
+import exception.ShopException;
+import helper.IOHelper;
+import service.SessionService;
 
 public class UserIOLayer {
-    private Scanner input = new Scanner(System.in);
-	UserValidationController ctrl;
-	AdminPasswordValidationController adminCtrl;
+	private Scanner scanner;
+    private UserController userController;
+    private SessionService sessionService;
+	private OrderIOLayer orderIOLayer;
 	
-	public UserIOLayer(UserValidationController userValidationController, AdminPasswordValidationController adminCtrl) {
-		this.ctrl = userValidationController;
-		this.adminCtrl = adminCtrl;
+	public UserIOLayer(Scanner scanner,
+					   UserController userController,
+                       SessionService sessionService,
+					   OrderIOLayer orderIOLayer) {
+        this.scanner = scanner;
+        this.userController = userController;
+        this.sessionService = sessionService;
+		this.orderIOLayer = orderIOLayer;
+    }
+
+	public void myPage() {
+		while (true) {
+			System.out.println("┌────────────────────────────────────┐");
+			System.out.println("│         👤 마이페이지               │");
+			System.out.println("├────────────────────────────────────┤");
+			System.out.println("│  1. 내 정보 조회                   │");
+			System.out.println("│  2. 비밀번호 변경                  │");
+			System.out.println("│  3. 개인정보 수정                  │");
+			System.out.println("│  4. 주문 내역 조회                 │");
+			System.out.println("│  5. 회원 탈퇴                      │");
+			System.out.println("│  6. 돌아가기                       │");
+			System.out.println("└────────────────────────────────────┘");
+			int choice = scanner.nextInt();
+			switch (choice) {
+				case 1:
+					// 내 정보 조회 로직
+					this.displayLoggedUser();
+					break;
+				case 2:
+					// 비밀번호 변경 로직
+					this.changePassword();
+					break;
+				case 3:
+					// 개인정보 수정 로직
+					this.updateUser();
+					break;
+				case 4:
+					// 주문 내역 조회 로직
+					orderIOLayer.showOrderMenu();
+					break;
+				case 5:
+					// 회원 탈퇴 로직
+					this.withdrawUserByAdmin();
+					break;
+				case 6:
+					// 돌아가기
+					System.out.println("이전 메뉴로 돌아갑니다...");
+					break;
+				default:
+					System.out.println("올바른 메뉴를 선택해주세요.");
+			}
+
+		}
 	}
+
     public void createUser() {
+		IOHelper.printFirstLine();
     	System.out.println("이메일을 입력하세요: ");
-    	String email = input.nextLine();
+    	String email = scanner.nextLine();
     	System.out.println("현재 거주하고 계신 주소를 입력해주세요: ");
-    	String address = input.nextLine();
+    	String address = scanner.nextLine();
     	System.out.println("전화번호를 입력해주세요: ");
-    	String phone = input.nextLine(); // xxx-xxxx-xxxx
-    	
-    	System.out.println("-------------------------------");
+    	String phone = scanner.nextLine(); // xxx-xxxx-xxxx
     	System.out.println("유저이름을 입력하세요\t\t\t|");
-    	String name = input.nextLine();
-    	System.out.println("비밀번호를 입력하세요\t\t\t|");
-    	String password = input.nextLine();
-    	System.out.println("비밀번호를 다시 입력하세요\t\t|");
-    	String password2 = input.nextLine();
-    	ctrl.checkPassword(password, password2);
-    	System.out.println("-------------------------------");
-    	System.out.println("개인 정보에 대한 동의서를 확인하시겠습니까? [30 페이지 양의 동의서 출력 예정] (Y/N): ");
-    	String agree = input.nextLine();
-    	if(ctrl.validateChoice(agree)){
-    		System.out.println("수집하는 개인정보 항목 :");
-    		System.out.println("개인식별정보 : 성명, 주소, 전화번호, 이메일, 기타 위촉을 위해 본인이 작성한 관련 정보 등");
-    		System.out.println("개인정보의 수집 및 이용목적");
-    		System.out.println("공하신 정보는 위촉절차의 집행 및 관리, 경력‧자격 등 확인(조회 및 검증), 위촉 여부의 결정, 민원처리에 사용 됩니다.\n"
-    				+ "① 본인 확인 및 범죄경력 조회에 이용: 성명, 생년월일\n"
-    				+ "② 지원자와의 의사소통 및 정보 전달 등에 이용: 성명, 주소, 전화번호, 휴대전화번호, 이메일\n");
-    		System.out.println("수집된 개인정보는 지원서 제출 후 위촉기간 만료 시 또는 지원서 삭제 요청 시까지 위 이용 목적을 위하여 보유‧이용됩니다. 또한 삭제 요청 시 지원자의 개인정보를 재생이 불가능한 방법으로 즉시 파기합니다.");
-    	}
-    	System.out.println("귀하는 이에 대한 동의를 거부할 수 있으며, 다만, 동의가 없을 경우 위촉 전형 진행이 불가능할 수 있음을 알려드립니다.\n");
-    	System.out.println("개인정보 수집 및 이용에 동의함/동의안함 (Y/N): ");
-    	String agree2 = input.nextLine();
-    	ctrl.validateChoice(agree2);
-    	if(ctrl.validateChoice(agree2) == false) {
-    		System.out.println("안녕히가십시요");
-    		System.exit(0);
-    	}
-    	ctrl.createUser(name, email, password2, address, phone);
-    	System.out.println("성공적으로 회원가입이 되었습니다.");
+		String name = scanner.nextLine();
+		String password;
+		String checkPassword;
+		while (true) {
+			System.out.println("비밀번호를 입력하세요\t\t\t|");
+			password = scanner.nextLine();
+			System.out.println("비밀번호 다시를 입력하세요\t\t\t|");
+			checkPassword = scanner.nextLine();
+			if (!checkPassword.equals(password)) {
+				System.out.println("패스워드가 일치하지 않습니다. 다시 입력해주세요.");
+			} else {
+				break;
+			}
+		}
+		try {
+			userController.createUser(name, email, password, address, phone);
+			System.out.println("성공적으로 회원가입이 되었습니다. 로그인 해주세요.");
+		} catch (ShopException e) {
+			System.out.println("오류가 발생했습니다: " + e.getMessage());
+		} finally {
+			IOHelper.printEndLine();
+		}
     }
-    public void updateManager(User user) throws IOException {
+
+    private void updateManager() {
+		IOHelper.printFirstLine();
     	System.out.println("user를 manager로 권한부여합니다");
-    	//System.out.println("현재 UserID: ");
-    	//String id = input.nextLine();
-    	// [feat] 총괄적이게 administrator 이 되려면 저장된 파일 비밀번호와 일치할경우에만 가능
-    	System.out.println("Admin password: ");
-    	ArrayList<String> password = new ArrayList<String>();
-    	password.add(input.nextLine());
-    	adminCtrl.checkManagerByPassword(password);
-    	
-    	ctrl.updateManager(user);
+		try {
+			User user = userController.updateManager(sessionService.getLoggedInUser());
+			System.out.println("성공적으로 매니저로 승격되었습니다.");
+			sessionService.updateSessionUser(user);
+		} catch (ShopException e) {
+			System.out.println("오류가 발생했습니다: " + e.getMessage());
+		} finally {
+			IOHelper.printEndLine();
+		}
     }
-    public void withdrawUser() throws IOException {
-    	System.out.println("퇴출 고객 지정중");
-    	System.out.println("Admin password: ");
-    	ArrayList<String> password = new ArrayList<String>();
-    	password.add(input.nextLine());
-    	adminCtrl.checkManagerByPassword(password);
-    	System.out.println("퇴출 고객 이름: ");
-    	String username = input.nextLine();
-    	ctrl.withdrawUser(username);
-    	System.out.println("성공적으로 퇴출완료");
+    private void withdrawUserByAdmin()  {
+		IOHelper.printFirstLine();
+    	System.out.print("탈퇴시킬 고객네임: ");
+    	String username = scanner.nextLine();
+		try {
+			userController.withdrawUserByAdmin(sessionService.getLoggedInUser(), username);
+			System.out.println("성공적으로 퇴출완료");
+		} catch (Exception e) {
+			System.out.println("오류가 발생했습니다: " + e.getMessage());
+		} finally {
+			IOHelper.printEndLine();
+		}
     }
+<<<<<<< HEAD
     
     public void findUser(String username, String password) {
     	System.out.println("유저의 정보를 출력합니다: ");
@@ -94,59 +143,81 @@ public class UserIOLayer {
     	System.out.println("조회하고싶은 USERNAME을 입력하세요: ");
     	String username = input.nextLine();
     	ctrl.displayUser(username);
+=======
+
+    private void displayLoggedUser() {
+		IOHelper.printFirstLine();
+		System.out.println("로그인된 현재 유저 조회를 시작합니다.");
+		System.out.println(sessionService.getLoggedInUser());
+		IOHelper.printEndLine();
     }
-    public void displayAllUser(User adminUser) throws IOException {
-    	System.out.println("모든 유저를 확인합니다.");
-    	System.out.println("Admin password: ");
-    	ArrayList<String> password = new ArrayList<String>();
-    	password.add(input.nextLine());
-    	adminCtrl.checkManagerByPassword(password);
-    	ctrl.findAllUsers(adminUser);
+
+    public void displayAllUser() {
+		IOHelper.printFirstLine();
+		System.out.println("모든 유저를 조회합니다.");
+    	userController.findAllUsers(sessionService.getLoggedInUser());
+		IOHelper.printEndLine();
+>>>>>>> origin/lsek/dev
     }
-    public void changePassword(User user) {
+
+    private void changePassword() {
+		IOHelper.printFirstLine();
     	System.out.println("패스워드를 변경합니다.");
     	System.out.println("현재 패스워드를 입력하시오");
-    	String password = input.nextLine();
-    	ctrl.checkPassword(user.getPassword(), password);
-    	
+    	String currentPwd = scanner.nextLine();
     	System.out.println("변경할 비밀번호를 입력하시오");
-    	String password2 = input.nextLine();
-    	ctrl.changePassword(user.getUsername(), password2);
-    	System.out.println("변경되었습니다.");
+    	String newPwd = scanner.nextLine();
+		try {
+			User updatedUser = userController.changePassword(sessionService.getLoggedInUser(), currentPwd, newPwd);
+			System.out.println("유저 정보 : " + updatedUser);
+			System.out.println("변경되었습니다. 다시 로그인해주시기 바랍니다.");
+			sessionService.logout();
+		} catch (ShopException e) {
+			System.out.println("오류가 발생했습니다: " + e.getMessage());
+		} finally {
+			IOHelper.printEndLine();
+		}
     }
     //상세정보 변경
-    public void updateUser(User user) {
+    public void updateUser() {
+		IOHelper.printFirstLine();
     	System.out.println("유저를 상세정보를 변경합니다.");
     	System.out.println("변경할 이메일을 입력하세요: ");
-    	String email = input.nextLine();
+    	String email = scanner.nextLine();
     	System.out.println("변경할 현재 거주하고 계신 주소를 입력해주세요: ");
-    	String address = input.nextLine();
+    	String address = scanner.nextLine();
     	System.out.println("변경할 전화번호를 입력해주세요: ");
-    	String phone = input.nextLine(); // xxx-xxxx-xxxx
-    	
-    	System.out.println("-------------------------------");
-    	System.out.println("유저이름을 입력하세요\t\t\t|");
-    	String name = input.nextLine();
-    	System.out.println("비밀번호를 입력하세요\t\t\t|");
-    	String password = input.nextLine();
-    	System.out.println("비밀번호를 다시 입력하세요\t\t|");
-    	
-    	String password2 = input.nextLine();
-    	ctrl.checkPassword(password, password2);
-    	
-    	User changedUser = ctrl.createUser(name, email, password2, address, phone);
-    	ctrl.updateUser(user, changedUser);
-    	System.out.println("변경되었습니다.");
+    	String phone = scanner.nextLine(); // xxx-xxxx-xxxx
+		try {
+			User updatedUser = userController.updateUser(sessionService.getLoggedInUser(), email, address, phone);
+			sessionService.updateSessionUser(updatedUser);
+			System.out.println("업데이트 된 유저 정보 : " + updatedUser);
+			System.out.println("변경되었습니다.");
+			sessionService.updateSessionUser(updatedUser);
+		} catch (ShopException e) {
+			System.out.println("오류가 발생했습니다: " + e.getMessage());
+		} finally {
+			IOHelper.printEndLine();
+		}
     }
-    public void withdrawl(User user) {
+    public void withdrawal() {
+		IOHelper.printFirstLine();
     	System.out.println("회원탈퇴 시작합니다");
-    	System.out.println("유저네임: ");
-    	String username = input.nextLine();
-    	System.out.println("패스워드: ");
-    	String password = input.nextLine();
-    	ctrl.withdrawl(username, password);
-    	System.out.println("성공적으로 회원탈퇴 완료");
+		try {
+			System.out.print("회원 탈퇴를 위해 비밀번호를 다시 입력해주세요: ");
+			String password = scanner.next();
+			userController.withdrawal(sessionService.getLoggedInUser(), password);
+			sessionService.logout();
+			System.out.println("성공적으로 회원탈퇴 완료");
+		} catch (ShopException e){
+			System.out.println("오류가 발생했습니다: " + e.getMessage());
+		} finally {
+			IOHelper.printEndLine();
+		}
     }
     
-    
+    class ManagerLayer {
+
+
+	}
 }

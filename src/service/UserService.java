@@ -1,44 +1,38 @@
 package service;
 
-import domain.Order;
 import domain.User;
-import exception.InvalidatedInputException;
-import exception.ShopException;
-import exception.UserDuplicatedException;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 public interface UserService {
 
 	User createUser(String username, String email, String password, String address, String phone);
 	
-	boolean CheckPassword(String firstInput, String SecondInput);
+//	boolean CheckPassword(String firstInput, String SecondInput);
 	
-	boolean validateChoice(String choice);
+//	boolean validateChoice(String choice);
 	
-	User updateManager(String userId);
+	User updateManager(User user);
 
 	
 	User findUser(String username, String password);
 	
-	User changePassword(String username, String paswword);
+	User changePassword(User user,String currentPwd, String newPwd);
 	
-	User updateUser(User previousUser, User changedUser);
+	User updateUser(User user, String email, String address, String phone);
 	
-	Boolean withdrawl(String username, String password);
+	Boolean withdrawal(User user,String password);
 	
 	
 	
 	// 관리자용
-	List<User> displayAllUsers(String adminUsername, String adminPassword);
+	List<User> displayAllUsersByAdmin(User user);
 	
-	User displayUser(String username); // 고객 정보 찾기
+	User displayUserByAdmin(User user, String username); // 고객 정보 찾기
 	
 	//List<LocalDateTime> displayLogin(String username);
 	
 	//List<LocalDateTime> displayLogout(String username);
 	
-	List<User> withdrawUser(String username);
+	List<User> withdrawUserByAdmin(User user, String willDeleteUsername);
 }
