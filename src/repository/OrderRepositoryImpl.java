@@ -16,7 +16,8 @@ import java.util.*;
 public class OrderRepositoryImpl implements OrderRepository{
     // src 폴더 밖에 있는 data 폴더안에 있는 orders.dat에 path 지정
 	CartRepository cartRepository;
-	Order order;
+    List<Order> orders;
+    List<Order> tempOrders;
 
     private final Path DATA_FILE = Paths.get("orderData", "orders.dat");
     // orders.dat를 위한 폴더(/data)가 없다면 생성해준다.
@@ -28,9 +29,6 @@ public class OrderRepositoryImpl implements OrderRepository{
         }
         load();
     }
-    List<Order> orders = new ArrayList<Order>();
-    List<Order> tempOrders = new ArrayList<Order>();
-
     private void load() {
 		List<Order> read = FileManager.readObject(DATA_FILE);
 		if (read != null) {
@@ -40,6 +38,43 @@ public class OrderRepositoryImpl implements OrderRepository{
 			orders = new ArrayList<>();
 			tempOrders = new ArrayList<>();
 		}
+	}
+    @Override
+    public Order saveOrder(Order order) {
+    	orders.add(order);
+        return order;
+    }
+	@Override
+	public Order replaceOrder(Order previousOrder, Order changedOrder) {
+	    for (int i = 0; i < orders.size(); i++) {
+			if (orders.get(i).getOrderId().equals(previousOrder.getOrderId())) {
+				orders.set(i, changedOrder);
+			}
+	    }
+		return changedOrder;
+	}
+	public Order updateOrder(Order order) {
+	    for (int i = 0; i < orders.size(); i++) {
+			if (orders.get(i).getOrderId().equals(order.getOrderId())) {
+				orders.set(i, order); // 기존 객체 교체
+				return order;
+			}
+		}
+		orders.add(order); // 없으면 새로 추가
+		return order;
+	}
+    @Override
+    public List<Order> getOrder() {
+        return orders;
+    }
+	@Override
+	public Order getOrderByOrderId(String orderId) {
+		return orders.stream().filter(u -> u.getOrderId().equals(orderId)).findFirst().orElse(null);
+	}
+	// 왜 리스트가 리턴값인지 한유저의 오더기록을 보려하는건가? *******************************
+	@Override
+	public List<Order> getOrderByUserId(String userId) {
+		return orders.stream().filter(o -> o.getUser().getUserId().equals(userId)).toList();
 	}
     @Override
 	public void commit() {
@@ -56,43 +91,5 @@ public class OrderRepositoryImpl implements OrderRepository{
 		return new ArrayList<>(source);
 	}
 
-	@Override
-	public Order replaceOrder(Order previousOrder, Order changedOrder) {
-	    for (int i = 0; i < orders.size(); i++) {
-			if (orders.get(i).getOrderId().equals(previousOrder.getOrderId())) {
-				orders.set(i, changedOrder);
-			}
-	    }
-		return changedOrder;
-	}
-
-	public Order updateOrder(Order order) {
-	    for (int i = 0; i < orders.size(); i++) {
-			if (orders.get(i).getOrderId().equals(order.getOrderId())) {
-				orders.set(i, order); // 기존 객체 교체
-				return order;
-			}
-		}
-		orders.add(order); // 없으면 새로 추가
-		return order;
-	}
-    @Override
-    public Order saveOrder(Order order) {
-    	orders.add(order);
-        return order;
-    }
-    @Override
-    public List<Order> getOrder() {
-        return orders;
-    }
-	@Override
-	public Order getOrderByOrderId(String orderId) {
-		return orders.stream().filter(u -> u.getOrderId().equals(orderId)).findFirst().orElse(null);
-	}
-
-	@Override
-	public List<Order> getOrderByUserId(String userId) {
-		return orders.stream().filter(o -> o.getOrderId().equals(userId)).toList();
-	}
 
 }

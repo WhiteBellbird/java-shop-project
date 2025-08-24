@@ -10,6 +10,7 @@ import java.util.Comparator;
 import exception.CustomIllegalArgumentException;
 import exception.ProductNotfoundException;
 import exception.QuantityException;
+import repository.ProductRepository;
 
 import java.util.*;
 
@@ -22,6 +23,7 @@ public class Cart implements Serializable {
     //private Map<String, Log> history;
     // key: 상품 ID, value: 상품과 수량을 담는 CartItem 객체
     private LinkedHashMap<String, CartItem> items;
+    //ProductRepository productRepository;
 
     public Cart(String userId) {
         this.userId = userId;
@@ -69,6 +71,13 @@ public class Cart implements Serializable {
         return existingItem;
     }
 
+    /*
+    // 카트 안에 있는 카트 아이템 get
+    public void getCartItem(String productId) {
+    	
+    }
+    */
+    
     /**
      * 장바구니에서 상품을 삭제합니다.
      * productId 삭제할 상품의 ID
@@ -78,11 +87,12 @@ public class Cart implements Serializable {
             throw new ProductNotfoundException("CartItem is not in cart : " + productId);
         }
         items.remove(productId);
-        Log log = new Log();
-        log.removed();
+//        Log log = new Log();
+//        log.removed();
         //history.put(productId, log);
     }
     public LinkedHashMap<String, CartItem> replaceCartItem(LinkedHashMap<String, CartItem> changedCartItem) {
+    	// 기존 해쉬맵을 바뀐 해쉬맵으로 교체해버린다.
     	this.items = new LinkedHashMap<String, CartItem>(changedCartItem);
     	return this.items;
     }

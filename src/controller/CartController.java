@@ -19,41 +19,41 @@ public class CartController {
 		return cartService.createCart(user.getUserId());
 	}
 
-	public CartItem addProductByCart(User user, String productId, int quantity) throws ShopException {
-		if (productId == null || productId.trim().isEmpty()) {
-			throw new InvalidatedInputException("ProductId cannot be empty.");
+	public CartItem addProductByCart(User user, String productName, int quantity) throws ShopException {
+		if (productName == null || productName.trim().isEmpty()) {
+			throw new InvalidatedInputException("productName cannot be empty.");
 		}
 		if (quantity <= 0) {
 			throw new InvalidatedInputException("Quantity must be greater than 0.");
 		}
-		return cartService.addProductByCart(user.getUserId(), productId, quantity);
+		return cartService.addProductByCart(user.getUserId(), productName, quantity);
 	}
 
-	public String removeProductByCart(User user, String productId) throws ShopException {
-		if (productId == null || productId.trim().isEmpty()) {
-			throw new InvalidatedInputException("ProductId cannot be empty.");
+	public String removeProductByCart(User user, String productName) throws ShopException {
+		if (productName == null || productName.trim().isEmpty()) {
+			throw new InvalidatedInputException("productName cannot be empty.");
 		}
-		return cartService.removeProductByCart(user.getUserId(),productId);
+		return cartService.removeProductByCart(user.getUserId(),productName);
 	}
 
-	public CartItem addProductQuantityByCart(User user, String productId, Integer quantity) throws ShopException {
-		if (productId == null || productId.trim().isEmpty()) {
-			throw new InvalidatedInputException("ProductId cannot be empty.");
+	public CartItem addProductQuantityByCart(User user, String productName, Integer quantity) throws ShopException {
+		if (productName == null || productName.trim().isEmpty()) {
+			throw new InvalidatedInputException("productName cannot be empty.");
 		}
 		if (quantity == null || quantity <= 0) {
 			throw new InvalidatedInputException("Quantity must be greater than 0.");
 		}
-		return cartService.addProductQuantityByCart(user.getUserId(), productId, quantity);
+		return cartService.addProductQuantityByCart(user.getUserId(), productName, quantity);
 	}
 
-	public CartItem subProductQuantityByCart(User user, String productId, Integer quantity) throws ShopException {
-		if (productId == null || productId.trim().isEmpty()) {
-			throw new InvalidatedInputException("ProductId cannot be empty.");
+	public CartItem subProductQuantityByCart(User user, String productName, Integer quantity) throws ShopException {
+		if (productName == null || productName.trim().isEmpty()) {
+			throw new InvalidatedInputException("productName cannot be empty.");
 		}
 		if (quantity == null || quantity <= 0) {
 			throw new InvalidatedInputException("Quantity must be greater than 0.");
 		}
-		return cartService.subProductQuantityByCart(user.getUserId(),productId, quantity);
+		return cartService.subProductQuantityByCart(user.getUserId(),productName, quantity);
 	}
 
 	public Integer calcTotalPriceInCart(User user) throws ShopException {

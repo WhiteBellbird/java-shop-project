@@ -45,17 +45,17 @@ public class UserIOLayerTest {
 		
 =======
 		createUser();
-		login();
+		//login();
 	}
 
 	private static void createUser() {
 		User user = userService.createUser("username", "hi@gmail.com", "password",
 				"address", "101-1111-1111");
 	}
-
+	/*
 	private static void login() {
 		mainLayer.main();
 >>>>>>> origin/lsek/dev
 	}
-	
+	*/
 }
