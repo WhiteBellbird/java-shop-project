@@ -19,15 +19,16 @@ public class MainLayer {
     private SessionService sessionService;
     private UserIOLayer userIOLayer;
     private OrderIOLayer orderIOLayer;
-
+    private AdminIOLayer adminIOLayer;
     public MainLayer(Scanner scanner, OrderIOLayer orderIOLayer,
                      ProductIOLayer productIOLayer,
-                     SessionService sessionService, UserIOLayer userIOLayer) {
+                     SessionService sessionService, UserIOLayer userIOLayer, AdminIOLayer adminIOLayer) {
         this.scanner = scanner;
         this.productIOLayer = productIOLayer;
         this.sessionService = sessionService;
         this.userIOLayer = userIOLayer;
         this.orderIOLayer = orderIOLayer;
+        this.adminIOLayer = adminIOLayer;
     }
 
     public void main() {
@@ -64,8 +65,6 @@ public class MainLayer {
 
     public void mainMenu() {
         while (true) {
-
-
             User loggedInUser = sessionService.getLoggedInUser();
             String name = loggedInUser.isAdmin() ? loggedInUser.getUsername() + " 관리자" : loggedInUser.getUsername();
 
@@ -119,6 +118,7 @@ public class MainLayer {
                     this.logout();
                     return;
                 case 8:
+
                     // [관리] 상품 관리
                     break;
                 case 9:
@@ -129,7 +129,6 @@ public class MainLayer {
             }
         }
     }
-
 
     private void login() {
         IOHelper.printFirstLine();

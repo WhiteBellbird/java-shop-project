@@ -56,7 +56,7 @@ public class UserIOLayer {
 					break;
 				case 5:
 					// 회원 탈퇴 로직
-					this.withdrawUserByAdmin();
+					this.withdrawal();
 					break;
 				case 6:
 					// 돌아가기
@@ -102,32 +102,32 @@ public class UserIOLayer {
 		}
     }
 
-    private void updateManager() {
-		IOHelper.printFirstLine();
-    	System.out.println("user를 manager로 권한부여합니다");
-		try {
-			User user = userController.updateManager(sessionService.getLoggedInUser());
-			System.out.println("성공적으로 매니저로 승격되었습니다.");
-			sessionService.updateSessionUser(user);
-		} catch (ShopException e) {
-			System.out.println("오류가 발생했습니다: " + e.getMessage());
-		} finally {
-			IOHelper.printEndLine();
-		}
-    }
-    private void withdrawUserByAdmin()  {
-		IOHelper.printFirstLine();
-    	System.out.print("탈퇴시킬 고객네임: ");
-    	String username = scanner.nextLine();
-		try {
-			userController.withdrawUserByAdmin(sessionService.getLoggedInUser(), username);
-			System.out.println("성공적으로 퇴출완료");
-		} catch (Exception e) {
-			System.out.println("오류가 발생했습니다: " + e.getMessage());
-		} finally {
-			IOHelper.printEndLine();
-		}
-    }
+//    private void updateManager() {
+//		IOHelper.printFirstLine();
+//    	System.out.println("user를 manager로 권한부여합니다");
+//		try {
+//			User user = userController.updateManager(sessionService.getLoggedInUser());
+//			System.out.println("성공적으로 매니저로 승격되었습니다.");
+//			sessionService.updateSessionUser(user);
+//		} catch (ShopException e) {
+//			System.out.println("오류가 발생했습니다: " + e.getMessage());
+//		} finally {
+//			IOHelper.printEndLine();
+//		}
+//    }
+//    private void withdrawUserByAdmin()  {
+//		IOHelper.printFirstLine();
+//    	System.out.print("탈퇴시킬 고객네임: ");
+//    	String username = scanner.nextLine();
+//		try {
+//			userController.withdrawUserByAdmin(sessionService.getLoggedInUser(), username);
+//			System.out.println("성공적으로 퇴출완료");
+//		} catch (Exception e) {
+//			System.out.println("오류가 발생했습니다: " + e.getMessage());
+//		} finally {
+//			IOHelper.printEndLine();
+//		}
+//    }
 
     private void displayLoggedUser() {
 		IOHelper.printFirstLine();
@@ -135,13 +135,13 @@ public class UserIOLayer {
 		System.out.println(sessionService.getLoggedInUser());
 		IOHelper.printEndLine();
     }
-
-    public void displayAllUser() {
-		IOHelper.printFirstLine();
-		System.out.println("모든 유저를 조회합니다.");
-    	userController.findAllUsers(sessionService.getLoggedInUser());
-		IOHelper.printEndLine();
-    }
+//
+//    public void displayAllUser() {
+//		IOHelper.printFirstLine();
+//		System.out.println("모든 유저를 조회합니다.");
+//    	userController.findAllUsers(sessionService.getLoggedInUser());
+//		IOHelper.printEndLine();
+//    }
 
     private void changePassword() {
 		IOHelper.printFirstLine();
@@ -198,9 +198,5 @@ public class UserIOLayer {
 			IOHelper.printEndLine();
 		}
     }
-    
-    class ManagerLayer {
 
-
-	}
 }

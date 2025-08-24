@@ -26,7 +26,7 @@ public class UserIOLayerTest {
 		static SessionService sessionService = new SessionServiceImpl(userRepository, passwordEncoder);
 		static UserIOLayer userIOLayer = new UserIOLayer(input,new UserController(userService),sessionService,null);
 		static MainLayer mainLayer = new MainLayer(new Scanner(System.in), null, null,
-				sessionService, null);
+				sessionService, null,null);
 	public static void main(String[] args) throws IOException {
 
 		createUser();
