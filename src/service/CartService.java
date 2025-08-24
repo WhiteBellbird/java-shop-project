@@ -8,17 +8,17 @@ public interface CartService {
 
 	Cart createCart(String userId);
 
-    CartItem addProductByCart(String userId, String productId, int quantity);
+    CartItem addProductByCart(String userId, String productName, int quantity);
     
 //    Boolean updateProductQuantity(String userId, String productId, int newQuantity);
     
     Cart clearCart(String userId);
 
-    String removeProductByCart(String userId, String productId) throws ProductNotfoundException;
+    String removeProductByCart(String userId, String productName) throws ProductNotfoundException;
 	
-	CartItem addProductQuantityByCart(String userId, String productId, Integer quantity);
+	CartItem addProductQuantityByCart(String userId, String productName, Integer quantity);
 	
-	CartItem subProductQuantityByCart(String userId, String productId, Integer quantity);
+	CartItem subProductQuantityByCart(String userId, String productName, Integer quantity);
 	
 	Integer getCartItemsTotalProductPrice(String userId);
 
