@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
             }
             // 주문 생성
             // 여기서 만약 에러를 일부러 발생시킨다면, 실제로 롤백이 되는지 테스트
-            throwError();
+//            throwError();
             Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
             // 카트 수정된거 저장
             cartRepository.saveCart(userCart);

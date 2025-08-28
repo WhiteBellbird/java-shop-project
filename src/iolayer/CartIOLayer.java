@@ -27,8 +27,7 @@ public class CartIOLayer {
     public void cartMenu() {
         while (true) {
             displayMenu();
-            String choice = scanner.next();
-            scanner.nextLine();
+            String choice = scanner.nextLine();
             try {
                 switch (choice) {
                     case "0":
@@ -49,10 +48,10 @@ public class CartIOLayer {
                     case "5":
                         calcTotalPrice();
                         break;
-                    case "6":
+                    case "7":
                         System.out.println("메인 메뉴로 돌아갑니다.");
                         return;
-                    case "7":
+                    case "6":
                         showCarts();
                     default:
                         System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
@@ -90,8 +89,8 @@ public class CartIOLayer {
         System.out.println("│  3. 상품 삭제                          │");
         System.out.println("│  4. 장바구니 비우기                      │");
         System.out.println("│  5. 총 가격 확인                        │");
-        System.out.println("│  7. 장바구니 조회                       │");
-        System.out.println("│  6. 돌아가기                           │");
+        System.out.println("│  6. 장바구니 조회                       │");
+        System.out.println("│  7. 돌아가기                           │");
         System.out.println("└──────────────────────────────────────┘");
         System.out.print("선택: _");
     }

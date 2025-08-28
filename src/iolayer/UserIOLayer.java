@@ -34,7 +34,8 @@ public class UserIOLayer {
             System.out.println("└────────────────────────────────────┘");
             System.out.print("메뉴를 선택하세요: _");
 
-            int choice = Integer.parseInt(scanner.nextLine());
+            int choice = Integer.parseInt(scanner.next());
+            scanner.nextLine();
             switch (choice) {
                 case 1:
                     displayLoggedUser();
