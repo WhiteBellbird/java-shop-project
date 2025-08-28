@@ -50,11 +50,18 @@ public class Product implements Serializable {
         return category;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
     public int getPrice() {
         return price;
     }
 
+
+    public int getSellCount() {
+        return sellCount;
+    }
 
     public int getStock() {
         return stock;

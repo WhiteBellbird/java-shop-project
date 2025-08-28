@@ -136,6 +136,7 @@ public class JavaShopApplication {
         orderRepository.clearAll();
     }
 
+    // 이 파트에서 관리자의 아이디에 고의적으로 상품을 추가했습니다.
     private static void addCart(CartController cartController) {
         User user = userRepository.findUserByUsername("u");
         Product product = productRepository.findByName("젠하이저 HD 450BT").get();

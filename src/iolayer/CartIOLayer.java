@@ -48,11 +48,12 @@ public class CartIOLayer {
                     case "5":
                         calcTotalPrice();
                         break;
+                    case "6":
+                        showCarts();
+                        break;
                     case "7":
                         System.out.println("메인 메뉴로 돌아갑니다.");
                         return;
-                    case "6":
-                        showCarts();
                     default:
                         System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
                 }

@@ -152,6 +152,7 @@ public class User implements Serializable{
 	public List<LocalDateTime> getLoginTime(){
 		return this.loginTime;
 	}
+
 	public List<LocalDateTime> getLogoutTime(){
 		return this.logoutTime;
 	}
@@ -166,7 +167,11 @@ public class User implements Serializable{
 		return time;
 	}
 
-	//아이디가 같으면 동등하게 취급 hash-code 비교는 불필요
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    //아이디가 같으면 동등하게 취급 hash-code 비교는 불필요
 	public boolean equals(User obj) {
 		return (this.getUserId().equals(obj.getUserId()));
 	}

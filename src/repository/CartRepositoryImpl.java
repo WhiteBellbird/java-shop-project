@@ -214,10 +214,11 @@ public class CartRepositoryImpl implements CartRepository {
         tmpCarts.clear();
         FileManager.writeObject(DATA_FILE,carts);
     }
-
     private List<Cart> deepCopy(List<Cart> source) {
-        List<Cart> copy = new ArrayList<>(source);
-		return copy;
-	}
-	
+        List<Cart> copy = new ArrayList<>();
+        for (Cart originalCart : source) {
+            copy.add(originalCart.deepCopy());
+        }
+        return copy;
+    }
 }

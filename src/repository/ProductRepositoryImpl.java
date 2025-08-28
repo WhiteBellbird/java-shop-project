@@ -108,6 +108,21 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     private List<Product> deepCopy(List<Product> source) {
-		return new ArrayList<>(source);
-	}
+        List<Product> copy = new ArrayList<>();
+        for (Product p : source) {
+            Product clone = new Product(
+                    p.getProductId(),
+                    p.getName(),
+                    p.getCategory(),
+                    p.getPrice(),
+                    p.getStock(),
+                    p.toString(),  // description
+                    p.getSellCount(),
+                    p.getRegistrationDate()
+            );
+            copy.add(clone);
+        }
+        return copy;
+    }
+
 }

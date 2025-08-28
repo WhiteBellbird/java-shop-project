@@ -64,10 +64,31 @@ public class UserRepositoryImpl implements UserRepository {
 		}
 	}
 
-	// 깊은 복사 (얕은 복사로 충분)
-	private List<User> deepCopy(List<User> source) {
-		return new ArrayList<>(source);
-	}
+    private List<User> deepCopy(List<User> source) {
+        List<User> copy = new ArrayList<>();
+        for (User u : source) {
+            // loginTime, logoutTime 새 리스트로 복사
+
+            User clone = new User(
+                    u.getUserId(),
+                    u.getUsername(),
+                    u.getEmail(),
+                    u.getPassword(),
+                    u.getRank(),
+                    u.getAddress(),
+                    u.getPoint(),
+                    u.getCoupon(),
+                    u.getPhone(),
+                    u.isAdmin(),
+                    u.getCreatedDate(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+            );
+
+            copy.add(clone);
+        }
+        return copy;
+    }
 	// commit: 현재 상태를 파일에 저장하고 tmpUsers 갱신
 	@Override
 	public void commit() {

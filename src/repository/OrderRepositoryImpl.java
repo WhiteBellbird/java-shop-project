@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class OrderRepositoryImpl implements OrderRepository{
@@ -103,9 +104,43 @@ public class OrderRepositoryImpl implements OrderRepository{
 		orders = deepCopy(tempOrders);
 		FileManager.writeObject(DATA_FILE, orders);
 	}
-	private List<Order> deepCopy(List<Order> source) {
-		return new ArrayList<>(source);
-	}
+    private List<Order> deepCopy(List<Order> source) {
+        List<Order> copy = new ArrayList<>();
+        for (Order o : source) {
+            // User와 CartItem도 새로운 객체로 복사
+            User userClone = new User(
+                    o.getUser().getUserId(),
+                    o.getUser().getUsername(),
+                    o.getUser().getEmail(),
+                    o.getUser().getPassword(),
+                    o.getUser().getRank(),
+                    o.getUser().getAddress(),
+                    o.getUser().getPoint(),
+                    o.getUser().getCoupon(),
+                    o.getUser().getPhone(),
+                    o.getUser().isAdmin(),
+                    LocalDateTime.now(),
+                    o.getUser().getLoginTime(),   // List는 mutable하므로 새 ArrayList로 복사
+                    o.getUser().getLogoutTime()
+            );
 
+            CartItem cartItemClone = new CartItem(
+                    o.getCartItem().getProduct(),
+                    o.getCartItem().getQuantity()
+            );
+
+            Order orderClone = new Order(
+                    o.getOrderId(),
+                    userClone,
+                    cartItemClone,
+                    o.getAddress(),
+                    o.getStatus(),
+                    o.getOrderDate()
+            );
+
+            copy.add(orderClone);
+        }
+        return copy;
+    }
 
 }

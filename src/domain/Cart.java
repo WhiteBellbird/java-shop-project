@@ -163,5 +163,29 @@ public class Cart implements Serializable {
         return sb.toString();
     }
 
+    public Cart deepCopy() {
+        Cart copy = new Cart(this.userId);
+
+        // items 깊은 복사
+        for (Map.Entry<String, CartItem> entry : this.items.entrySet()) {
+            CartItem originalItem = entry.getValue();
+            // CartItem 깊은 복사
+            Product originalProduct = originalItem.getProduct();
+            Product productCopy = new Product(
+                    originalProduct.getProductId(),
+                    originalProduct.getName(),
+                    originalProduct.getCategory(),
+                    originalProduct.getPrice(),
+                    originalProduct.getStock(),
+                    originalProduct.getDescription(),
+                    originalItem.getProduct().getSellCount(),
+                    originalProduct.getRegistrationDate()
+            );
+            CartItem itemCopy = new CartItem(productCopy, originalItem.getQuantity());
+            copy.getItems().put(entry.getKey(), itemCopy);
+        }
+
+        return copy;
+    }
     
 }
