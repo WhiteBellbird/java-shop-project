@@ -71,7 +71,6 @@ public class CartIOLayer {
             for (CartItem cartItem : cartItems) {
                 System.out.println(cartItem.toString());
             }
-            System.out.println("장바구니가 성공적으로 생성되었습니다.");
         } catch (ShopException e) {
             System.out.println("오류가 발생했습니다: " + e.getMessage());
         } finally {
