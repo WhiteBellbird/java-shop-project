@@ -8,6 +8,7 @@ import exception.ShopException;
 import helper.IOHelper;
 import service.SessionService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class CartIOLayer {
@@ -51,6 +52,8 @@ public class CartIOLayer {
                     case "6":
                         System.out.println("메인 메뉴로 돌아갑니다.");
                         return;
+                    case "7":
+                        showCarts();
                     default:
                         System.out.println("잘못된 입력입니다. 다시 선택해주세요.");
                 }
@@ -59,6 +62,21 @@ public class CartIOLayer {
             } catch (NumberFormatException e) {
                 System.out.println("잘못된 수량 입력입니다. 숫자를 입력해주세요.");
             }
+        }
+    }
+
+    private void showCarts() {
+        IOHelper.printFirstLine();
+        try {
+            List<CartItem> cartItems = cartController.showCart(sessionService.getLoggedInUser());
+            for (CartItem cartItem : cartItems) {
+                System.out.println(cartItem.toString());
+            }
+            System.out.println("장바구니가 성공적으로 생성되었습니다.");
+        } catch (ShopException e) {
+            System.out.println("오류가 발생했습니다: " + e.getMessage());
+        } finally {
+            IOHelper.printEndLine();
         }
     }
 
@@ -72,6 +90,7 @@ public class CartIOLayer {
         System.out.println("│  3. 상품 삭제                          │");
         System.out.println("│  4. 장바구니 비우기                      │");
         System.out.println("│  5. 총 가격 확인                        │");
+        System.out.println("│  7. 장바구니 조회                       │");
         System.out.println("│  6. 돌아가기                           │");
         System.out.println("└──────────────────────────────────────┘");
         System.out.print("선택: _");

@@ -2,7 +2,10 @@ package service;
 
 import domain.Cart;
 import domain.CartItem;
+import domain.User;
 import exception.ProductNotfoundException;
+
+import java.util.List;
 
 public interface CartService {
 
@@ -21,6 +24,8 @@ public interface CartService {
 	CartItem subProductQuantityByCart(String userId, String productName, Integer quantity);
 	
 	Integer getCartItemsTotalProductPrice(String userId);
+
+    List<CartItem> showCarts(User user);
 
 	Boolean organizeUsersCartsByTotalPrice();
 	

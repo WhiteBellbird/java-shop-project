@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
                 System.out.printf("\n[ERROR] %s is not authenticated.\n", user);
                 throw new UserAuthenticationException(String.format("%s is not authenticated.", user.getUsername()));
             }
-            User username = repository.findUserByUsername(user.getUsername());
+            User username = repository.findUserByUsername(willDeleteUsername);
             if (username == null) {
                 throw new UserNotfoundException(String.format("%s is not found.", willDeleteUsername));
             }

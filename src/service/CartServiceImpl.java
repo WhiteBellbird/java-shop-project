@@ -12,6 +12,7 @@ import repository.ProductRepository;
 import repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CartServiceImpl implements CartService {
 
@@ -123,6 +124,18 @@ public class CartServiceImpl implements CartService {
             Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(() ->
                     new CartNotFoundException("Cart not found By Id : " + userId));
             return cart.getTotalPrice();
+        } catch (ShopException e) {
+            System.out.println("[ERROR] get total price : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public List<CartItem> showCarts(User user) {
+        try {
+            Cart cart = cartRepository.findCartByUserId(user.getUserId()).orElseThrow(() ->
+                    new CartNotFoundException("Cart not found By Id : " + user.getUserId()));
+            return cart.getItems().values().stream().toList();
         } catch (ShopException e) {
             System.out.println("[ERROR] get total price : " + e.getMessage());
             throw e;

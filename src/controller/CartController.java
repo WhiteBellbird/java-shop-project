@@ -7,6 +7,8 @@ import exception.InvalidatedInputException;
 import exception.ShopException;
 import service.CartService;
 
+import java.util.List;
+
 public class CartController {
 
 	private final CartService cartService;
@@ -28,6 +30,10 @@ public class CartController {
 		}
 		return cartService.addProductByCart(user.getUserId(), productName, quantity);
 	}
+
+    public List<CartItem> showCart(User user) throws ShopException {
+        return cartService.showCarts(user);
+    }
 
 	public String removeProductByCart(User user, String productName) throws ShopException {
 		if (productName == null || productName.trim().isEmpty()) {

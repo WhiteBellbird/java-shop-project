@@ -63,11 +63,16 @@ public class OrderServiceImpl implements OrderService {
             // 프로덕트에 재고 줄였어
             product.reduceStock(quantity);
             product.addSellCount(quantity);
+            //
+
+
             // 그 수량이 0이면 카트에서 사라져야지.
             if (cartItem.getQuantity() == 0) {
                 userCart.removeProduct(product.getProductId());
             }
             // 주문 생성
+            // 여기서 만약 에러를 일부러 발생시킨다면, 실제로 롤백이 되는지 테스트
+            throwError();
             Order order = Order.craeteOrder(user, cartItem, address, LocalDateTime.now());
             // 카트 수정된거 저장
             cartRepository.saveCart(userCart);
@@ -93,6 +98,16 @@ public class OrderServiceImpl implements OrderService {
             throw e;
         }
     }
+
+
+    private void throwError() {
+        try {
+            throw new ShopException("강제 에러 ");
+        } catch (ShopException e) {
+            throw  e;
+        }
+    }
+
     @Override
     public Order cancelOrder(String orderId) {
         try {
